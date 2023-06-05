@@ -22,7 +22,7 @@ const StoresScreen = () => {
 		<View style={styles.rootContainer}>
 			<FlatList
 				data={dummyData}
-				keyExtractor={(item) => `${item}`}
+				keyExtractor={(item) => `${item.id}`}
 				renderItem={renderCards}
 				numColumns={2}
 				style={styles.cardList}
