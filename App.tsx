@@ -7,11 +7,13 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 import StoresScreen from './screens/StoresScreen';
 import GameDealsScreen from './screens/GameDealsScreen';
 import WishListScreen from './screens/WishListScreen';
+import GamessScreen from './screens/GamesScreen';
 
 type RootNavigatorParamList = {
 	StoresScreen: undefined;
 	GameDealsScreen: undefined;
 	WishListScreen: undefined;
+	GamesScreen: undefined;
 };
 
 export default function App() {
@@ -37,6 +39,11 @@ export default function App() {
 							name='WishListScreen'
 							options={{ title: 'Wish List' }}
 							component={WishListScreen}
+						/>
+						<Tab.Screen
+							name='GamesScreen'
+							options={{ title: 'Games' }}
+							component={GamessScreen}
 						/>
 					</Tab.Navigator>
 				</NavigationContainer>
