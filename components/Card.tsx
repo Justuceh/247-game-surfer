@@ -1,11 +1,11 @@
-import React, { ReactNode } from 'react';
+import { ReactNode } from 'react';
 import { Text, View, StyleSheet } from 'react-native';
 
 interface CardProps {
 	children: ReactNode | undefined;
 }
 
-const Card: React.FC<CardProps> = ({ children }) => {
+const Card = ({ children }: CardProps) => {
 	return (
 		<View style={styles.cardContainer}>
 			<Text>{children}</Text>

@@ -1,15 +1,15 @@
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 
-import HomeScreen from './screens/HomeScreen';
+import StoresScreen from './screens/StoresScreen';
 import GameDealsScreen from './screens/GameDealsScreen';
 import WishListScreen from './screens/WishListScreen';
 
 type RootNavigatorParamList = {
-	HomeScreen: undefined;
+	StoresScreen: undefined;
 	GameDealsScreen: undefined;
 	WishListScreen: undefined;
 };
@@ -24,13 +24,13 @@ export default function App() {
 				<NavigationContainer<RootNavigatorParamList>>
 					<Tab.Navigator>
 						<Tab.Screen
-							name='Home'
-							component={HomeScreen}
+							name='StoresScreen'
+							component={StoresScreen}
 							options={{ title: 'Stores' }}
 						/>
 						<Tab.Screen
 							name='GameDealsScreen'
-							options={{ title: 'Game Deals' }}
+							options={{ title: 'Deals' }}
 							component={GameDealsScreen}
 						/>
 						<Tab.Screen

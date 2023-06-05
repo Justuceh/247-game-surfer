@@ -1,9 +1,8 @@
-import React from 'react';
 import { View, StyleSheet, FlatList } from 'react-native';
 
 import Card from '../components/Card';
 
-const HomeScreen: React.FC = () => {
+const StoresScreen = () => {
 	const dummyData: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 	const renderCards = ({ item }: { item: number }) => {
 		return <Card>{item}</Card>;
@@ -22,7 +21,7 @@ const HomeScreen: React.FC = () => {
 	);
 };
 
-export default HomeScreen;
+export default StoresScreen;
 
 const styles = StyleSheet.create({
 	rootContainer: {

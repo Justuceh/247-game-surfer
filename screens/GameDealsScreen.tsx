@@ -1,7 +1,6 @@
-import React from 'react';
 import { Text, View, StyleSheet } from 'react-native';
 
-const GameDealsScreen: React.FC = () => {
+const GameDealsScreen = () => {
 	return (
 		<View style={styles.rootContainer}>
 			<Text>Game Deals Screen!</Text>
