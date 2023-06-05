@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { View, StyleSheet, FlatList } from 'react-native';
+import { View, StyleSheet } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 
 import Card from '../components/Card';
 
@@ -21,12 +22,12 @@ const GamessScreen = () => {
 
 	return (
 		<View style={styles.rootContainer}>
-			<FlatList
+			<FlashList
 				data={dummyData}
-				keyExtractor={(item) => `${item.id}`}
 				renderItem={renderCards}
 				numColumns={2}
-				style={styles.cardList}
+				estimatedItemSize={181}
+				contentContainerStyle={{ padding: 5 }}
 			/>
 		</View>
 	);

@@ -1,4 +1,5 @@
-import { View, StyleSheet, FlatList } from 'react-native';
+import { View, StyleSheet } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 
 import Card from '../components/Card';
 
@@ -13,6 +14,14 @@ const StoresScreen = () => {
 		{ id: '2', testNumber: 2 },
 		{ id: '3', testNumber: 3 },
 		{ id: '4', testNumber: 4 },
+		{ id: '4', testNumber: 4 },
+		{ id: '4', testNumber: 4 },
+		{ id: '4', testNumber: 4 },
+		{ id: '4', testNumber: 4 },
+		{ id: '4', testNumber: 4 },
+		{ id: '4', testNumber: 4 },
+		{ id: '4', testNumber: 4 },
+		{ id: '4', testNumber: 4 },
 	];
 	const renderCards = ({ item }: { item: TestListData }) => {
 		return <Card>{item.testNumber}</Card>;
@@ -20,12 +29,12 @@ const StoresScreen = () => {
 
 	return (
 		<View style={styles.rootContainer}>
-			<FlatList
+			<FlashList
 				data={dummyData}
-				keyExtractor={(item) => `${item.id}`}
 				renderItem={renderCards}
 				numColumns={2}
-				style={styles.cardList}
+				estimatedItemSize={181}
+				contentContainerStyle={{ padding: 5 }}
 			/>
 		</View>
 	);
