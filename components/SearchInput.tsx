@@ -3,9 +3,19 @@ import { Text, View, StyleSheet, TextInput, Pressable } from 'react-native';
 
 interface SearchInputProps {
 	onSearchHandler: (data: any) => any;
+	backgroundColor?: string;
+	buttonColor?: string;
+	buttonTextColor?: string;
+	placeholderTextColor?: string;
 }
 
-const SearchInput = ({ onSearchHandler }: SearchInputProps) => {
+const SearchInput = ({
+	onSearchHandler,
+	placeholderTextColor,
+	buttonTextColor,
+	backgroundColor,
+	buttonColor,
+}: SearchInputProps) => {
 	const [searchQuery, setSearchQuery] = useState('');
 
 	function onPressHandler() {
@@ -14,12 +24,18 @@ const SearchInput = ({ onSearchHandler }: SearchInputProps) => {
 	return (
 		<View style={styles.rootContainer}>
 			<TextInput
-				style={styles.searchInput}
+				style={[
+					{ color: buttonTextColor, backgroundColor: backgroundColor },
+					styles.searchInput,
+				]}
 				value={searchQuery}
 				onChangeText={setSearchQuery}
 				placeholder='Search...'
+				placeholderTextColor={placeholderTextColor}
 			/>
-			<Pressable onPress={onPressHandler} style={styles.searchButton}>
+			<Pressable
+				onPress={onPressHandler}
+				style={[{ backgroundColor: buttonColor }, styles.searchButton]}>
 				<Text style={styles.searchText}>Search</Text>
 			</Pressable>
 		</View>
@@ -43,7 +59,6 @@ const styles = StyleSheet.create({
 		borderRadius: 89,
 		marginRight: 10,
 		padding: 5,
-
 		opacity: 0.7,
 		justifyContent: 'center',
 	},

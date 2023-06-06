@@ -3,11 +3,17 @@ import { Text, View, StyleSheet } from 'react-native';
 
 interface CardProps {
 	children: ReactNode | undefined;
+	color?: string;
 }
 
-const Card = ({ children }: CardProps) => {
+const Card = ({ children, color }: CardProps) => {
 	return (
-		<View style={styles.cardContainer}>
+		<View
+			style={
+				color
+					? [{ backgroundColor: color }, styles.cardContainer]
+					: [{ backgroundColor: 'white' }, styles.cardContainer]
+			}>
 			<Text>{children}</Text>
 		</View>
 	);
@@ -18,7 +24,6 @@ export default Card;
 const styles = StyleSheet.create({
 	cardContainer: {
 		margin: 8,
-		backgroundColor: 'white',
 		padding: 10,
 		borderRadius: 20,
 		justifyContent: 'center',
