@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { View, StyleSheet, Image, Pressable, Text } from 'react-native';
 import { FlashList } from '@shopify/flash-list';
+import { API_KEY, API_URL } from '@env';
 
 import Card from '../components/Card';
 import SearchInput from '../components/SearchInput';
@@ -46,7 +47,7 @@ const GamessScreen = () => {
 	};
 
 	function onSearchHandler(searchQuery: string) {
-		console.log(searchQuery);
+		console.log(API_URL);
 	}
 
 	return (
@@ -117,4 +118,5 @@ const styles = StyleSheet.create({
 		fontSize: 16,
 		marginVertical: 2,
 	},
+	image: {},
 });
