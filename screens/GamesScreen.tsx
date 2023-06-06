@@ -1,46 +1,60 @@
 import { useState, useEffect } from 'react';
-import { View, StyleSheet, TextInput, Pressable, Text } from 'react-native';
+import { View, StyleSheet, Image, Pressable, Text } from 'react-native';
 import { FlashList } from '@shopify/flash-list';
 
 import Card from '../components/Card';
+import SearchInput from '../components/SearchInput';
 
-export interface TestListData {
-	id: string;
-	testNumber: number;
+interface GameDetail {
+	id: number;
+	slug: string;
+	name: string;
+	released: string;
+	tba: boolean;
+	background_image: string;
+	rating: number;
+	rating_top: number;
+	ratings: any;
 }
 
+const games: GameDetail[] = Array(10)
+	.fill({
+		id: 0,
+		slug: 'game-slug',
+		name: 'Game Name',
+		released: '2023-06-06',
+		tba: true,
+		background_image: 'http://example.com',
+		rating: 0,
+		rating_top: 0,
+		ratings: {},
+	})
+	.map((game, index) => ({ ...game, id: index + 1 }));
+
 const GamessScreen = () => {
-	const [searchQuery, setSearchQuery] = useState('');
-	const dummyData: TestListData[] = [
-		{ id: '1', testNumber: 1 },
-		{ id: '2', testNumber: 2 },
-		{ id: '3', testNumber: 3 },
-		{ id: '4', testNumber: 4 },
-	];
-	const renderCards = ({ item }: { item: TestListData }) => {
-		return <Card>{item.testNumber}</Card>;
+	const renderCards = ({ item }: { item: GameDetail }) => {
+		return (
+			<Card>
+				<Image source={{ uri: item.background_image }} style={styles.image} />
+				<Text style={styles.title}>{item.name}</Text>
+				<Text style={styles.text}>Released: {item.released}</Text>
+				<Text style={styles.text}>Rating: {item.rating}</Text>
+				<Text style={styles.text}>Top rating: {item.rating_top}</Text>
+				<Text style={styles.text}>TBA: {item.tba ? 'Yes' : 'No'}</Text>
+			</Card>
+		);
 	};
 
-	function onSearchHandler() {
+	function onSearchHandler(searchQuery: string) {
 		console.log(searchQuery);
 	}
 
 	return (
 		<View style={styles.rootContainer}>
-			<View style={styles.searchContainer}>
-				<TextInput
-					style={styles.searchInput}
-					value={searchQuery}
-					onChangeText={setSearchQuery}
-					placeholder='Search...'
-				/>
-				<Pressable onPress={onSearchHandler} style={styles.searchButton}>
-					<Text style={styles.searchText}>Search</Text>
-				</Pressable>
-			</View>
+			<SearchInput onSearchHandler={onSearchHandler} />
 			<View style={styles.listContainer}>
 				<FlashList
-					data={dummyData}
+					data={games}
 					renderItem={renderCards}
 					numColumns={2}
 					estimatedItemSize={181}
@@ -93,5 +107,14 @@ const styles = StyleSheet.create({
 	},
 	listContainer: {
 		flex: 9,
+	},
+	title: {
+		fontSize: 20,
+		fontWeight: 'bold',
+		marginVertical: 10,
+	},
+	text: {
+		fontSize: 16,
+		marginVertical: 2,
 	},
 });
