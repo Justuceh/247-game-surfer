@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, TextInput, Pressable, Text } from 'react-native';
 import { FlashList } from '@shopify/flash-list';
 
 import Card from '../components/Card';
@@ -10,6 +10,7 @@ export interface TestListData {
 }
 
 const GamessScreen = () => {
+	const [searchQuery, setSearchQuery] = useState('');
 	const dummyData: TestListData[] = [
 		{ id: '1', testNumber: 1 },
 		{ id: '2', testNumber: 2 },
@@ -20,15 +21,32 @@ const GamessScreen = () => {
 		return <Card>{item.testNumber}</Card>;
 	};
 
+	function onSearchHandler() {
+		console.log(searchQuery);
+	}
+
 	return (
 		<View style={styles.rootContainer}>
-			<FlashList
-				data={dummyData}
-				renderItem={renderCards}
-				numColumns={2}
-				estimatedItemSize={181}
-				contentContainerStyle={{ padding: 5 }}
-			/>
+			<View style={styles.searchContainer}>
+				<TextInput
+					style={styles.searchInput}
+					value={searchQuery}
+					onChangeText={setSearchQuery}
+					placeholder='Search...'
+				/>
+				<Pressable onPress={onSearchHandler} style={styles.searchButton}>
+					<Text style={styles.searchText}>Search</Text>
+				</Pressable>
+			</View>
+			<View style={styles.listContainer}>
+				<FlashList
+					data={dummyData}
+					renderItem={renderCards}
+					numColumns={2}
+					estimatedItemSize={181}
+					contentContainerStyle={{ padding: 5 }}
+				/>
+			</View>
 		</View>
 	);
 };
@@ -40,7 +58,40 @@ const styles = StyleSheet.create({
 		flex: 1,
 		justifyContent: 'center',
 	},
-	cardList: {
+	searchContainer: {
 		flex: 1,
+		flexDirection: 'row',
+		alignItems: 'center',
+		marginHorizontal: '10%',
+		margin: 5,
+	},
+	searchInput: {
+		flex: 3,
+		borderWidth: 1,
+		borderColor: '#837f7e',
+		borderRadius: 89,
+		marginRight: 10,
+		padding: 5,
+
+		opacity: 0.7,
+		justifyContent: 'center',
+	},
+	searchButton: {
+		backgroundColor: 'white',
+		borderWidth: 1,
+		borderColor: '#837f7e',
+		borderRadius: 10,
+		opacity: 0.7,
+		flex: 1,
+		padding: 5,
+		justifyContent: 'center',
+	},
+	searchText: {
+		textAlign: 'center',
+		fontSize: 12,
+		fontWeight: '400',
+	},
+	listContainer: {
+		flex: 9,
 	},
 });
