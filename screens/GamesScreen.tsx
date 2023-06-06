@@ -3,6 +3,7 @@ import { View, StyleSheet, Image, ImageBackground, Text } from 'react-native';
 import { FlashList } from '@shopify/flash-list';
 import { API_KEY, API_URL } from '@env';
 import axios from 'axios';
+import { LinearGradient } from 'expo-linear-gradient';
 
 import Card from '../components/Card';
 import SearchInput from '../components/SearchInput';
@@ -44,27 +45,31 @@ const GamessScreen = () => {
 		setGameState(updatedGameData);
 	};
 
-	async function handleQueryUpdate(searchQuery: string) {
+	function handleQueryUpdate(searchQuery: string) {
 		setSearchQuery(searchQuery);
-		await onSearchHandler();
 	}
 
 	return (
 		<View style={styles.rootContainer}>
-			<SearchInput
-				onSearchHandler={handleQueryUpdate}
-				placeholderTextColor={'white'}
-				backgroundColor='white'
-				buttonColor='white'
-			/>
-			<View style={styles.listContainer}>
-				<FlashList
-					data={gameState}
-					renderItem={renderCards}
-					estimatedItemSize={181}
-					contentContainerStyle={{ padding: 5 }}
+			<LinearGradient
+				style={styles.linearGradient}
+				colors={['black', 'white', 'black']}>
+				<SearchInput
+					onSearchHandler={onSearchHandler}
+					onChangeText={handleQueryUpdate}
+					placeholderTextColor={'white'}
+					backgroundColor='white'
+					buttonColor='white'
 				/>
-			</View>
+				<View style={styles.listContainer}>
+					<FlashList
+						data={gameState}
+						renderItem={renderCards}
+						estimatedItemSize={181}
+						contentContainerStyle={{ padding: 5 }}
+					/>
+				</View>
+			</LinearGradient>
 		</View>
 	);
 };
@@ -75,7 +80,9 @@ const styles = StyleSheet.create({
 	rootContainer: {
 		flex: 1,
 		justifyContent: 'center',
-		backgroundColor: '#565656',
+	},
+	linearGradient: {
+		flex: 1,
 	},
 	listContainer: {
 		flex: 9,
