@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
-import { View, StyleSheet, Image, Pressable, Text } from 'react-native';
+import { View, StyleSheet, Image, ImageBackground, Text } from 'react-native';
 import { FlashList } from '@shopify/flash-list';
 import { API_KEY, API_URL } from '@env';
+import { useQuery } from '@tanstack/react-query';
+import axios from 'axios';
 
 import Card from '../components/Card';
 import SearchInput from '../components/SearchInput';
@@ -18,36 +20,48 @@ interface GameDetail {
 	ratings: any;
 }
 
-const games: GameDetail[] = Array(10)
-	.fill({
-		id: 0,
-		slug: 'game-slug',
-		name: 'Game Name',
-		released: '2023-06-06',
-		tba: true,
-		background_image: 'http://example.com',
-		rating: 0,
-		rating_top: 0,
-		ratings: {},
-	})
-	.map((game, index) => ({ ...game, id: index + 1 }));
+const fetchGames = async () => {
+	const params = {
+		key: API_KEY,
+		ordering: '-rating',
+		page_size: '10',
+		search: 'Diablo',
+	};
+	const response = await axios.get(`${API_URL}`, { params });
+	return response.data.results;
+};
 
 const GamessScreen = () => {
-	const renderCards = ({ item }: { item: GameDetail }) => {
+	const { data: games, isLoading, isError } = useQuery(['games'], fetchGames);
+
+	if (isLoading) {
+		return <Text>Loading...</Text>;
+	}
+
+	if (isError) {
+		return <Text>An error occurred...</Text>;
+	}
+
+	const renderCards = ({ item }: { item: any }) => {
 		return (
 			<Card>
-				<Image source={{ uri: item.background_image }} style={styles.image} />
-				<Text style={styles.title}>{item.name}</Text>
-				<Text style={styles.text}>Released: {item.released}</Text>
-				<Text style={styles.text}>Rating: {item.rating}</Text>
-				<Text style={styles.text}>Top rating: {item.rating_top}</Text>
-				<Text style={styles.text}>TBA: {item.tba ? 'Yes' : 'No'}</Text>
+				<View>
+					<ImageBackground
+						source={{ uri: item.background_image }}
+						style={styles.image}
+					/>
+					<Text style={styles.title}>{item.name}</Text>
+					<Text style={styles.text}>Released: {item.released}</Text>
+					<Text style={styles.text}>Rating: {item.rating}</Text>
+					<Text style={styles.text}>Top rating: {item.rating_top}</Text>
+					<Text style={styles.text}>TBA: {item.tba ? 'Yes' : 'No'}</Text>
+				</View>
 			</Card>
 		);
 	};
 
 	function onSearchHandler(searchQuery: string) {
-		console.log(API_URL);
+		console.log(games);
 	}
 
 	return (
@@ -57,7 +71,6 @@ const GamessScreen = () => {
 				<FlashList
 					data={games}
 					renderItem={renderCards}
-					numColumns={2}
 					estimatedItemSize={181}
 					contentContainerStyle={{ padding: 5 }}
 				/>
@@ -118,5 +131,7 @@ const styles = StyleSheet.create({
 		fontSize: 16,
 		marginVertical: 2,
 	},
-	image: {},
+	image: {
+		flex: 1,
+	},
 });
