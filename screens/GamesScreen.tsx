@@ -49,6 +49,10 @@ const GamessScreen = () => {
 		setSearchQuery(searchQuery);
 	}
 
+	useEffect(() => {
+		fetchGames().then((data) => setGameState(data));
+	}, []);
+
 	return (
 		<View style={styles.rootContainer}>
 			<LinearGradient
@@ -57,7 +61,7 @@ const GamessScreen = () => {
 				<SearchInput
 					onSearchHandler={onSearchHandler}
 					onChangeText={handleQueryUpdate}
-					placeholderTextColor={'white'}
+					placeholderTextColor={'black'}
 					backgroundColor='white'
 					buttonColor='white'
 				/>
