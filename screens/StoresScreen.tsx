@@ -1,41 +1,74 @@
-import { View, StyleSheet } from 'react-native';
-import { FlashList } from '@shopify/flash-list';
+import {
+	View,
+	StyleSheet,
+	ImageBackground,
+	Text,
+	FlatList,
+} from 'react-native';
+import { useQuery } from '@tanstack/react-query';
+import { API_KEY, STORES_API_URL } from '@env';
+import axios from 'axios';
 
 import Card from '../components/Card';
+import ActivityIndicatorComponent from '../components/ActivityIndicator';
 
-export interface TestListData {
-	id: string;
-	testNumber: number;
+export interface GameStoreInterface {
+	id: number;
+	name: string;
+	domain: string;
+	slug: string;
+	image_background: string;
+	error?: any;
+}
+
+async function fetchGameStores(): Promise<any> {
+	const params = {
+		key: API_KEY,
+		page_size: 20,
+	};
+	try {
+		const response = await axios.get(`${STORES_API_URL}`, { params });
+		return response.data.results;
+	} catch (error) {
+		console.log('thrown error');
+		throw error;
+	}
 }
 
 const StoresScreen = () => {
-	const dummyData: TestListData[] = [
-		{ id: '1', testNumber: 1 },
-		{ id: '2', testNumber: 2 },
-		{ id: '3', testNumber: 3 },
-		{ id: '4', testNumber: 4 },
-		{ id: '4', testNumber: 4 },
-		{ id: '4', testNumber: 4 },
-		{ id: '4', testNumber: 4 },
-		{ id: '4', testNumber: 4 },
-		{ id: '4', testNumber: 4 },
-		{ id: '4', testNumber: 4 },
-		{ id: '4', testNumber: 4 },
-		{ id: '4', testNumber: 4 },
-	];
-	const renderCards = ({ item }: { item: TestListData }) => {
-		return <Card>{item.testNumber}</Card>;
+	const {
+		data: gameStores,
+		isLoading,
+		error,
+	} = useQuery<GameStoreInterface[], unknown>(['stores'], fetchGameStores);
+
+	const renderCards = ({ item }: { item: GameStoreInterface }) => {
+		return (
+			<Card color='#0a1112'>
+				<View style={styles.innerCardContainer}>
+					<ImageBackground
+						style={styles.image}
+						source={{ uri: item.image_background }}
+					/>
+					<Text>{item.name}</Text>
+				</View>
+			</Card>
+		);
 	};
 
 	return (
 		<View style={styles.rootContainer}>
-			<FlashList
-				data={dummyData}
-				renderItem={renderCards}
-				numColumns={2}
-				estimatedItemSize={181}
-				contentContainerStyle={{ padding: 5 }}
-			/>
+			{isLoading ? (
+				<ActivityIndicatorComponent size='large' color='blue' />
+			) : (
+				<FlatList
+					data={gameStores}
+					renderItem={renderCards}
+					numColumns={2}
+					contentContainerStyle={{ padding: 5 }}
+					keyExtractor={(item) => `${item.id}`}
+				/>
+			)}
 		</View>
 	);
 };
@@ -47,7 +80,14 @@ const styles = StyleSheet.create({
 		flex: 1,
 		justifyContent: 'center',
 	},
-	cardList: {
+	innerCardContainer: {
 		flex: 1,
+		justifyContent: 'center',
+		alignItems: 'center',
+		width: '100%',
+	},
+	image: {
+		flex: 1,
+		aspectRatio: 1,
 	},
 });

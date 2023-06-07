@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { View, StyleSheet, Image, ImageBackground, Text } from 'react-native';
 import { FlashList } from '@shopify/flash-list';
-import { API_KEY, API_URL } from '@env';
+import { API_KEY, GAMES_API_URL } from '@env';
 import axios from 'axios';
 import { LinearGradient } from 'expo-linear-gradient';
 
@@ -32,14 +32,19 @@ const GamessScreen = () => {
 		);
 	};
 	const fetchGames = async () => {
-		const params = {
-			key: API_KEY,
-			ordering: '-top_rating',
-			page_size: '10',
-			search: searchQuery,
-		};
-		const response = await axios.get(`${API_URL}`, { params });
-		return response.data.results;
+		try {
+			const params = {
+				key: API_KEY,
+				ordering: '-top_rating',
+				page_size: '10',
+				search: searchQuery,
+			};
+			const response = await axios.get(`${GAMES_API_URL}`, { params });
+			return response.data.results;
+		} catch (error) {
+			console.log('thrown error');
+			throw error;
+		}
 	};
 
 	const onSearchHandler = async () => {
