@@ -7,10 +7,12 @@ import { LinearGradient } from 'expo-linear-gradient';
 
 import Card from '../components/Card';
 import SearchInput from '../components/SearchInput';
+import ActivityIndicatorComponent from '../components/ActivityIndicator';
 
 const GamessScreen = () => {
 	const [searchQuery, setSearchQuery] = useState('');
 	const [gameState, setGameState] = useState([]);
+	const [isLoading, setIsLoading] = useState(true);
 
 	const renderCards = ({ item }: { item: any }) => {
 		return (
@@ -41,8 +43,10 @@ const GamessScreen = () => {
 	};
 
 	const onSearchHandler = async () => {
+		setIsLoading(true);
 		const updatedGameData = await fetchGames();
 		setGameState(updatedGameData);
+		setIsLoading(false);
 	};
 
 	function handleQueryUpdate(searchQuery: string) {
@@ -50,7 +54,10 @@ const GamessScreen = () => {
 	}
 
 	useEffect(() => {
-		fetchGames().then((data) => setGameState(data));
+		fetchGames().then((data) => {
+			setGameState(data);
+			setIsLoading(false);
+		});
 	}, []);
 
 	return (
@@ -66,12 +73,18 @@ const GamessScreen = () => {
 					buttonColor='white'
 				/>
 				<View style={styles.listContainer}>
-					<FlashList
-						data={gameState}
-						renderItem={renderCards}
-						estimatedItemSize={181}
-						contentContainerStyle={{ padding: 5 }}
-					/>
+					{isLoading ? (
+						<ActivityIndicatorComponent size={'large'} color='blue' />
+					) : (
+						<>
+							<FlashList
+								data={gameState}
+								renderItem={renderCards}
+								estimatedItemSize={181}
+								contentContainerStyle={{ padding: 5 }}
+							/>
+						</>
+					)}
 				</View>
 			</LinearGradient>
 		</View>

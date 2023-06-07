@@ -39,7 +39,15 @@ const SearchInput = ({
 			/>
 			<Pressable
 				onPress={onPressHandler}
-				style={[{ backgroundColor: buttonColor }, styles.searchButton]}>
+				style={({ pressed }) => {
+					return pressed
+						? [
+								{ backgroundColor: buttonColor },
+								styles.searchButton,
+								styles.buttonPressed,
+						  ]
+						: [{ backgroundColor: buttonColor }, styles.searchButton];
+				}}>
 				<Text style={styles.searchText}>Search</Text>
 			</Pressable>
 		</View>
@@ -80,5 +88,8 @@ const styles = StyleSheet.create({
 		textAlign: 'center',
 		fontSize: 12,
 		fontWeight: '400',
+	},
+	buttonPressed: {
+		opacity: 0.5,
 	},
 });
