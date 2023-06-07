@@ -1,10 +1,29 @@
-import React from 'react';
-import { Text, View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Text } from 'react-native';
 
-const GameDealsScreen: React.FC = () => {
+import SearchInput from '../components/SearchInput';
+import ActivityIndicatorComponent from '../components/ActivityIndicator';
+
+const GameDealsScreen = () => {
+	function onGameDealSearchHandler() {
+		console.log('searched game deals');
+	}
+
+	function handleOnChangeText(text: string) {
+		console.log(text);
+	}
+
 	return (
 		<View style={styles.rootContainer}>
-			<Text>Game Deals Screen!</Text>
+			<View style={styles.searchContainer}>
+				<SearchInput
+					onChangeText={handleOnChangeText}
+					onSearchHandler={onGameDealSearchHandler}
+				/>
+			</View>
+
+			<View style={styles.dealsContainer}>
+				<ActivityIndicatorComponent size={'large'} color='blue' />
+			</View>
 		</View>
 	);
 };
@@ -14,7 +33,12 @@ export default GameDealsScreen;
 const styles = StyleSheet.create({
 	rootContainer: {
 		flex: 1,
-		justifyContent: 'center',
-		alignItems: 'center',
+	},
+	searchContainer: {
+		flex: 1,
+	},
+	dealsContainer: {
+		flex: 9,
+		margin: 10,
 	},
 });

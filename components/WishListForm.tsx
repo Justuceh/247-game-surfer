@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { View, TextInput, Button, StyleSheet } from 'react-native';
+import { useState } from 'react';
+import { Text, View, TextInput, Button, StyleSheet } from 'react-native';
 
 interface Game {
 	id: number;
@@ -7,7 +7,7 @@ interface Game {
 	platform: string;
 }
 
-const WishlistForm: React.FC = () => {
+const WishlistForm = () => {
 	const [title, setTitle] = useState('');
 	const [platform, setPlatform] = useState('');
 	const [wishlist, setWishlist] = useState<Game[]>([]);
