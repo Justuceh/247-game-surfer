@@ -46,7 +46,7 @@ const StoresScreen = () => {
 
 	const renderCards = ({ item }: { item: GameStoreInterface }) => {
 		return (
-			<Card color='#572e68'>
+			<Card color='#e4e4e4'>
 				<View style={styles.innerCardContainer}>
 					<ImageBackground
 						style={styles.image}
@@ -96,6 +96,6 @@ const styles = StyleSheet.create({
 		marginTop: 9,
 		fontWeight: '400',
 		fontSize: 19,
-		color: 'white',
+		color: 'black',
 	},
 });
