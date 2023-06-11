@@ -41,13 +41,15 @@ const GamessScreen = () => {
 	}
 
 	const renderCards = ({ item }: { item: GameItem }) => {
-		const isWishlisted = wishlistContext.ids?.includes(item.id);
+		const isWishlisted = wishlistContext.games.some(
+			(game) => game.id === item.id
+		);
 
 		const changeWishlistStatusHandler = () => {
 			if (isWishlisted) {
-				wishlistContext.removeWishlistItem(item);
+				wishlistContext.removeGame(item.id);
 			} else {
-				wishlistContext.addWishlistItem(item);
+				wishlistContext.addGame(item);
 			}
 		};
 		return item ? (
