@@ -34,31 +34,30 @@ const GamessScreen = () => {
 
 	function handleOnGamePress() {
 		console.log('pressed');
-		//
 		///console.log(`game pressed.  Id: ${id}`)
 	}
-
 	const renderCards = ({ item }: { item: any }) => {
 		return item ? (
-			<Pressable
-				onPress={handleOnGamePress}
-				style={({ pressed }) => [pressed ? styles.cardPressed : null]}>
-				<Card color='#0a1112'>
-					<View style={styles.innerCardContainer}>
-						<View style={styles.imageContainer}>
-							<ImageBackground
-								source={{ uri: item.background_image }}
-								style={styles.image}
-							/>
-						</View>
-
-						<Text style={styles.title}>{item.name}</Text>
-						<Text style={styles.text}>Released: {item.released}</Text>
-						<Text style={styles.text}>Rating: {item.rating}</Text>
-						<Text style={styles.text}>ID: {item.id}</Text>
+			<>
+				<Pressable
+					onPress={handleOnGamePress}
+					style={({ pressed }) => [pressed ? styles.pressed : null]}>
+					<View style={styles.imageContainer}>
+						<ImageBackground
+							source={{ uri: item.background_image }}
+							style={styles.image}
+						/>
 					</View>
-				</Card>
-			</Pressable>
+				</Pressable>
+				<View style={styles.titleContainer}>
+					<Text style={styles.title}>{item.name}</Text>
+					<Pressable style={({ pressed }) => [pressed ? styles.pressed : null]}>
+						<View style={styles.pressableContent}>
+							<Text style={styles.wishlistText}>+ Wishlist</Text>
+						</View>
+					</Pressable>
+				</View>
+			</>
 		) : (
 			<Card> </Card>
 		);
@@ -140,18 +139,19 @@ const styles = StyleSheet.create({
 		flex: 1,
 	},
 	listContainer: {
-		flex: 9,
+		flex: 7,
+	},
+	titleContainer: {
+		flex: 1,
+		flexDirection: 'row',
+		margin: 10,
 	},
 	title: {
+		flex: 4,
 		fontSize: 20,
 		fontWeight: 'bold',
 		marginVertical: 10,
-		color: 'white',
-	},
-	text: {
-		fontSize: 16,
-		marginVertical: 2,
-		color: 'white',
+		color: 'black',
 	},
 	imageContainer: {
 		flex: 1,
@@ -164,13 +164,21 @@ const styles = StyleSheet.create({
 		aspectRatio: 1,
 		overflow: 'hidden',
 	},
-	innerCardContainer: {
+	pressed: {
+		opacity: 0.5,
+	},
+	pressableContent: {
 		flex: 1,
+		borderWidth: 0.2,
+		borderRadius: 20,
+		padding: 4,
 		justifyContent: 'center',
 		alignItems: 'center',
-		width: '100%',
 	},
-	cardPressed: {
-		opacity: 0.5,
+	wishlistText: {
+		opacity: 0.8,
+		padding: 2,
+		fontWeight: 'bold',
+		color: 'white',
 	},
 });
