@@ -5,6 +5,9 @@ import {
 	ImageBackground,
 	Text,
 	Pressable,
+	KeyboardAvoidingView,
+	FlatList,
+	Platform,
 } from 'react-native';
 import { FlashList } from '@shopify/flash-list';
 import { API_KEY, GAMES_API_URL } from '@env';
@@ -98,37 +101,43 @@ const GamessScreen = () => {
 	}, []);
 
 	return (
-		<View style={styles.rootContainer}>
-			<View style={styles.searchContainer}>
-				<SearchInput
-					onSearchHandler={onSearchHandler}
-					onChangeText={handleQueryUpdate}
-					placeholderTextColor={'black'}
-					backgroundColor='#fff'
-					buttonColor='white'
-				/>
+		<KeyboardAvoidingView
+			style={styles.rootContainer}
+			behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+			keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}>
+			<View style={styles.rootContainer}>
+				<View style={styles.searchContainer}>
+					<SearchInput
+						onSearchHandler={onSearchHandler}
+						onChangeText={handleQueryUpdate}
+						placeholderTextColor={'black'}
+						backgroundColor='#fff'
+						buttonColor='white'
+					/>
+				</View>
+				<View style={styles.linearGradient}>
+					<LinearGradient
+						style={styles.linearGradient}
+						colors={['#313131', '#dfdfdf', '#313131']}>
+						<View style={styles.listContainer}>
+							{isLoading ? (
+								<ActivityIndicatorComponent size={'large'} color='blue' />
+							) : (
+								<>
+									<FlatList
+										data={gameState}
+										renderItem={renderCards}
+										//estimatedItemSize={181}
+										contentContainerStyle={{ padding: 5 }}
+										keyExtractor={(item) => `${item.id}`}
+									/>
+								</>
+							)}
+						</View>
+					</LinearGradient>
+				</View>
 			</View>
-			<View style={styles.linearGradient}>
-				<LinearGradient
-					style={styles.linearGradient}
-					colors={['#313131', '#dfdfdf', '#313131']}>
-					<View style={styles.listContainer}>
-						{isLoading ? (
-							<ActivityIndicatorComponent size={'large'} color='blue' />
-						) : (
-							<>
-								<FlashList
-									data={gameState}
-									renderItem={renderCards}
-									estimatedItemSize={181}
-									contentContainerStyle={{ padding: 5 }}
-								/>
-							</>
-						)}
-					</View>
-				</LinearGradient>
-			</View>
-		</View>
+		</KeyboardAvoidingView>
 	);
 };
 
