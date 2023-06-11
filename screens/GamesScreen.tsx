@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import {
 	View,
 	StyleSheet,
@@ -9,14 +9,15 @@ import {
 	FlatList,
 	Platform,
 } from 'react-native';
-import { FlashList } from '@shopify/flash-list';
 import { API_KEY, GAMES_API_URL } from '@env';
 import axios from 'axios';
 import { LinearGradient } from 'expo-linear-gradient';
+import { Ionicons } from '@expo/vector-icons';
 
 import Card from '../components/Card';
 import SearchInput from '../components/SearchInput';
 import ActivityIndicatorComponent from '../components/ActivityIndicator';
+import { WishlistContext } from '../store/context/wishlist-context';
 
 interface Game {
 	id: number;
@@ -35,11 +36,23 @@ const GamessScreen = () => {
 	const [gameState, setGameState] = useState<Game[]>([]);
 	const [isLoading, setIsLoading] = useState(true);
 
+	const wishlistContext = useContext(WishlistContext);
+
 	function handleOnGamePress() {
 		console.log('pressed');
 		///console.log(`game pressed.  Id: ${id}`)
 	}
-	const renderCards = ({ item }: { item: any }) => {
+
+	const renderCards = ({ item }: { item: Game }) => {
+		const isWishlisted = wishlistContext.ids?.includes(item.id);
+
+		const changeWishlistStatusHandler = () => {
+			if (isWishlisted) {
+				wishlistContext.removeWishlistItem(item.id);
+			} else {
+				wishlistContext.addWishlistItem(item.id);
+			}
+		};
 		return item ? (
 			<>
 				<View style={styles.listItemContainer}>
@@ -56,9 +69,24 @@ const GamessScreen = () => {
 					<View style={styles.titleContainer}>
 						<Text style={styles.title}>{item.name}</Text>
 						<Pressable
+							onPress={changeWishlistStatusHandler}
 							style={({ pressed }) => [pressed ? styles.pressed : null]}>
 							<View style={styles.pressableContent}>
-								<Text style={styles.wishlistText}>+ Wishlist</Text>
+								{!isWishlisted ? (
+									<Ionicons
+										onPress={changeWishlistStatusHandler}
+										name={'star'}
+										size={30}
+										color='white'
+									/>
+								) : (
+									<Ionicons
+										onPress={changeWishlistStatusHandler}
+										name={'star'}
+										size={30}
+										color='yellow'
+									/>
+								)}
 							</View>
 						</Pressable>
 					</View>
@@ -160,10 +188,10 @@ const styles = StyleSheet.create({
 		flex: 7,
 	},
 	listItemContainer: {
-		elevation: 8,
+		elevation: 4,
 		shadowColor: 'black',
 		shadowOffset: { width: 0, height: 2 },
-		shadowRadius: 6,
+		shadowRadius: 4,
 		shadowOpacity: 0.5,
 	},
 	titleContainer: {
@@ -194,8 +222,6 @@ const styles = StyleSheet.create({
 	},
 	pressableContent: {
 		flex: 1,
-		borderWidth: 0.2,
-		borderRadius: 20,
 		padding: 4,
 		justifyContent: 'center',
 		alignItems: 'center',
