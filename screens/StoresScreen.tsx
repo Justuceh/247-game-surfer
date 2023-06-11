@@ -6,29 +6,27 @@ import {
 	FlatList,
 } from 'react-native';
 import { useQuery } from '@tanstack/react-query';
-import { API_KEY, STORES_API_URL } from '@env';
+import { STORES_BASE_API_URL, STORES_API_URL } from '@env';
 import axios from 'axios';
 
 import Card from '../components/Card';
 import ActivityIndicatorComponent from '../components/ActivityIndicator';
 
 export interface GameStoreInterface {
-	id: number;
-	name: string;
-	domain: string;
-	slug: string;
-	image_background: string;
-	error?: any;
+	storeID: string;
+	storeName: string;
+	images: {
+		banner: string;
+		logo: string;
+		icon: string;
+	};
+	isActive: boolean;
 }
 
-async function fetchGameStores(): Promise<any> {
-	const params = {
-		key: API_KEY,
-		page_size: 20,
-	};
+async function fetchGameStores(): Promise<GameStoreInterface[]> {
 	try {
-		const response = await axios.get(`${STORES_API_URL}`, { params });
-		return response.data.results;
+		const response = await axios.get(`${STORES_API_URL}`);
+		return response.data;
 	} catch (error) {
 		console.log('thrown error');
 		throw error;
@@ -40,17 +38,21 @@ const StoresScreen = () => {
 		data: gameStores,
 		isLoading,
 		error,
-	} = useQuery<GameStoreInterface[], unknown>(['stores'], fetchGameStores);
+	} = useQuery<GameStoreInterface[], unknown>(['gameStores'], fetchGameStores, {
+		cacheTime: 1000 * 60 * 60 * 24, // Cache the store list for one day before fetching again
+	});
+
+	const filteredGames = gameStores?.filter((store) => store.isActive);
 
 	const renderCards = ({ item }: { item: GameStoreInterface }) => {
 		return (
-			<Card color='#0a1112'>
+			<Card color='#572e68'>
 				<View style={styles.innerCardContainer}>
 					<ImageBackground
 						style={styles.image}
-						source={{ uri: item.image_background }}
+						source={{ uri: `${STORES_BASE_API_URL}${item.images.logo}` }}
 					/>
-					<Text>{item.name}</Text>
+					<Text style={styles.storeText}>{item.storeName}</Text>
 				</View>
 			</Card>
 		);
@@ -66,7 +68,7 @@ const StoresScreen = () => {
 					renderItem={renderCards}
 					numColumns={2}
 					contentContainerStyle={{ padding: 5 }}
-					keyExtractor={(item) => `${item.id}`}
+					keyExtractor={(item) => `${item.storeID}`}
 				/>
 			)}
 		</View>
@@ -79,15 +81,21 @@ const styles = StyleSheet.create({
 	rootContainer: {
 		flex: 1,
 		justifyContent: 'center',
+		backgroundColor: '#282828',
 	},
 	innerCardContainer: {
 		flex: 1,
 		justifyContent: 'center',
 		alignItems: 'center',
-		width: '100%',
 	},
 	image: {
 		flex: 1,
 		aspectRatio: 1,
+	},
+	storeText: {
+		marginTop: 9,
+		fontWeight: '400',
+		fontSize: 19,
+		color: 'white',
 	},
 });
