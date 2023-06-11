@@ -99,31 +99,35 @@ const GamessScreen = () => {
 
 	return (
 		<View style={styles.rootContainer}>
-			<LinearGradient
-				style={styles.linearGradient}
-				colors={['black', 'white', 'black']}>
+			<View style={styles.searchContainer}>
 				<SearchInput
 					onSearchHandler={onSearchHandler}
 					onChangeText={handleQueryUpdate}
 					placeholderTextColor={'black'}
-					backgroundColor='white'
+					backgroundColor='#fff'
 					buttonColor='white'
 				/>
-				<View style={styles.listContainer}>
-					{isLoading ? (
-						<ActivityIndicatorComponent size={'large'} color='blue' />
-					) : (
-						<>
-							<FlashList
-								data={gameState}
-								renderItem={renderCards}
-								estimatedItemSize={181}
-								contentContainerStyle={{ padding: 5 }}
-							/>
-						</>
-					)}
-				</View>
-			</LinearGradient>
+			</View>
+			<View style={styles.linearGradient}>
+				<LinearGradient
+					style={styles.linearGradient}
+					colors={['#313131', '#dfdfdf', '#313131']}>
+					<View style={styles.listContainer}>
+						{isLoading ? (
+							<ActivityIndicatorComponent size={'large'} color='blue' />
+						) : (
+							<>
+								<FlashList
+									data={gameState}
+									renderItem={renderCards}
+									estimatedItemSize={181}
+									contentContainerStyle={{ padding: 5 }}
+								/>
+							</>
+						)}
+					</View>
+				</LinearGradient>
+			</View>
 		</View>
 	);
 };
@@ -135,8 +139,11 @@ const styles = StyleSheet.create({
 		flex: 1,
 		justifyContent: 'center',
 	},
-	linearGradient: {
+	searchContainer: {
 		flex: 1,
+	},
+	linearGradient: {
+		flex: 13,
 	},
 	listContainer: {
 		flex: 7,
@@ -179,6 +186,6 @@ const styles = StyleSheet.create({
 		opacity: 0.8,
 		padding: 2,
 		fontWeight: 'bold',
-		color: 'white',
+		color: 'black',
 	},
 });

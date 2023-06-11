@@ -26,8 +26,8 @@ const SearchInput = ({
 		<View style={styles.rootContainer}>
 			<TextInput
 				style={[
-					{ color: buttonTextColor, backgroundColor: backgroundColor },
 					styles.searchInput,
+					{ color: buttonTextColor, backgroundColor: backgroundColor },
 				]}
 				value={searchQuery}
 				onChangeText={(text) => {
