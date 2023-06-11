@@ -19,21 +19,18 @@ import SearchInput from '../components/SearchInput';
 import ActivityIndicatorComponent from '../components/ActivityIndicator';
 import { WishlistContext } from '../store/context/wishlist-context';
 
-interface Game {
+export interface GameItem {
 	id: number;
-	slug: string;
 	name: string;
 	description: string;
 	background_image: string;
-	releaseDate: string;
 	metacritic: number;
-	website: string;
 	redditUrl: string;
 }
 
 const GamessScreen = () => {
 	const [searchQuery, setSearchQuery] = useState('');
-	const [gameState, setGameState] = useState<Game[]>([]);
+	const [gameState, setGameState] = useState<GameItem[]>([]);
 	const [isLoading, setIsLoading] = useState(true);
 
 	const wishlistContext = useContext(WishlistContext);
@@ -43,14 +40,14 @@ const GamessScreen = () => {
 		///console.log(`game pressed.  Id: ${id}`)
 	}
 
-	const renderCards = ({ item }: { item: Game }) => {
+	const renderCards = ({ item }: { item: GameItem }) => {
 		const isWishlisted = wishlistContext.ids?.includes(item.id);
 
 		const changeWishlistStatusHandler = () => {
 			if (isWishlisted) {
-				wishlistContext.removeWishlistItem(item.id);
+				wishlistContext.removeWishlistItem(item);
 			} else {
-				wishlistContext.addWishlistItem(item.id);
+				wishlistContext.addWishlistItem(item);
 			}
 		};
 		return item ? (
@@ -97,7 +94,7 @@ const GamessScreen = () => {
 		);
 	};
 
-	const fetchGames = async (): Promise<Game[]> => {
+	const fetchGames = async (): Promise<GameItem[]> => {
 		try {
 			const params = {
 				key: API_KEY,
