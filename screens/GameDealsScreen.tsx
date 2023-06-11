@@ -21,9 +21,7 @@ const GameDealsScreen = () => {
 				/>
 			</View>
 
-			<View style={styles.dealsContainer}>
-				<ActivityIndicatorComponent size={'large'} color='blue' />
-			</View>
+			<View style={styles.dealsContainer}></View>
 		</View>
 	);
 };
