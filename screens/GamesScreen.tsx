@@ -9,13 +9,25 @@ import Card from '../components/Card';
 import SearchInput from '../components/SearchInput';
 import ActivityIndicatorComponent from '../components/ActivityIndicator';
 
+interface Game {
+	id: number;
+	slug: string;
+	name: string;
+	description: string;
+	background_image: string;
+	releaseDate: string;
+	metacritic: number;
+	website: string;
+	redditUrl: string;
+}
+
 const GamessScreen = () => {
 	const [searchQuery, setSearchQuery] = useState('');
-	const [gameState, setGameState] = useState([]);
+	const [gameState, setGameState] = useState<Game[]>([]);
 	const [isLoading, setIsLoading] = useState(true);
 
 	const renderCards = ({ item }: { item: any }) => {
-		return (
+		return item ? (
 			<Card color='#0a1112'>
 				<View style={styles.innerCardContainer}>
 					<ImageBackground
@@ -25,13 +37,15 @@ const GamessScreen = () => {
 					<Text style={styles.title}>{item.name}</Text>
 					<Text style={styles.text}>Released: {item.released}</Text>
 					<Text style={styles.text}>Rating: {item.rating}</Text>
-					<Text style={styles.text}>Top rating: {item.rating_top}</Text>
-					<Text style={styles.text}>TBA: {item.tba ? 'Yes' : 'No'}</Text>
+					<Text style={styles.text}>ID: {item.id}</Text>
 				</View>
 			</Card>
+		) : (
+			<Card> </Card>
 		);
 	};
-	const fetchGames = async () => {
+
+	const fetchGames = async (): Promise<Game[]> => {
 		try {
 			const params = {
 				key: API_KEY,
