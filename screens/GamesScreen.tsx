@@ -42,23 +42,26 @@ const GamessScreen = () => {
 	const renderCards = ({ item }: { item: any }) => {
 		return item ? (
 			<>
-				<Pressable
-					onPress={handleOnGamePress}
-					style={({ pressed }) => [pressed ? styles.pressed : null]}>
-					<View style={styles.imageContainer}>
-						<ImageBackground
-							source={{ uri: item.background_image }}
-							style={styles.image}
-						/>
-					</View>
-				</Pressable>
-				<View style={styles.titleContainer}>
-					<Text style={styles.title}>{item.name}</Text>
-					<Pressable style={({ pressed }) => [pressed ? styles.pressed : null]}>
-						<View style={styles.pressableContent}>
-							<Text style={styles.wishlistText}>+ Wishlist</Text>
+				<View style={styles.listItemContainer}>
+					<Pressable
+						onPress={handleOnGamePress}
+						style={({ pressed }) => [pressed ? styles.pressed : null]}>
+						<View style={styles.imageContainer}>
+							<ImageBackground
+								source={{ uri: item.background_image }}
+								style={styles.image}
+							/>
 						</View>
 					</Pressable>
+					<View style={styles.titleContainer}>
+						<Text style={styles.title}>{item.name}</Text>
+						<Pressable
+							style={({ pressed }) => [pressed ? styles.pressed : null]}>
+							<View style={styles.pressableContent}>
+								<Text style={styles.wishlistText}>+ Wishlist</Text>
+							</View>
+						</Pressable>
+					</View>
 				</View>
 			</>
 		) : (
@@ -127,7 +130,6 @@ const GamessScreen = () => {
 									<FlatList
 										data={gameState}
 										renderItem={renderCards}
-										//estimatedItemSize={181}
 										contentContainerStyle={{ padding: 5 }}
 										keyExtractor={(item) => `${item.id}`}
 									/>
@@ -156,6 +158,13 @@ const styles = StyleSheet.create({
 	},
 	listContainer: {
 		flex: 7,
+	},
+	listItemContainer: {
+		elevation: 8,
+		shadowColor: 'black',
+		shadowOffset: { width: 0, height: 2 },
+		shadowRadius: 6,
+		shadowOpacity: 0.5,
 	},
 	titleContainer: {
 		flex: 1,
