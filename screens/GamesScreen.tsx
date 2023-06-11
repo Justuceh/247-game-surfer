@@ -1,5 +1,11 @@
 import { useState, useEffect } from 'react';
-import { View, StyleSheet, Image, ImageBackground, Text } from 'react-native';
+import {
+	View,
+	StyleSheet,
+	ImageBackground,
+	Text,
+	Pressable,
+} from 'react-native';
 import { FlashList } from '@shopify/flash-list';
 import { API_KEY, GAMES_API_URL } from '@env';
 import axios from 'axios';
@@ -26,20 +32,33 @@ const GamessScreen = () => {
 	const [gameState, setGameState] = useState<Game[]>([]);
 	const [isLoading, setIsLoading] = useState(true);
 
+	function handleOnGamePress() {
+		console.log('pressed');
+		//
+		///console.log(`game pressed.  Id: ${id}`)
+	}
+
 	const renderCards = ({ item }: { item: any }) => {
 		return item ? (
-			<Card color='#0a1112'>
-				<View style={styles.innerCardContainer}>
-					<ImageBackground
-						source={{ uri: item.background_image }}
-						style={styles.image}
-					/>
-					<Text style={styles.title}>{item.name}</Text>
-					<Text style={styles.text}>Released: {item.released}</Text>
-					<Text style={styles.text}>Rating: {item.rating}</Text>
-					<Text style={styles.text}>ID: {item.id}</Text>
-				</View>
-			</Card>
+			<Pressable
+				onPress={handleOnGamePress}
+				style={({ pressed }) => [pressed ? styles.cardPressed : null]}>
+				<Card color='#0a1112'>
+					<View style={styles.innerCardContainer}>
+						<View style={styles.imageContainer}>
+							<ImageBackground
+								source={{ uri: item.background_image }}
+								style={styles.image}
+							/>
+						</View>
+
+						<Text style={styles.title}>{item.name}</Text>
+						<Text style={styles.text}>Released: {item.released}</Text>
+						<Text style={styles.text}>Rating: {item.rating}</Text>
+						<Text style={styles.text}>ID: {item.id}</Text>
+					</View>
+				</Card>
+			</Pressable>
 		) : (
 			<Card> </Card>
 		);
@@ -134,14 +153,24 @@ const styles = StyleSheet.create({
 		marginVertical: 2,
 		color: 'white',
 	},
+	imageContainer: {
+		flex: 1,
+		borderRadius: 20,
+		overflow: 'hidden',
+	},
 	image: {
 		flex: 1,
 		width: '100%',
+		aspectRatio: 1,
+		overflow: 'hidden',
 	},
 	innerCardContainer: {
 		flex: 1,
 		justifyContent: 'center',
 		alignItems: 'center',
 		width: '100%',
+	},
+	cardPressed: {
+		opacity: 0.5,
 	},
 });
