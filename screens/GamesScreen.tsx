@@ -17,7 +17,7 @@ import Icon from 'react-native-vector-icons/AntDesign';
 import Card from '../components/Card';
 import SearchInput from '../components/SearchInput';
 import ActivityIndicatorComponent from '../components/ActivityIndicator';
-import { WishlistContext } from '../store/context/wishlist-context';
+import { WishlistContext } from '../store/context/wishlist/wishlist-context';
 
 export interface GameItem {
 	id: number;

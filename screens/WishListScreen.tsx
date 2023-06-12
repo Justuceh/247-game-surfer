@@ -6,10 +6,10 @@ import {
 	ImageBackground,
 	FlatList,
 } from 'react-native';
-import { WishlistContext } from '../store/context/wishlist-context';
+import { WishlistContext } from '../store/context/wishlist/wishlist-context';
 
 import Card from '../components/Card';
-import { Game } from '../store/context/wishlist-context';
+import { Game } from '../store/context/wishlist/wishlist-context';
 
 const WishListScreen = () => {
 	const wishListGames = useContext(WishlistContext);

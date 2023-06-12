@@ -1,6 +1,6 @@
 import { createContext, useState } from 'react';
 
-import { GameItem } from '../../screens/GamesScreen';
+import { GameItem } from '../../../screens/GamesScreen';
 
 export interface Game {
 	id: number;

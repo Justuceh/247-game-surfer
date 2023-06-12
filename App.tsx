@@ -1,15 +1,16 @@
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { StyleSheet } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, RouteProp } from '@react-navigation/native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 import StoresScreen from './screens/StoresScreen';
-import GameDealsScreen from './screens/GameDealsScreen';
+import GameDealsScreen, { GameDealsProps } from './screens/GameDealsScreen';
 import WishListScreen from './screens/WishListScreen';
 import GamessScreen from './screens/GamesScreen';
-import { WishlistContextProvider } from './store/context/wishlist-context';
+import { WishlistContextProvider } from './store/context/wishlist/wishlist-context';
+import { GameStoreContextProvider } from './store/context/game_deals/game-stores-context';
 
 type RootNavigatorParamList = {
 	StoresScreen: undefined;
@@ -28,34 +29,36 @@ export default function App() {
 		<SafeAreaProvider>
 			<SafeAreaView style={styles.rootContainer}>
 				<StatusBar style='auto' />
-				<WishlistContextProvider>
-					<NavigationContainer<RootNavigatorParamList>>
-						<QueryClientProvider client={queryClient}>
-							<Tab.Navigator>
-								<Tab.Screen
-									name='StoresScreen'
-									component={StoresScreen}
-									options={{ title: 'Stores' }}
-								/>
-								<Tab.Screen
-									name='GameDealsScreen'
-									options={{ title: 'Deals' }}
-									component={GameDealsScreen}
-								/>
-								<Tab.Screen
-									name='WishListScreen'
-									options={{ title: 'Wish List' }}
-									component={WishListScreen}
-								/>
-								<Tab.Screen
-									name='GamesScreen'
-									options={{ title: 'Games' }}
-									component={GamessScreen}
-								/>
-							</Tab.Navigator>
-						</QueryClientProvider>
-					</NavigationContainer>
-				</WishlistContextProvider>
+				<GameStoreContextProvider>
+					<WishlistContextProvider>
+						<NavigationContainer<RootNavigatorParamList>>
+							<QueryClientProvider client={queryClient}>
+								<Tab.Navigator>
+									<Tab.Screen
+										name='StoresScreen'
+										component={StoresScreen}
+										options={{ title: 'Stores' }}
+									/>
+									{/* <Tab.Screen
+										name='GameDealsScreen'
+										options={{ title: 'Deals' }}
+										component={GameDealsScreen}
+									/> */}
+									<Tab.Screen
+										name='WishListScreen'
+										options={{ title: 'Wish List' }}
+										component={WishListScreen}
+									/>
+									<Tab.Screen
+										name='GamesScreen'
+										options={{ title: 'Games' }}
+										component={GamessScreen}
+									/>
+								</Tab.Navigator>
+							</QueryClientProvider>
+						</NavigationContainer>
+					</WishlistContextProvider>
+				</GameStoreContextProvider>
 			</SafeAreaView>
 		</SafeAreaProvider>
 	);

@@ -1,9 +1,11 @@
+import { useContext, useEffect } from 'react';
 import {
 	View,
 	StyleSheet,
 	ImageBackground,
 	Text,
 	FlatList,
+	Pressable,
 } from 'react-native';
 import { FlashList } from '@shopify/flash-list';
 import { useQuery } from '@tanstack/react-query';
@@ -12,6 +14,8 @@ import axios from 'axios';
 
 import Card from '../components/Card';
 import ActivityIndicatorComponent from '../components/ActivityIndicator';
+
+import { GameStoreContext } from '../store/context/game_deals/game-stores-context';
 
 export interface GameStoreInterface {
 	storeID: string;
@@ -43,7 +47,19 @@ const StoresScreen = () => {
 		cacheTime: 1000 * 60 * 60 * 24, // Cache the store list for one day before fetching again
 	});
 
-	const filteredGames = gameStores?.filter((store) => store.isActive);
+	const storesContext = useContext(GameStoreContext);
+
+	useEffect(() => {
+		if (
+			gameStores &&
+			gameStores.length > 0 &&
+			storesContext.games.length === 0
+		) {
+			storesContext.addGameStores(gameStores);
+		}
+	}, [gameStores, storesContext.games]);
+
+	const filteredGames = storesContext.games.filter((game) => game.isActive);
 
 	const renderCards = ({ item }: { item: GameStoreInterface }) => {
 		return (
