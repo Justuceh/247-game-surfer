@@ -16,7 +16,7 @@ import { GameStoreContextProvider } from './store/context/game_deals/game-stores
 export type RootNavigatorParamList = {
 	StoresScreen: undefined;
 	StoresScreenStack: undefined;
-	GameDealsScreen: { storeID: string };
+	GameDealsScreen: { storeID: string; title: string };
 	WishListScreen: undefined;
 	GamesScreen: undefined;
 };

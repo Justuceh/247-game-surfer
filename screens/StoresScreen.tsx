@@ -65,7 +65,10 @@ const StoresScreen = () => {
 	const renderCards = ({ item }: { item: GameStoreInterface }) => {
 		const storeID = item.storeID;
 		const handleGameStorePress = () => {
-			navigation.navigate('GameDealsScreen', { storeID });
+			navigation.navigate('GameDealsScreen', {
+				storeID: storeID,
+				title: item.storeName,
+			});
 		};
 		return (
 			<Card color='#e4e4e4'>
