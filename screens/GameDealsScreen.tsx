@@ -1,11 +1,9 @@
 import { CHEAPSHARK_API_URL } from '@env';
+import { RouteProp } from '@react-navigation/native';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { View, StyleSheet, Text } from 'react-native';
-
-export interface GameDealsProps {
-	storeID: string;
-}
+import { RootNavigatorParamList } from '../App';
 
 export interface GameDealItem {
 	gameID: string;
@@ -19,15 +17,24 @@ export interface GameDealItem {
 	dealRating: string;
 	dealID: string;
 }
+type GameDealsScreenRouteProp = RouteProp<
+	RootNavigatorParamList,
+	'GameDealsScreen'
+>;
 
-const GameDealsScreen = ({ storeID }: GameDealsProps) => {
+type GameDealsScreenProps = {
+	route: GameDealsScreenRouteProp;
+};
+
+const GameDealsScreen = ({ route }: GameDealsScreenProps) => {
+	const { storeID } = route.params;
 	async function fetchGameStoreDeals() {
 		const params = {
 			storeID: storeID,
 			pageSize: 20,
 		};
 		return await axios
-			.get(`${CHEAPSHARK_API_URL}/deals`, { params })
+			.get(`${CHEAPSHARK_API_URL}/deals`)
 			.then((response) => {
 				if (!response) {
 					throw new Error('Network response was not ok');
@@ -44,7 +51,18 @@ const GameDealsScreen = ({ storeID }: GameDealsProps) => {
 	} = useQuery<GameDealItem[], unknown>(['gameDeals'], fetchGameStoreDeals);
 	const filteredGames = games?.filter((game) => game.dealID !== undefined);
 
-	return <View></View>;
+	return (
+		<View>
+			{games?.map((game) => {
+				return (
+					<View key={game.dealID}>
+						<Text>{game.title}</Text>
+						<Text>{game.salePrice}</Text>
+					</View>
+				);
+			})}
+		</View>
+	);
 };
 
 export default GameDealsScreen;

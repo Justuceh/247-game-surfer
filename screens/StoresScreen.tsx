@@ -1,12 +1,5 @@
 import { useContext, useEffect } from 'react';
-import {
-	View,
-	StyleSheet,
-	ImageBackground,
-	Text,
-	FlatList,
-	Pressable,
-} from 'react-native';
+import { View, StyleSheet, ImageBackground, Pressable } from 'react-native';
 import { FlashList } from '@shopify/flash-list';
 import { useQuery } from '@tanstack/react-query';
 import { STORES_BASE_API_URL, STORES_API_URL } from '@env';
@@ -14,8 +7,11 @@ import axios from 'axios';
 
 import Card from '../components/Card';
 import ActivityIndicatorComponent from '../components/ActivityIndicator';
+import { useNavigation } from '@react-navigation/native';
 
 import { GameStoreContext } from '../store/context/game_deals/game-stores-context';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RootNavigatorParamList } from '../App';
 
 export interface GameStoreInterface {
 	storeID: string;
@@ -37,8 +33,13 @@ async function fetchGameStores(): Promise<GameStoreInterface[]> {
 		throw error;
 	}
 }
+type StoresScreenNavigationProp = StackNavigationProp<
+	RootNavigatorParamList,
+	'GameDealsScreen'
+>;
 
 const StoresScreen = () => {
+	const navigation = useNavigation<StoresScreenNavigationProp>();
 	const {
 		data: gameStores,
 		isLoading,
@@ -62,9 +63,15 @@ const StoresScreen = () => {
 	const filteredGames = storesContext.games.filter((game) => game.isActive);
 
 	const renderCards = ({ item }: { item: GameStoreInterface }) => {
+		const storeID = item.storeID;
+		const handleGameStorePress = () => {
+			navigation.navigate('GameDealsScreen', { storeID });
+		};
 		return (
 			<Card color='#e4e4e4'>
-				<Pressable style={({ pressed }) => [pressed ? styles.pressed : null]}>
+				<Pressable
+					onPress={handleGameStorePress}
+					style={({ pressed }) => [pressed ? styles.pressed : null]}>
 					<ImageBackground
 						style={styles.image}
 						source={{ uri: `${STORES_BASE_API_URL}${item.images.logo}` }}

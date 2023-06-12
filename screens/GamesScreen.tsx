@@ -28,7 +28,7 @@ export interface GameItem {
 	redditUrl: string;
 }
 
-const GamessScreen = () => {
+const GamesScreen = () => {
 	const [searchQuery, setSearchQuery] = useState('');
 	const [gameState, setGameState] = useState<GameItem[]>([]);
 	const [isLoading, setIsLoading] = useState(true);
@@ -170,7 +170,7 @@ const GamessScreen = () => {
 	);
 };
 
-export default GamessScreen;
+export default GamesScreen;
 
 const styles = StyleSheet.create({
 	rootContainer: {
