@@ -1,7 +1,6 @@
 import { View, StyleSheet, Text } from 'react-native';
 
 import SearchInput from '../components/SearchInput';
-import ActivityIndicatorComponent from '../components/ActivityIndicator';
 
 const GameDealsScreen = () => {
 	function onGameDealSearchHandler() {
