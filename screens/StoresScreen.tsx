@@ -64,13 +64,12 @@ const StoresScreen = () => {
 	const renderCards = ({ item }: { item: GameStoreInterface }) => {
 		return (
 			<Card color='#e4e4e4'>
-				<View style={styles.innerCardContainer}>
+				<Pressable style={({ pressed }) => [pressed ? styles.pressed : null]}>
 					<ImageBackground
 						style={styles.image}
 						source={{ uri: `${STORES_BASE_API_URL}${item.images.logo}` }}
 					/>
-					<Text style={styles.storeText}>{item.storeName}</Text>
-				</View>
+				</Pressable>
 			</Card>
 		);
 	};
@@ -101,19 +100,11 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 		backgroundColor: '#282828',
 	},
-	innerCardContainer: {
-		flex: 1,
-		justifyContent: 'center',
-		alignItems: 'center',
-	},
 	image: {
 		flex: 1,
 		aspectRatio: 1,
 	},
-	storeText: {
-		marginTop: 9,
-		fontWeight: '400',
-		fontSize: 19,
-		color: 'black',
+	pressed: {
+		opacity: 0.5,
 	},
 });
