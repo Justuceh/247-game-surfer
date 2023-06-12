@@ -12,7 +12,7 @@ import {
 import { API_KEY, GAMES_API_URL } from '@env';
 import axios from 'axios';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Ionicons } from '@expo/vector-icons';
+import Icon from 'react-native-vector-icons/AntDesign';
 
 import Card from '../components/Card';
 import SearchInput from '../components/SearchInput';
@@ -72,14 +72,14 @@ const GamessScreen = () => {
 							style={({ pressed }) => [pressed ? styles.pressed : null]}>
 							<View style={styles.pressableContent}>
 								{!isWishlisted ? (
-									<Ionicons
+									<Icon
 										onPress={changeWishlistStatusHandler}
 										name={'star'}
 										size={30}
 										color='white'
 									/>
 								) : (
-									<Ionicons
+									<Icon
 										onPress={changeWishlistStatusHandler}
 										name={'star'}
 										size={30}
@@ -187,6 +187,7 @@ const styles = StyleSheet.create({
 		flex: 7,
 	},
 	listItemContainer: {
+		backgroundColor: 'white',
 		elevation: 4,
 		shadowColor: 'black',
 		shadowOffset: { width: 0, height: 2 },

@@ -5,6 +5,7 @@ import {
 	Text,
 	FlatList,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import { useQuery } from '@tanstack/react-query';
 import { STORES_BASE_API_URL, STORES_API_URL } from '@env';
 import axios from 'axios';
@@ -63,10 +64,11 @@ const StoresScreen = () => {
 			{isLoading ? (
 				<ActivityIndicatorComponent size='large' color='blue' />
 			) : (
-				<FlatList
-					data={gameStores}
+				<FlashList
+					data={filteredGames}
 					renderItem={renderCards}
 					numColumns={2}
+					estimatedItemSize={190}
 					contentContainerStyle={{ padding: 5 }}
 					keyExtractor={(item) => `${item.storeID}`}
 				/>
