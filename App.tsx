@@ -6,15 +6,14 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 import StoresScreen from './screens/StoresScreen';
-import GameDealsScreen, { GameDealsProps } from './screens/GameDealsScreen';
 import WishListScreen from './screens/WishListScreen';
 import GamessScreen from './screens/GamesScreen';
 import { WishlistContextProvider } from './store/context/wishlist/wishlist-context';
 import { GameStoreContextProvider } from './store/context/game_deals/game-stores-context';
 
-type RootNavigatorParamList = {
+export type RootNavigatorParamList = {
 	StoresScreen: undefined;
-	GameDealsScreen: undefined;
+	GameDealsScreen: { storeID: string };
 	WishListScreen: undefined;
 	GamesScreen: undefined;
 };
@@ -39,11 +38,6 @@ export default function App() {
 										component={StoresScreen}
 										options={{ title: 'Stores' }}
 									/>
-									{/* <Tab.Screen
-										name='GameDealsScreen'
-										options={{ title: 'Deals' }}
-										component={GameDealsScreen}
-									/> */}
 									<Tab.Screen
 										name='WishListScreen'
 										options={{ title: 'Wish List' }}
