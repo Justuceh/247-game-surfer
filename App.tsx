@@ -32,7 +32,11 @@ export default function App() {
 	const StoresScreenTab = () => {
 		return (
 			<Stack.Navigator>
-				<Stack.Screen name='StoresScreenStack' component={StoresScreen} />
+				<Stack.Screen
+					options={{ headerShown: false }}
+					name='StoresScreenStack'
+					component={StoresScreen}
+				/>
 				<Stack.Screen name='GameDealsScreen' component={GameDealsScreen} />
 			</Stack.Navigator>
 		);
