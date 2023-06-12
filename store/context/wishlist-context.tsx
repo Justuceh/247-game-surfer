@@ -2,7 +2,7 @@ import { createContext, useState } from 'react';
 
 import { GameItem } from '../../screens/GamesScreen';
 
-interface Game {
+export interface Game {
 	id: number;
 	name: string;
 	description: string;
