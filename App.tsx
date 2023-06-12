@@ -9,6 +9,7 @@ import StoresScreen from './screens/StoresScreen';
 import GameDealsScreen from './screens/GameDealsScreen';
 import WishListScreen from './screens/WishListScreen';
 import GamessScreen from './screens/GamesScreen';
+import { WishlistContextProvider } from './store/context/wishlist-context';
 
 type RootNavigatorParamList = {
 	StoresScreen: undefined;
@@ -27,32 +28,34 @@ export default function App() {
 		<SafeAreaProvider>
 			<SafeAreaView style={styles.rootContainer}>
 				<StatusBar style='auto' />
-				<NavigationContainer<RootNavigatorParamList>>
-					<QueryClientProvider client={queryClient}>
-						<Tab.Navigator>
-							<Tab.Screen
-								name='StoresScreen'
-								component={StoresScreen}
-								options={{ title: 'Stores' }}
-							/>
-							<Tab.Screen
-								name='GameDealsScreen'
-								options={{ title: 'Deals' }}
-								component={GameDealsScreen}
-							/>
-							<Tab.Screen
-								name='WishListScreen'
-								options={{ title: 'Wish List' }}
-								component={WishListScreen}
-							/>
-							<Tab.Screen
-								name='GamesScreen'
-								options={{ title: 'Games' }}
-								component={GamessScreen}
-							/>
-						</Tab.Navigator>
-					</QueryClientProvider>
-				</NavigationContainer>
+				<WishlistContextProvider>
+					<NavigationContainer<RootNavigatorParamList>>
+						<QueryClientProvider client={queryClient}>
+							<Tab.Navigator>
+								<Tab.Screen
+									name='StoresScreen'
+									component={StoresScreen}
+									options={{ title: 'Stores' }}
+								/>
+								<Tab.Screen
+									name='GameDealsScreen'
+									options={{ title: 'Deals' }}
+									component={GameDealsScreen}
+								/>
+								<Tab.Screen
+									name='WishListScreen'
+									options={{ title: 'Wish List' }}
+									component={WishListScreen}
+								/>
+								<Tab.Screen
+									name='GamesScreen'
+									options={{ title: 'Games' }}
+									component={GamessScreen}
+								/>
+							</Tab.Navigator>
+						</QueryClientProvider>
+					</NavigationContainer>
+				</WishlistContextProvider>
 			</SafeAreaView>
 		</SafeAreaProvider>
 	);
