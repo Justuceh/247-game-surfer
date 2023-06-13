@@ -1,6 +1,11 @@
 import { useContext, useEffect } from 'react';
-import { View, StyleSheet, ImageBackground, Pressable } from 'react-native';
-import { FlashList } from '@shopify/flash-list';
+import {
+	View,
+	StyleSheet,
+	ImageBackground,
+	Pressable,
+	FlatList,
+} from 'react-native';
 import { useQuery } from '@tanstack/react-query';
 import { STORES_BASE_API_URL, STORES_API_URL } from '@env';
 import axios from 'axios';
@@ -62,18 +67,18 @@ const StoresScreen = () => {
 
 	const filteredGames = storesContext.games.filter((game) => game.isActive);
 
+	const handleGameStorePress = (storeID: string, storeName: string) => {
+		navigation.navigate('GameDealsScreen', {
+			storeID: storeID,
+			title: storeName,
+		});
+	};
+
 	const renderCards = ({ item }: { item: GameStoreInterface }) => {
-		const storeID = item.storeID;
-		const handleGameStorePress = () => {
-			navigation.navigate('GameDealsScreen', {
-				storeID: storeID,
-				title: item.storeName,
-			});
-		};
 		return (
 			<Card color='#e4e4e4'>
 				<Pressable
-					onPress={handleGameStorePress}
+					onPress={() => handleGameStorePress(item.storeID, item.storeName)}
 					style={({ pressed }) => [pressed ? styles.pressed : null]}>
 					<ImageBackground
 						style={styles.image}
@@ -89,11 +94,10 @@ const StoresScreen = () => {
 			{isLoading ? (
 				<ActivityIndicatorComponent size='large' color='blue' />
 			) : (
-				<FlashList
+				<FlatList
 					data={filteredGames}
 					renderItem={renderCards}
 					numColumns={2}
-					estimatedItemSize={190}
 					contentContainerStyle={{ padding: 5 }}
 					keyExtractor={(item) => `${item.storeID}`}
 				/>
