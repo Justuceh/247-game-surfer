@@ -66,7 +66,6 @@ const GameDealsScreen = ({ route }: GameDealsScreenProps) => {
 	useEffect(() => {
 		refetch;
 	}, [navigation, route]);
-	console.log(games);
 	return (
 		<View>
 			{games?.map((game) => {

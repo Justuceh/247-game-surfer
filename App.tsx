@@ -1,8 +1,15 @@
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { StyleSheet } from 'react-native';
-import { NavigationContainer, RouteProp } from '@react-navigation/native';
-import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import {
+	NavigationContainer,
+	getFocusedRouteNameFromRoute,
+} from '@react-navigation/native';
+import {
+	MaterialTopTabBar,
+	MaterialTopTabBarProps,
+	createMaterialTopTabNavigator,
+} from '@react-navigation/material-top-tabs';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { createStackNavigator } from '@react-navigation/stack';
 
@@ -12,6 +19,7 @@ import GamesScreen from './screens/GamesScreen';
 import GameDealsScreen from './screens/GameDealsScreen';
 import { WishlistContextProvider } from './store/context/wishlist/wishlist-context';
 import { GameStoreContextProvider } from './store/context/game_deals/game-stores-context';
+import React, { useLayoutEffect, useState } from 'react';
 
 export type RootNavigatorParamList = {
 	StoresScreen: undefined;
@@ -37,7 +45,11 @@ export default function App() {
 					name='StoresScreenStack'
 					component={StoresScreen}
 				/>
-				<Stack.Screen name='GameDealsScreen' component={GameDealsScreen} />
+				<Stack.Screen
+					options={{ headerStatusBarHeight: 2 }}
+					name='GameDealsScreen'
+					component={GameDealsScreen}
+				/>
 			</Stack.Navigator>
 		);
 	};
@@ -50,11 +62,26 @@ export default function App() {
 					<WishlistContextProvider>
 						<NavigationContainer<RootNavigatorParamList>>
 							<QueryClientProvider client={queryClient}>
-								<Tab.Navigator>
+								<Tab.Navigator
+									tabBar={(props: MaterialTopTabBarProps) => {
+										const { state } = props;
+										const currentRoute = state.routes[state.index];
+										const focusedRouteName =
+											getFocusedRouteNameFromRoute(currentRoute);
+										if (focusedRouteName === 'GameDealsScreen') {
+											return null; // Hide the tab bar for specific screens with tabBarVisible set to false
+										}
+
+										return (
+											<MaterialTopTabBar {...props} /> // Render the default tab bar otherwise
+										);
+									}}>
 									<Tab.Screen
 										name='StoresScreen'
 										component={StoresScreenTab}
-										options={{ title: 'Stores' }}
+										options={{
+											title: 'Stores',
+										}}
 									/>
 									<Tab.Screen
 										name='WishListScreen'

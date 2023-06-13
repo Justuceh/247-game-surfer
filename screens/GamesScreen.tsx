@@ -35,10 +35,7 @@ const GamesScreen = () => {
 
 	const wishlistContext = useContext(WishlistContext);
 
-	function handleOnGamePress() {
-		console.log('pressed');
-		///console.log(`game pressed.  Id: ${id}`)
-	}
+	function handleOnGamePress() {}
 
 	const renderCards = ({ item }: { item: GameItem }) => {
 		const isWishlisted = wishlistContext.games.some(
