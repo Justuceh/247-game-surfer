@@ -6,6 +6,7 @@ import { View, StyleSheet, Text, Image, FlatList } from 'react-native';
 import { RootNavigatorParamList } from '../App';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useLayoutEffect } from 'react';
+import { LinearGradient } from 'expo-linear-gradient';
 
 import ActivityIndicatorComponent from '../components/ActivityIndicator';
 import Card from '../components/Card';
@@ -70,7 +71,7 @@ const GameDealsScreen = ({ route }: GameDealsScreenProps) => {
 
 	const renderItem = ({ item }: { item: GameDealItem }) => {
 		return (
-			<Card>
+			<Card color='#e4dddd'>
 				<View style={styles.rootContainer}>
 					<View style={styles.imageContainer}>
 						<Image style={styles.image} source={{ uri: item.thumb }} />
@@ -92,30 +93,43 @@ const GameDealsScreen = ({ route }: GameDealsScreenProps) => {
 
 	useLayoutEffect(() => {
 		refetch;
-		navigation.setOptions({ title: title });
+		navigation.setOptions({
+			title: title,
+			headerStyle: { backgroundColor: 'black' },
+			headerTintColor: 'white',
+		});
 	}, [navigation, route]);
 
 	return (
-		<View style={styles.rootContainer}>
-			{isLoading ? (
-				<ActivityIndicatorComponent size='large' color='black' />
-			) : (
-				<View>
-					<FlatList
-						data={games}
-						keyExtractor={(item) => item.dealID}
-						numColumns={2}
-						renderItem={renderItem}
-					/>
+		<>
+			<LinearGradient
+				style={styles.linearGradient}
+				colors={['#313131', '#dfdfdf', '#313131']}>
+				<View style={styles.rootContainer}>
+					{isLoading ? (
+						<ActivityIndicatorComponent size='large' color='black' />
+					) : (
+						<View>
+							<FlatList
+								data={games}
+								keyExtractor={(item) => item.dealID}
+								numColumns={2}
+								renderItem={renderItem}
+							/>
+						</View>
+					)}
 				</View>
-			)}
-		</View>
+			</LinearGradient>
+		</>
 	);
 };
 
 export default GameDealsScreen;
 
 const styles = StyleSheet.create({
+	linearGradient: {
+		flex: 1,
+	},
 	rootContainer: {
 		flex: 1,
 	},
