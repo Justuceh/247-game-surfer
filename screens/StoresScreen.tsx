@@ -125,6 +125,8 @@ const styles = StyleSheet.create({
 	},
 	image: {
 		flex: 1,
+		backgroundColor: '#e4e4e4',
+		borderRadius: 30,
 		aspectRatio: 1,
 		elevation: 4,
 		shadowColor: 'black',

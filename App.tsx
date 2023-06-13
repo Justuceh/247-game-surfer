@@ -76,7 +76,7 @@ export default function App() {
 											getFocusedRouteNameFromRoute(currentRoute);
 										if (
 											focusedRouteName === 'GameDealsScreen' ||
-											'GameStoreScreen'
+											focusedRouteName === 'GameStoreScreen'
 										) {
 											return null; // Hide the tab bar for specific screens with tabBarVisible set to false
 										}
