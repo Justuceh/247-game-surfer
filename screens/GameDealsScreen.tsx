@@ -20,7 +20,7 @@ import { CHEAPSHARK_REDIRECT_API } from '@env';
 import ActivityIndicatorComponent from '../components/ActivityIndicator';
 import Card from '../components/Card';
 import { WishlistContext } from '../store/context/wishlist/wishlist-context';
-import Icon from 'react-native-vector-icons/AntDesign';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 export interface GameDealItem {
 	gameID: string;
@@ -134,9 +134,11 @@ const GameDealsScreen = ({ route }: GameDealsScreenProps) => {
 									<View style={styles.iconContainer}>
 										<Icon
 											onPress={changeWishlistStatusHandler}
-											name={'star'}
+											name={
+												!isWishlisted ? 'playlist-add' : 'playlist-add-check'
+											}
 											size={30}
-											color={!isWishlisted ? 'white' : 'yellow'}
+											color={!isWishlisted ? '#a3a3a3' : '#02f402'}
 											style={styles.icon}
 										/>
 									</View>
