@@ -119,7 +119,10 @@ const GameDealsScreen = ({ route }: GameDealsScreenProps) => {
 						</View>
 
 						<View style={styles.descriptionContainer}>
-							<Text style={styles.title}>{item.title}</Text>
+							<View style={styles.titleContainer}>
+								<Text style={styles.title}>{item.title}</Text>
+							</View>
+
 							<View style={styles.saleInfoContainer}>
 								<Text style={[styles.strikethroughText, styles.saleText]}>
 									{item.normalPrice}
@@ -210,9 +213,11 @@ const styles = StyleSheet.create({
 	descriptionContainer: {
 		flex: 1,
 	},
+	titleContainer: {
+		flex: 1,
+	},
 	title: {
 		flex: 1,
-		flexWrap: 'wrap',
 		textAlign: 'center',
 		fontWeight: 'bold',
 		color: 'white',
@@ -224,11 +229,10 @@ const styles = StyleSheet.create({
 		flex: 1,
 		flexDirection: 'row',
 		alignItems: 'center',
+		marginHorizontal: 4,
 	},
 	saleText: {
 		flex: 1,
-		padding: 4,
-		textAlign: 'center',
 		fontWeight: '400',
 		justifyContent: 'center',
 		color: 'white',
