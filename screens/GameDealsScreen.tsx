@@ -12,13 +12,15 @@ import {
 } from 'react-native';
 import { RootNavigatorParamList } from '../App';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { useLayoutEffect } from 'react';
+import { useContext, useLayoutEffect } from 'react';
 import { LinearGradient } from 'expo-linear-gradient';
 import * as WebBrowser from 'expo-web-browser';
 import { CHEAPSHARK_REDIRECT_API } from '@env';
 
 import ActivityIndicatorComponent from '../components/ActivityIndicator';
 import Card from '../components/Card';
+import { WishlistContext } from '../store/context/wishlist/wishlist-context';
+import Icon from 'react-native-vector-icons/AntDesign';
 
 export interface GameDealItem {
 	gameID: string;
@@ -48,6 +50,7 @@ type GameDealsScreenProps = {
 const GameDealsScreen = ({ route }: GameDealsScreenProps) => {
 	const navigation = useNavigation<GameDealsScreenNavigationProp>();
 	const { storeID, title: storeTitle } = route.params;
+	const wishlistContext = useContext(WishlistContext);
 
 	async function fetchGameStoreDeals() {
 		const params = {
@@ -89,8 +92,20 @@ const GameDealsScreen = ({ route }: GameDealsScreenProps) => {
 		await openBrowserAsync(dealID);
 	}
 	const renderItem = ({ item }: { item: GameDealItem }) => {
+		const isWishlisted = wishlistContext.games.some(
+			(game) => game.gameID === item.gameID
+		);
+
+		const changeWishlistStatusHandler = () => {
+			if (isWishlisted) {
+				wishlistContext.removeGame(item.gameID);
+			} else {
+				wishlistContext.addGame(item);
+			}
+		};
+
 		return (
-			<Card color='#e4dddd'>
+			<Card color='#120c0c'>
 				<View style={styles.rootContainer}>
 					<Pressable
 						onPress={() => handleGameDealPress(item.dealID, item.storeID)}
@@ -110,6 +125,19 @@ const GameDealsScreen = ({ route }: GameDealsScreenProps) => {
 									{item.normalPrice}
 								</Text>
 								<Text style={styles.saleText}>{item.salePrice}</Text>
+								<Pressable
+									onPress={changeWishlistStatusHandler}
+									style={({ pressed }) => [pressed ? styles.pressed : null]}>
+									<View style={styles.iconContainer}>
+										<Icon
+											onPress={changeWishlistStatusHandler}
+											name={'star'}
+											size={30}
+											color={!isWishlisted ? 'white' : 'yellow'}
+											style={styles.icon}
+										/>
+									</View>
+								</Pressable>
 							</View>
 						</View>
 					</Pressable>
@@ -183,23 +211,41 @@ const styles = StyleSheet.create({
 		flex: 1,
 	},
 	title: {
+		flex: 1,
+		flexWrap: 'wrap',
 		textAlign: 'center',
 		fontWeight: 'bold',
-		color: 'black',
+		color: 'white',
 		fontSize: 18,
 		padding: 4,
 		margin: 4,
 	},
 	saleInfoContainer: {
+		flex: 1,
 		flexDirection: 'row',
+		alignItems: 'center',
 	},
 	saleText: {
 		flex: 1,
 		padding: 4,
 		textAlign: 'center',
 		fontWeight: '400',
+		justifyContent: 'center',
+		color: 'white',
 	},
 	strikethroughText: {
+		flex: 1,
 		textDecorationLine: 'line-through',
+		justifyContent: 'center',
+		color: 'white',
+	},
+	iconContainer: {
+		flex: 1,
+		alignItems: 'center',
+		justifyContent: 'center',
+	},
+	icon: {
+		flex: 1,
+		justifyContent: 'center',
 	},
 });
