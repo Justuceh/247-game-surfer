@@ -14,6 +14,8 @@ import { RootNavigatorParamList } from '../App';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useLayoutEffect } from 'react';
 import { LinearGradient } from 'expo-linear-gradient';
+import * as WebBrowser from 'expo-web-browser';
+import { CHEAPSHARK_REDIRECT_API } from '@env';
 
 import ActivityIndicatorComponent from '../components/ActivityIndicator';
 import Card from '../components/Card';
@@ -46,6 +48,7 @@ type GameDealsScreenProps = {
 const GameDealsScreen = ({ route }: GameDealsScreenProps) => {
 	const navigation = useNavigation<GameDealsScreenNavigationProp>();
 	const { storeID, title: storeTitle } = route.params;
+
 	async function fetchGameStoreDeals() {
 		const params = {
 			storeID: storeID,
@@ -76,11 +79,14 @@ const GameDealsScreen = ({ route }: GameDealsScreenProps) => {
 		}
 	);
 
-	function handleGameDealPress(dealID: string, storeID: string) {
-		navigation.navigate('GameStoreScreen', {
-			dealID: dealID,
-			title: storeTitle,
-		});
+	const openBrowserAsync = async (dealID: string) => {
+		const result = await WebBrowser.openBrowserAsync(
+			`${CHEAPSHARK_REDIRECT_API}${dealID}`
+		);
+	};
+
+	async function handleGameDealPress(dealID: string, storeID: string) {
+		await openBrowserAsync(dealID);
 	}
 	const renderItem = ({ item }: { item: GameDealItem }) => {
 		return (
