@@ -1,7 +1,9 @@
-import { useLayoutEffect } from 'react';
-import { Text, View, StyleSheet } from 'react-native';
+import { useEffect, useLayoutEffect } from 'react';
+import { Text, View, StyleSheet, Linking, Alert } from 'react-native';
 import { RouteProp, useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
+import * as WebBrowser from 'expo-web-browser';
+import { CHEAPSHARK_REDIRECT_API } from '@env';
 
 import { RootNavigatorParamList } from '../App';
 
@@ -29,6 +31,16 @@ const GameStoreScreen = ({ route }: GameStoreScreenProps) => {
 			headerTintColor: 'white',
 		});
 	}, [navigation, route]);
+
+	useEffect(() => {
+		const openBrowserAsync = async () => {
+			const result = await WebBrowser.openBrowserAsync(
+				`${CHEAPSHARK_REDIRECT_API}${dealID}`
+			);
+		};
+
+		openBrowserAsync();
+	}, []);
 
 	return (
 		<View style={styles.rootContainer}>
