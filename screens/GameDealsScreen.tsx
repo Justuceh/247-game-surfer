@@ -38,7 +38,7 @@ type GameDealsScreenRouteProp = RouteProp<
 >;
 type GameDealsScreenNavigationProp = StackNavigationProp<
 	RootNavigatorParamList,
-	'GameStoreScreen'
+	'GameDealsScreen'
 >;
 
 type GameDealsScreenProps = {

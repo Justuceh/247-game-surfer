@@ -17,7 +17,6 @@ import StoresScreen from './screens/StoresScreen';
 import WishListScreen from './screens/WishListScreen';
 import GamesScreen from './screens/GamesScreen';
 import GameDealsScreen from './screens/GameDealsScreen';
-import GameStoreScreen from './screens/GameStoreScreen';
 import { WishlistContextProvider } from './store/context/wishlist/wishlist-context';
 import { GameStoreContextProvider } from './store/context/game_deals/game-stores-context';
 
@@ -27,7 +26,6 @@ export type RootNavigatorParamList = {
 	GamesScreen: undefined;
 	StoresScreenStack: undefined;
 	GameDealsScreen: { storeID: string; title: string };
-	GameStoreScreen: { dealID: string; title: string };
 };
 
 //App level query client that is passed down to all child components
@@ -51,11 +49,6 @@ export default function App() {
 					name='GameDealsScreen'
 					component={GameDealsScreen}
 				/>
-				<Stack.Screen
-					options={{ headerStatusBarHeight: 2 }}
-					name='GameStoreScreen'
-					component={GameStoreScreen}
-				/>
 			</Stack.Navigator>
 		);
 	};
@@ -74,10 +67,7 @@ export default function App() {
 										const currentRoute = state.routes[state.index];
 										const focusedRouteName =
 											getFocusedRouteNameFromRoute(currentRoute);
-										if (
-											focusedRouteName === 'GameDealsScreen' ||
-											focusedRouteName === 'GameStoreScreen'
-										) {
+										if (focusedRouteName === 'GameDealsScreen') {
 											return null; // Hide the tab bar for specific screens with tabBarVisible set to false
 										}
 
