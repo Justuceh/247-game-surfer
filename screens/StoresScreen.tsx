@@ -1,8 +1,9 @@
+import { useContext, useEffect } from 'react';
 import {
 	View,
 	StyleSheet,
 	ImageBackground,
-	Text,
+	Pressable,
 	FlatList,
 } from 'react-native';
 import { useQuery } from '@tanstack/react-query';
@@ -11,6 +12,12 @@ import axios from 'axios';
 
 import Card from '../components/Card';
 import ActivityIndicatorComponent from '../components/ActivityIndicator';
+import { useNavigation } from '@react-navigation/native';
+
+import { GameStoreContext } from '../store/context/game_deals/game-stores-context';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RootNavigatorParamList } from '../App';
+import { LinearGradient } from 'expo-linear-gradient';
 
 export interface GameStoreInterface {
 	storeID: string;
@@ -32,8 +39,13 @@ async function fetchGameStores(): Promise<GameStoreInterface[]> {
 		throw error;
 	}
 }
+type StoresScreenNavigationProp = StackNavigationProp<
+	RootNavigatorParamList,
+	'GameDealsScreen'
+>;
 
 const StoresScreen = () => {
+	const navigation = useNavigation<StoresScreenNavigationProp>();
 	const {
 		data: gameStores,
 		isLoading,
@@ -42,60 +54,87 @@ const StoresScreen = () => {
 		cacheTime: 1000 * 60 * 60 * 24, // Cache the store list for one day before fetching again
 	});
 
-	const filteredGames = gameStores?.filter((store) => store.isActive);
+	const storesContext = useContext(GameStoreContext);
+
+	useEffect(() => {
+		if (
+			gameStores &&
+			gameStores.length > 0 &&
+			storesContext.stores.length === 0
+		) {
+			storesContext.addGameStores(gameStores);
+		}
+	}, [gameStores, storesContext.stores]);
+
+	const filteredGames = storesContext.stores.filter((game) => game.isActive);
+
+	const handleGameStorePress = (storeID: string, storeName: string) => {
+		navigation.navigate('GameDealsScreen', {
+			storeID: storeID,
+			title: storeName,
+		});
+	};
 
 	const renderCards = ({ item }: { item: GameStoreInterface }) => {
 		return (
 			<Card color='#e4e4e4'>
-				<View style={styles.innerCardContainer}>
+				<Pressable
+					onPress={() => handleGameStorePress(item.storeID, item.storeName)}
+					style={({ pressed }) => [pressed ? styles.pressed : null]}>
 					<ImageBackground
 						style={styles.image}
 						source={{ uri: `${STORES_BASE_API_URL}${item.images.logo}` }}
 					/>
-					<Text style={styles.storeText}>{item.storeName}</Text>
-				</View>
+				</Pressable>
 			</Card>
 		);
 	};
 
 	return (
-		<View style={styles.rootContainer}>
-			{isLoading ? (
-				<ActivityIndicatorComponent size='large' color='blue' />
-			) : (
-				<FlatList
-					data={gameStores}
-					renderItem={renderCards}
-					numColumns={2}
-					contentContainerStyle={{ padding: 5 }}
-					keyExtractor={(item) => `${item.storeID}`}
-				/>
-			)}
-		</View>
+		<>
+			<LinearGradient
+				style={styles.linearGradient}
+				colors={['#313131', '#dfdfdf', '#313131']}>
+				<View style={styles.rootContainer}>
+					{isLoading ? (
+						<ActivityIndicatorComponent size='large' color='blue' />
+					) : (
+						<FlatList
+							data={filteredGames}
+							renderItem={renderCards}
+							numColumns={2}
+							contentContainerStyle={{ padding: 5 }}
+							keyExtractor={(item) => `${item.storeID}`}
+						/>
+					)}
+				</View>
+			</LinearGradient>
+		</>
 	);
 };
 
 export default StoresScreen;
 
 const styles = StyleSheet.create({
+	linearGradient: {
+		flex: 1,
+	},
 	rootContainer: {
 		flex: 1,
 		justifyContent: 'center',
-		backgroundColor: '#282828',
-	},
-	innerCardContainer: {
-		flex: 1,
-		justifyContent: 'center',
-		alignItems: 'center',
 	},
 	image: {
 		flex: 1,
+		backgroundColor: '#e4e4e4',
+		borderRadius: 30,
 		aspectRatio: 1,
+		elevation: 4,
+		shadowColor: 'black',
+		shadowOffset: { width: 0, height: 2 },
+		shadowRadius: 4,
+		shadowOpacity: 0.5,
 	},
-	storeText: {
-		marginTop: 9,
-		fontWeight: '400',
-		fontSize: 19,
-		color: 'black',
+	pressed: {
+		opacity: 0.5,
 	},
 });
