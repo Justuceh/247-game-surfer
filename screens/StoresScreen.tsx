@@ -17,6 +17,7 @@ import { useNavigation } from '@react-navigation/native';
 import { GameStoreContext } from '../store/context/game_deals/game-stores-context';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootNavigatorParamList } from '../App';
+import { LinearGradient } from 'expo-linear-gradient';
 
 export interface GameStoreInterface {
 	storeID: string;
@@ -90,33 +91,46 @@ const StoresScreen = () => {
 	};
 
 	return (
-		<View style={styles.rootContainer}>
-			{isLoading ? (
-				<ActivityIndicatorComponent size='large' color='blue' />
-			) : (
-				<FlatList
-					data={filteredGames}
-					renderItem={renderCards}
-					numColumns={2}
-					contentContainerStyle={{ padding: 5 }}
-					keyExtractor={(item) => `${item.storeID}`}
-				/>
-			)}
-		</View>
+		<>
+			<LinearGradient
+				style={styles.linearGradient}
+				colors={['#313131', '#dfdfdf', '#313131']}>
+				<View style={styles.rootContainer}>
+					{isLoading ? (
+						<ActivityIndicatorComponent size='large' color='blue' />
+					) : (
+						<FlatList
+							data={filteredGames}
+							renderItem={renderCards}
+							numColumns={2}
+							contentContainerStyle={{ padding: 5 }}
+							keyExtractor={(item) => `${item.storeID}`}
+						/>
+					)}
+				</View>
+			</LinearGradient>
+		</>
 	);
 };
 
 export default StoresScreen;
 
 const styles = StyleSheet.create({
+	linearGradient: {
+		flex: 1,
+	},
 	rootContainer: {
 		flex: 1,
 		justifyContent: 'center',
-		backgroundColor: '#282828',
 	},
 	image: {
 		flex: 1,
 		aspectRatio: 1,
+		elevation: 4,
+		shadowColor: 'black',
+		shadowOffset: { width: 0, height: 2 },
+		shadowRadius: 4,
+		shadowOpacity: 0.5,
 	},
 	pressed: {
 		opacity: 0.5,
