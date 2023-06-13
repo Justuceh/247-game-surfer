@@ -184,7 +184,6 @@ const styles = StyleSheet.create({
 		flex: 7,
 	},
 	listItemContainer: {
-		backgroundColor: 'white',
 		elevation: 4,
 		shadowColor: 'black',
 		shadowOffset: { width: 0, height: 2 },
