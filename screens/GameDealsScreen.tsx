@@ -2,12 +2,13 @@ import { CHEAPSHARK_API_URL } from '@env';
 import { RouteProp, useNavigation } from '@react-navigation/native';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
-import { View, StyleSheet, Text } from 'react-native';
+import { View, StyleSheet, Text, Image, FlatList } from 'react-native';
 import { RootNavigatorParamList } from '../App';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useLayoutEffect } from 'react';
 
 import ActivityIndicatorComponent from '../components/ActivityIndicator';
+import Card from '../components/Card';
 
 export interface GameDealItem {
 	gameID: string;
@@ -40,7 +41,7 @@ const GameDealsScreen = ({ route }: GameDealsScreenProps) => {
 	async function fetchGameStoreDeals() {
 		const params = {
 			storeID: storeID,
-			pageSize: 50,
+			pageSize: 20,
 			upperPrice: 15,
 		};
 		return await axios
@@ -53,9 +54,6 @@ const GameDealsScreen = ({ route }: GameDealsScreenProps) => {
 			})
 			.catch((err) => err);
 	}
-	useLayoutEffect(() => {
-		navigation.setOptions({ title: title });
-	}, [navigation, route]);
 
 	const {
 		data: games,
@@ -70,26 +68,48 @@ const GameDealsScreen = ({ route }: GameDealsScreenProps) => {
 		}
 	);
 
+	const renderItem = ({ item }: { item: GameDealItem }) => {
+		return (
+			<Card>
+				<View style={styles.rootContainer}>
+					<View style={styles.imageContainer}>
+						<Image style={styles.image} source={{ uri: item.thumb }} />
+					</View>
+
+					<View style={styles.descriptionContainer}>
+						<Text style={styles.title}>{item.title}</Text>
+						<View style={styles.saleInfoContainer}>
+							<Text style={[styles.strikethroughText, styles.saleText]}>
+								{item.normalPrice}
+							</Text>
+							<Text style={styles.saleText}>{item.salePrice}</Text>
+						</View>
+					</View>
+				</View>
+			</Card>
+		);
+	};
+
 	useLayoutEffect(() => {
 		refetch;
+		navigation.setOptions({ title: title });
 	}, [navigation, route]);
+
 	return (
-		<>
+		<View style={styles.rootContainer}>
 			{isLoading ? (
 				<ActivityIndicatorComponent size='large' color='black' />
 			) : (
 				<View>
-					{games?.map((game) => {
-						return (
-							<View key={game.dealID}>
-								<Text>{game.title}</Text>
-								<Text>{game.salePrice}</Text>
-							</View>
-						);
-					})}
+					<FlatList
+						data={games}
+						keyExtractor={(item) => item.dealID}
+						numColumns={2}
+						renderItem={renderItem}
+					/>
 				</View>
 			)}
-		</>
+		</View>
 	);
 };
 
@@ -98,5 +118,36 @@ export default GameDealsScreen;
 const styles = StyleSheet.create({
 	rootContainer: {
 		flex: 1,
+	},
+	imageContainer: {
+		flex: 1,
+		alignItems: 'center',
+	},
+	image: {
+		flex: 1,
+		aspectRatio: 2,
+	},
+	descriptionContainer: {
+		flex: 1,
+	},
+	title: {
+		textAlign: 'center',
+		fontWeight: 'bold',
+		color: 'black',
+		fontSize: 18,
+		padding: 4,
+		margin: 4,
+	},
+	saleInfoContainer: {
+		flexDirection: 'row',
+	},
+	saleText: {
+		flex: 1,
+		padding: 4,
+		textAlign: 'center',
+		fontWeight: '400',
+	},
+	strikethroughText: {
+		textDecorationLine: 'line-through',
 	},
 });

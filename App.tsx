@@ -80,7 +80,7 @@ export default function App() {
 										name='StoresScreen'
 										component={StoresScreenTab}
 										options={{
-											title: 'Stores',
+											title: 'Shop Deals',
 										}}
 									/>
 									<Tab.Screen
