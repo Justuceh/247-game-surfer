@@ -1,20 +1,11 @@
 import { createContext, useState } from 'react';
 
-import { GameItem } from '../../../screens/GamesScreen';
-
-export interface Game {
-	id: number;
-	name: string;
-	description: string;
-	background_image: string;
-	metacritic: number | null;
-	redditUrl: string;
-}
+import { GameDealItem } from '../../../screens/GameDealsScreen';
 
 interface WishlistContextValue {
-	games: Game[];
-	addGame: (game: Game) => void;
-	removeGame: (id: number) => void;
+	games: GameDealItem[];
+	addGame: (game: GameDealItem) => void;
+	removeGame: (gameID: string) => void;
 }
 
 const WishlistContext = createContext<WishlistContextValue>({
@@ -28,14 +19,14 @@ const WishlistContextProvider = ({
 }: {
 	children: React.ReactNode;
 }) => {
-	const [games, setGames] = useState<Game[]>([]);
+	const [games, setGames] = useState<GameDealItem[]>([]);
 
-	const addGame = (game: Game) => {
+	const addGame = (game: GameDealItem) => {
 		setGames((prevGames) => [...prevGames, game]);
 	};
 
-	const removeGame = (id: number) => {
-		setGames((prevGames) => prevGames.filter((game) => game.id !== id));
+	const removeGame = (gameID: string) => {
+		setGames((prevGames) => prevGames.filter((game) => game.gameID !== gameID));
 	};
 
 	const contextValue: WishlistContextValue = {

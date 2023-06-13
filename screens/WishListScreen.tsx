@@ -9,22 +9,19 @@ import {
 import { WishlistContext } from '../store/context/wishlist/wishlist-context';
 
 import Card from '../components/Card';
-import { Game } from '../store/context/wishlist/wishlist-context';
+import { GameDealItem } from './GameDealsScreen';
 
 const WishListScreen = () => {
 	const wishListGames = useContext(WishlistContext);
-	const renderCards = ({ item }: { item: Game }) => {
+	const renderCards = ({ item }: { item: GameDealItem }) => {
 		return (
 			<Card color='#e4e4e4'>
 				<View style={styles.innerCardContainer}>
 					<ImageBackground
 						style={styles.image}
-						source={{ uri: `${item.background_image}` }}
+						source={{ uri: `${item.thumb}` }}
 					/>
-					<Text style={styles.storeText}>{item.name}</Text>
-					<Text style={styles.storeText}>
-						Metacritic Score: {item.metacritic}
-					</Text>
+					<Text style={styles.storeText}>{item.title}</Text>
 				</View>
 			</Card>
 		);
@@ -36,7 +33,7 @@ const WishListScreen = () => {
 				data={wishListGames.games}
 				renderItem={renderCards}
 				contentContainerStyle={{ padding: 5 }}
-				keyExtractor={(item) => `${item.id}`}
+				keyExtractor={(item) => `${item.dealID}`}
 			/>
 		</View>
 	);
