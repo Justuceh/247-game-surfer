@@ -9,45 +9,58 @@ import {
 	FlatList,
 	Platform,
 } from 'react-native';
-import { API_KEY, GAMES_API_URL } from '@env';
+import { CHEAPSHARK_API_URL } from '@env';
 import axios from 'axios';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Ionicons } from '@expo/vector-icons';
+import Icon from 'react-native-vector-icons/AntDesign';
 
 import Card from '../components/Card';
 import SearchInput from '../components/SearchInput';
 import ActivityIndicatorComponent from '../components/ActivityIndicator';
-import { WishlistContext } from '../store/context/wishlist-context';
+import { WishlistContext } from '../store/context/wishlist/wishlist-context';
+import { useQuery } from '@tanstack/react-query';
 
-export interface GameItem {
-	id: number;
-	name: string;
-	description: string;
-	background_image: string;
-	metacritic: number;
-	redditUrl: string;
-}
+import { GameDealItem } from './GameDealsScreen';
 
-const GamessScreen = () => {
+const GamesScreen = () => {
 	const [searchQuery, setSearchQuery] = useState('');
-	const [gameState, setGameState] = useState<GameItem[]>([]);
-	const [isLoading, setIsLoading] = useState(true);
 
 	const wishlistContext = useContext(WishlistContext);
 
-	function handleOnGamePress() {
-		console.log('pressed');
-		///console.log(`game pressed.  Id: ${id}`)
+	function handleOnGamePress() {}
+
+	async function fetchGames() {
+		const params = {
+			pageSize: 20,
+			upperPrice: 15,
+			title: searchQuery,
+		};
+		return await axios
+			.get(`${CHEAPSHARK_API_URL}/deals`, { params })
+			.then((response) => {
+				if (!response) {
+					throw new Error('Network response was not ok');
+				}
+				return response.data;
+			})
+			.catch((err) => err);
 	}
 
-	const renderCards = ({ item }: { item: GameItem }) => {
+	const {
+		data: games,
+		isLoading,
+		error,
+		refetch,
+	} = useQuery<GameDealItem[], unknown>([`games`], fetchGames);
+
+	const renderCards = ({ item }: { item: GameDealItem }) => {
 		const isWishlisted = wishlistContext.games.some(
-			(game) => game.id === item.id
+			(game) => game.gameID === item.gameID
 		);
 
 		const changeWishlistStatusHandler = () => {
 			if (isWishlisted) {
-				wishlistContext.removeGame(item.id);
+				wishlistContext.removeGame(item.gameID);
 			} else {
 				wishlistContext.addGame(item);
 			}
@@ -60,26 +73,26 @@ const GamessScreen = () => {
 						style={({ pressed }) => [pressed ? styles.pressed : null]}>
 						<View style={styles.imageContainer}>
 							<ImageBackground
-								source={{ uri: item.background_image }}
+								source={{ uri: item.thumb }}
 								style={styles.image}
 							/>
 						</View>
 					</Pressable>
 					<View style={styles.titleContainer}>
-						<Text style={styles.title}>{item.name}</Text>
+						<Text style={styles.title}>{item.title}</Text>
 						<Pressable
 							onPress={changeWishlistStatusHandler}
 							style={({ pressed }) => [pressed ? styles.pressed : null]}>
 							<View style={styles.pressableContent}>
 								{!isWishlisted ? (
-									<Ionicons
+									<Icon
 										onPress={changeWishlistStatusHandler}
 										name={'star'}
 										size={30}
 										color='white'
 									/>
 								) : (
-									<Ionicons
+									<Icon
 										onPress={changeWishlistStatusHandler}
 										name={'star'}
 										size={30}
@@ -96,39 +109,13 @@ const GamessScreen = () => {
 		);
 	};
 
-	const fetchGames = async (): Promise<GameItem[]> => {
-		try {
-			const params = {
-				key: API_KEY,
-				ordering: '-top_rating',
-				page_size: '10',
-				search: searchQuery,
-			};
-			const response = await axios.get(`${GAMES_API_URL}`, { params });
-			return response.data.results;
-		} catch (error) {
-			console.log('thrown error');
-			throw error;
-		}
-	};
-
 	const onSearchHandler = async () => {
-		setIsLoading(true);
-		const updatedGameData = await fetchGames();
-		setGameState(updatedGameData);
-		setIsLoading(false);
+		await refetch();
 	};
 
 	function handleQueryUpdate(searchQuery: string) {
 		setSearchQuery(searchQuery);
 	}
-
-	useEffect(() => {
-		fetchGames().then((data) => {
-			setGameState(data);
-			setIsLoading(false);
-		});
-	}, []);
 
 	return (
 		<KeyboardAvoidingView
@@ -155,10 +142,10 @@ const GamessScreen = () => {
 							) : (
 								<>
 									<FlatList
-										data={gameState}
+										data={games}
 										renderItem={renderCards}
 										contentContainerStyle={{ padding: 5 }}
-										keyExtractor={(item) => `${item.id}`}
+										keyExtractor={(item) => `${item.dealID}`}
 									/>
 								</>
 							)}
@@ -170,7 +157,7 @@ const GamessScreen = () => {
 	);
 };
 
-export default GamessScreen;
+export default GamesScreen;
 
 const styles = StyleSheet.create({
 	rootContainer: {
@@ -224,11 +211,5 @@ const styles = StyleSheet.create({
 		padding: 4,
 		justifyContent: 'center',
 		alignItems: 'center',
-	},
-	wishlistText: {
-		opacity: 0.8,
-		padding: 2,
-		fontWeight: 'bold',
-		color: 'black',
 	},
 });
