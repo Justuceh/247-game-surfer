@@ -5,7 +5,9 @@ import axios from 'axios';
 import { View, StyleSheet, Text } from 'react-native';
 import { RootNavigatorParamList } from '../App';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { useEffect, useLayoutEffect } from 'react';
+import { useLayoutEffect } from 'react';
+
+import ActivityIndicatorComponent from '../components/ActivityIndicator';
 
 export interface GameDealItem {
 	gameID: string;
@@ -38,7 +40,7 @@ const GameDealsScreen = ({ route }: GameDealsScreenProps) => {
 	async function fetchGameStoreDeals() {
 		const params = {
 			storeID: storeID,
-			pageSize: 2,
+			pageSize: 50,
 			upperPrice: 15,
 		};
 		return await axios
@@ -60,23 +62,31 @@ const GameDealsScreen = ({ route }: GameDealsScreenProps) => {
 		isLoading,
 		error,
 		refetch,
-	} = useQuery<GameDealItem[], unknown>(['gameDeals'], fetchGameStoreDeals);
-	const filteredGames = games?.filter((game) => game.dealID !== undefined);
+	} = useQuery<GameDealItem[], unknown>(
+		[`gameDeals-${storeID}`],
+		fetchGameStoreDeals
+	);
 
-	useEffect(() => {
+	useLayoutEffect(() => {
 		refetch;
 	}, [navigation, route]);
 	return (
-		<View>
-			{games?.map((game) => {
-				return (
-					<View key={game.dealID}>
-						<Text>{game.title}</Text>
-						<Text>{game.salePrice}</Text>
-					</View>
-				);
-			})}
-		</View>
+		<>
+			{isLoading ? (
+				<ActivityIndicatorComponent size='large' color='black' />
+			) : (
+				<View>
+					{games?.map((game) => {
+						return (
+							<View key={game.dealID}>
+								<Text>{game.title}</Text>
+								<Text>{game.salePrice}</Text>
+							</View>
+						);
+					})}
+				</View>
+			)}
+		</>
 	);
 };
 
