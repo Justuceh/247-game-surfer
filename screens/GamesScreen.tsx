@@ -212,10 +212,4 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 		alignItems: 'center',
 	},
-	wishlistText: {
-		opacity: 0.8,
-		padding: 2,
-		fontWeight: 'bold',
-		color: 'black',
-	},
 });
