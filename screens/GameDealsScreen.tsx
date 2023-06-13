@@ -2,7 +2,14 @@ import { CHEAPSHARK_API_URL } from '@env';
 import { RouteProp, useNavigation } from '@react-navigation/native';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
-import { View, StyleSheet, Text, Image, FlatList } from 'react-native';
+import {
+	View,
+	StyleSheet,
+	Text,
+	Image,
+	FlatList,
+	Pressable,
+} from 'react-native';
 import { RootNavigatorParamList } from '../App';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useLayoutEffect } from 'react';
@@ -27,9 +34,9 @@ type GameDealsScreenRouteProp = RouteProp<
 	RootNavigatorParamList,
 	'GameDealsScreen'
 >;
-type GameDealsScreenScreenNavigationProp = StackNavigationProp<
+type GameDealsScreenNavigationProp = StackNavigationProp<
 	RootNavigatorParamList,
-	'GameDealsScreen'
+	'GameStoreScreen'
 >;
 
 type GameDealsScreenProps = {
@@ -37,8 +44,8 @@ type GameDealsScreenProps = {
 };
 
 const GameDealsScreen = ({ route }: GameDealsScreenProps) => {
-	const navigation = useNavigation<GameDealsScreenScreenNavigationProp>();
-	const { storeID, title } = route.params;
+	const navigation = useNavigation<GameDealsScreenNavigationProp>();
+	const { storeID, title: storeTitle } = route.params;
 	async function fetchGameStoreDeals() {
 		const params = {
 			storeID: storeID,
@@ -69,23 +76,37 @@ const GameDealsScreen = ({ route }: GameDealsScreenProps) => {
 		}
 	);
 
+	function handleGameDealPress(dealID: string, storeID: string) {
+		navigation.navigate('GameStoreScreen', {
+			dealID: dealID,
+			title: storeTitle,
+		});
+	}
 	const renderItem = ({ item }: { item: GameDealItem }) => {
 		return (
 			<Card color='#e4dddd'>
 				<View style={styles.rootContainer}>
-					<View style={styles.imageContainer}>
-						<Image style={styles.image} source={{ uri: item.thumb }} />
-					</View>
-
-					<View style={styles.descriptionContainer}>
-						<Text style={styles.title}>{item.title}</Text>
-						<View style={styles.saleInfoContainer}>
-							<Text style={[styles.strikethroughText, styles.saleText]}>
-								{item.normalPrice}
-							</Text>
-							<Text style={styles.saleText}>{item.salePrice}</Text>
+					<Pressable
+						onPress={() => handleGameDealPress(item.dealID, item.storeID)}
+						style={({ pressed }) =>
+							pressed
+								? [styles.pressed, styles.pressableContainer]
+								: styles.pressableContainer
+						}>
+						<View style={styles.imageContainer}>
+							<Image style={styles.image} source={{ uri: item.thumb }} />
 						</View>
-					</View>
+
+						<View style={styles.descriptionContainer}>
+							<Text style={styles.title}>{item.title}</Text>
+							<View style={styles.saleInfoContainer}>
+								<Text style={[styles.strikethroughText, styles.saleText]}>
+									{item.normalPrice}
+								</Text>
+								<Text style={styles.saleText}>{item.salePrice}</Text>
+							</View>
+						</View>
+					</Pressable>
 				</View>
 			</Card>
 		);
@@ -94,7 +115,7 @@ const GameDealsScreen = ({ route }: GameDealsScreenProps) => {
 	useLayoutEffect(() => {
 		refetch;
 		navigation.setOptions({
-			title: title,
+			title: `${storeTitle} Deals`,
 			headerStyle: { backgroundColor: 'black' },
 			headerTintColor: 'white',
 		});
@@ -137,6 +158,12 @@ const styles = StyleSheet.create({
 		shadowOffset: { width: 0, height: 2 },
 		shadowRadius: 4,
 		shadowOpacity: 0.5,
+	},
+	pressableContainer: {
+		flex: 1,
+	},
+	pressed: {
+		opacity: 0.5,
 	},
 	imageContainer: {
 		flex: 1,
