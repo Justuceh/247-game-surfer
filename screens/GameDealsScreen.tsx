@@ -132,6 +132,11 @@ const styles = StyleSheet.create({
 	},
 	rootContainer: {
 		flex: 1,
+		elevation: 4,
+		shadowColor: 'black',
+		shadowOffset: { width: 0, height: 2 },
+		shadowRadius: 4,
+		shadowOpacity: 0.5,
 	},
 	imageContainer: {
 		flex: 1,
