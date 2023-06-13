@@ -64,7 +64,10 @@ const GameDealsScreen = ({ route }: GameDealsScreenProps) => {
 		refetch,
 	} = useQuery<GameDealItem[], unknown>(
 		[`gameDeals-${storeID}`],
-		fetchGameStoreDeals
+		fetchGameStoreDeals,
+		{
+			cacheTime: 1000 * 60 * 60, // Cache the store list for one hour before fetching again
+		}
 	);
 
 	useLayoutEffect(() => {
