@@ -2,12 +2,12 @@ import { createContext, useState } from 'react';
 import { GameStoreInterface } from '../../../screens/StoresScreen';
 
 interface GameStoreContextValue {
-	games: GameStoreInterface[];
-	addGameStores: (games: GameStoreInterface[]) => void;
+	stores: GameStoreInterface[];
+	addGameStores: (stores: GameStoreInterface[]) => void;
 }
 
 const GameStoreContext = createContext<GameStoreContextValue>({
-	games: [],
+	stores: [],
 	addGameStores: () => {},
 });
 
@@ -16,14 +16,14 @@ const GameStoreContextProvider = ({
 }: {
 	children: React.ReactNode;
 }) => {
-	const [games, setGames] = useState<GameStoreInterface[]>([]);
+	const [stoes, setGameStores] = useState<GameStoreInterface[]>([]);
 
 	const addGameStores = (gameStores: GameStoreInterface[]) => {
-		setGames((prevGames) => [...prevGames, ...gameStores]);
+		setGameStores((prevStores) => [...prevStores, ...gameStores]);
 	};
 
 	const contextValue: GameStoreContextValue = {
-		games,
+		stores: stoes,
 		addGameStores,
 	};
 

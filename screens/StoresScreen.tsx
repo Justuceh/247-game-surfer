@@ -59,13 +59,13 @@ const StoresScreen = () => {
 		if (
 			gameStores &&
 			gameStores.length > 0 &&
-			storesContext.games.length === 0
+			storesContext.stores.length === 0
 		) {
 			storesContext.addGameStores(gameStores);
 		}
-	}, [gameStores, storesContext.games]);
+	}, [gameStores, storesContext.stores]);
 
-	const filteredGames = storesContext.games.filter((game) => game.isActive);
+	const filteredGames = storesContext.stores.filter((game) => game.isActive);
 
 	const handleGameStorePress = (storeID: string, storeName: string) => {
 		navigation.navigate('GameDealsScreen', {
