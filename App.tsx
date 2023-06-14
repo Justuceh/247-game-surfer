@@ -79,18 +79,18 @@ export default function App() {
 										name='StoresScreen'
 										component={StoresScreenTab}
 										options={{
-											title: 'Shop Deals',
+											title: 'Store Deals',
 										}}
+									/>
+									<Tab.Screen
+										name='GamesScreen'
+										options={{ title: 'Game Deals' }}
+										component={GamesScreen}
 									/>
 									<Tab.Screen
 										name='WishListScreen'
 										options={{ title: 'Wish List' }}
 										component={WishListScreen}
-									/>
-									<Tab.Screen
-										name='GamesScreen'
-										options={{ title: 'Games' }}
-										component={GamesScreen}
 									/>
 								</Tab.Navigator>
 							</QueryClientProvider>
