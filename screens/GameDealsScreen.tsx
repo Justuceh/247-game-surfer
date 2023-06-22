@@ -2,14 +2,7 @@ import { CHEAPSHARK_API_URL } from '@env';
 import { RouteProp, useNavigation } from '@react-navigation/native';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
-import {
-	View,
-	StyleSheet,
-	Text,
-	Image,
-	FlatList,
-	Pressable,
-} from 'react-native';
+import { View, StyleSheet, FlatList } from 'react-native';
 import { RootNavigatorParamList } from '../App';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useContext, useLayoutEffect } from 'react';
@@ -18,9 +11,8 @@ import * as WebBrowser from 'expo-web-browser';
 import { CHEAPSHARK_REDIRECT_API } from '@env';
 
 import ActivityIndicatorComponent from '../components/ActivityIndicator';
-import Card from '../components/Card';
 import { WishlistContext } from '../store/context/wishlist/wishlist-context';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import GameDealCard from '../components/GameDealCard';
 
 export interface GameDealItem {
 	gameID: string;
@@ -50,7 +42,6 @@ type GameDealsScreenProps = {
 const GameDealsScreen = ({ route }: GameDealsScreenProps) => {
 	const navigation = useNavigation<GameDealsScreenNavigationProp>();
 	const { storeID, title: storeTitle } = route.params;
-	const wishlistContext = useContext(WishlistContext);
 
 	async function fetchGameStoreDeals() {
 		const params = {
@@ -83,71 +74,15 @@ const GameDealsScreen = ({ route }: GameDealsScreenProps) => {
 	);
 
 	const openBrowserAsync = async (dealID: string) => {
-		const result = await WebBrowser.openBrowserAsync(
-			`${CHEAPSHARK_REDIRECT_API}${dealID}`
-		);
+		await WebBrowser.openBrowserAsync(`${CHEAPSHARK_REDIRECT_API}${dealID}`);
 	};
 
-	async function handleGameDealPress(dealID: string, storeID: string) {
-		await openBrowserAsync(dealID);
-	}
 	const renderItem = ({ item }: { item: GameDealItem }) => {
-		const isWishlisted = wishlistContext.games.some(
-			(game) => game.gameID === item.gameID
-		);
-
-		const changeWishlistStatusHandler = () => {
-			if (isWishlisted) {
-				wishlistContext.removeGame(item.gameID);
-			} else {
-				wishlistContext.addGame(item);
-			}
-		};
-
 		return (
-			<Card color='#120c0c'>
-				<View style={styles.rootContainer}>
-					<Pressable
-						onPress={() => handleGameDealPress(item.dealID, item.storeID)}
-						style={({ pressed }) =>
-							pressed
-								? [styles.pressed, styles.pressableContainer]
-								: styles.pressableContainer
-						}>
-						<View style={styles.imageContainer}>
-							<Image style={styles.image} source={{ uri: item.thumb }} />
-						</View>
-
-						<View style={styles.descriptionContainer}>
-							<View style={styles.titleContainer}>
-								<Text style={styles.title}>{item.title}</Text>
-							</View>
-
-							<View style={styles.saleInfoContainer}>
-								<Text style={[styles.strikethroughText, styles.saleText]}>
-									{item.normalPrice}
-								</Text>
-								<Text style={styles.saleText}>{item.salePrice}</Text>
-								<Pressable
-									onPress={changeWishlistStatusHandler}
-									style={({ pressed }) => [pressed ? styles.pressed : null]}>
-									<View style={styles.iconContainer}>
-										<Icon
-											onPress={changeWishlistStatusHandler}
-											name={
-												!isWishlisted ? 'playlist-add' : 'playlist-add-check'
-											}
-											size={30}
-											color={!isWishlisted ? '#a3a3a3' : '#02f402'}
-											style={styles.icon}
-										/>
-									</View>
-								</Pressable>
-							</View>
-						</View>
-					</Pressable>
-				</View>
-			</Card>
+			<GameDealCard
+				gameDealItem={item}
+				handleGameDealPress={openBrowserAsync}
+			/>
 		);
 	};
 
@@ -197,61 +132,5 @@ const styles = StyleSheet.create({
 		shadowOffset: { width: 0, height: 2 },
 		shadowRadius: 4,
 		shadowOpacity: 0.5,
-	},
-	pressableContainer: {
-		flex: 1,
-	},
-	pressed: {
-		opacity: 0.5,
-	},
-	imageContainer: {
-		flex: 1,
-		alignItems: 'center',
-	},
-	image: {
-		flex: 1,
-		aspectRatio: 2,
-	},
-	descriptionContainer: {
-		flex: 1,
-	},
-	titleContainer: {
-		flex: 1,
-	},
-	title: {
-		flex: 1,
-		textAlign: 'center',
-		fontWeight: 'bold',
-		color: 'white',
-		fontSize: 18,
-		padding: 4,
-		margin: 4,
-	},
-	saleInfoContainer: {
-		flex: 1,
-		flexDirection: 'row',
-		alignItems: 'center',
-		marginHorizontal: 4,
-	},
-	saleText: {
-		flex: 1,
-		fontWeight: '400',
-		justifyContent: 'center',
-		color: 'white',
-	},
-	strikethroughText: {
-		flex: 1,
-		textDecorationLine: 'line-through',
-		justifyContent: 'center',
-		color: 'white',
-	},
-	iconContainer: {
-		flex: 1,
-		alignItems: 'center',
-		justifyContent: 'center',
-	},
-	icon: {
-		flex: 1,
-		justifyContent: 'center',
 	},
 });
