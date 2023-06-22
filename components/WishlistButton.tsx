@@ -27,15 +27,12 @@ const WishlistButton = ({ gameDealItem }: WishlistButtonProps) => {
 		<Pressable
 			onPress={changeWishlistStatusHandler}
 			style={({ pressed }) => [pressed ? styles.pressed : null]}>
-			<View style={styles.iconContainer}>
-				<Icon
-					onPress={changeWishlistStatusHandler}
-					name={!isWishlisted ? 'playlist-add' : 'playlist-add-check'}
-					size={30}
-					color={!isWishlisted ? '#a3a3a3' : '#02f402'}
-					style={styles.icon}
-				/>
-			</View>
+			<Icon
+				onPress={changeWishlistStatusHandler}
+				name={!isWishlisted ? 'playlist-add' : 'playlist-add-check'}
+				size={30}
+				color={!isWishlisted ? '#a3a3a3' : '#02f402'}
+			/>
 		</Pressable>
 	);
 };
@@ -43,15 +40,6 @@ const WishlistButton = ({ gameDealItem }: WishlistButtonProps) => {
 export default WishlistButton;
 
 const styles = StyleSheet.create({
-	iconContainer: {
-		flex: 1,
-		alignItems: 'center',
-		justifyContent: 'center',
-	},
-	icon: {
-		flex: 1,
-		justifyContent: 'center',
-	},
 	pressed: {
 		opacity: 0.5,
 	},
