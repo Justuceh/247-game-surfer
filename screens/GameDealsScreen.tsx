@@ -1,18 +1,18 @@
+import { useLayoutEffect } from 'react';
+import { View, StyleSheet, FlatList, ScrollView, Text } from 'react-native';
 import { CHEAPSHARK_API_URL } from '@env';
 import { RouteProp, useNavigation } from '@react-navigation/native';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
-import { View, StyleSheet, FlatList } from 'react-native';
 import { RootNavigatorParamList } from '../App';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { useContext, useLayoutEffect } from 'react';
 import { LinearGradient } from 'expo-linear-gradient';
 import * as WebBrowser from 'expo-web-browser';
 import { CHEAPSHARK_REDIRECT_API } from '@env';
 
 import ActivityIndicatorComponent from '../components/ActivityIndicator';
-import { WishlistContext } from '../store/context/wishlist/wishlist-context';
 import GameDealCard from '../components/GameDealCard';
+import GameDealCategoryList from '../components/GameDealCategoryList';
 
 export interface GameDealItem {
 	gameID: string;
@@ -99,21 +99,42 @@ const GameDealsScreen = ({ route }: GameDealsScreenProps) => {
 		<>
 			<LinearGradient
 				style={styles.linearGradient}
-				colors={['#313131', '#dfdfdf', '#313131']}>
-				<View style={styles.rootContainer}>
-					{isLoading ? (
-						<ActivityIndicatorComponent size='large' color='black' />
-					) : (
-						<View>
-							<FlatList
-								data={games}
-								keyExtractor={(item) => item.dealID}
-								numColumns={2}
-								renderItem={renderItem}
-							/>
-						</View>
-					)}
-				</View>
+				colors={['#313131', '#dfdfdf', '#1c1b1b']}>
+				<ScrollView style={styles.scrollContainer}>
+					<View style={styles.listItemContainer}>
+						{isLoading ? (
+							<ActivityIndicatorComponent size='large' color='black' />
+						) : (
+							<>
+								<GameDealCategoryList
+									data={games}
+									categoryText='Top Sale Items'
+									renderItem={renderItem}
+								/>
+								<GameDealCategoryList
+									data={games}
+									categoryText='Top Sale Items'
+									renderItem={renderItem}
+								/>
+								<GameDealCategoryList
+									data={games}
+									categoryText='Top Sale Items'
+									renderItem={renderItem}
+								/>
+								<GameDealCategoryList
+									data={games}
+									categoryText='Top Sale Items'
+									renderItem={renderItem}
+								/>
+								<GameDealCategoryList
+									data={games}
+									categoryText='Top Sale Items'
+									renderItem={renderItem}
+								/>
+							</>
+						)}
+					</View>
+				</ScrollView>
 			</LinearGradient>
 		</>
 	);
@@ -125,7 +146,10 @@ const styles = StyleSheet.create({
 	linearGradient: {
 		flex: 1,
 	},
-	rootContainer: {
+	scrollContainer: {
+		flex: 1,
+	},
+	listItemContainer: {
 		flex: 1,
 		elevation: 4,
 		shadowColor: 'black',
