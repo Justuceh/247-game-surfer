@@ -15,7 +15,7 @@ const GameDealCategoryList = ({
 	return (
 		<View style={styles.listContainer}>
 			<View style={styles.categoryContainer}>
-				<Text style={styles.categoryText}>Category 1</Text>
+				<Text style={styles.categoryText}>{categoryText}</Text>
 			</View>
 			<FlatList
 				data={data}
@@ -33,12 +33,17 @@ const styles = StyleSheet.create({
 	categoryContainer: {
 		borderBottomWidth: 1,
 		borderBottomColor: 'black',
+		elevation: 4,
+		shadowColor: 'black',
+		shadowOffset: { width: 0, height: 2 },
+		shadowRadius: 4,
+		shadowOpacity: 0.6,
 	},
 	categoryText: {
 		fontSize: 20,
 		fontWeight: 'bold',
 		textAlign: 'center',
-		color: '#beb5b5',
+		color: '#e4dfdf',
 		padding: 8,
 	},
 	listContainer: {

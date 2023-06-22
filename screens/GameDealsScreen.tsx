@@ -111,26 +111,7 @@ const GameDealsScreen = ({ route }: GameDealsScreenProps) => {
 									categoryText='Top Sale Items'
 									renderItem={renderItem}
 								/>
-								<GameDealCategoryList
-									data={games}
-									categoryText='Top Sale Items'
-									renderItem={renderItem}
-								/>
-								<GameDealCategoryList
-									data={games}
-									categoryText='Top Sale Items'
-									renderItem={renderItem}
-								/>
-								<GameDealCategoryList
-									data={games}
-									categoryText='Top Sale Items'
-									renderItem={renderItem}
-								/>
-								<GameDealCategoryList
-									data={games}
-									categoryText='Top Sale Items'
-									renderItem={renderItem}
-								/>
+								{/* Add more category lists here */}
 							</>
 						)}
 					</View>

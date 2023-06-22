@@ -51,7 +51,6 @@ export default GameDealCard;
 const styles = StyleSheet.create({
 	rootContainer: {
 		flex: 1,
-		color: ' #66ff00',
 	},
 	pressableContainer: {
 		flex: 1,
