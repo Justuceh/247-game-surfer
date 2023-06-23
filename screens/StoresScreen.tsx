@@ -7,7 +7,7 @@ import {
 	FlatList,
 } from 'react-native';
 import { useQuery } from '@tanstack/react-query';
-import { STORES_BASE_API_URL, STORES_API_URL } from '@env';
+import { CHEAPSHARK_BASE_URL, CHEAPSHARK_API_URL } from '@env';
 import axios from 'axios';
 
 import Card from '../components/Card';
@@ -32,7 +32,7 @@ export interface GameStoreInterface {
 
 async function fetchGameStores(): Promise<GameStoreInterface[]> {
 	try {
-		const response = await axios.get(`${STORES_API_URL}`);
+		const response = await axios.get(`${CHEAPSHARK_API_URL}/stores`);
 		return response.data;
 	} catch (error) {
 		console.log('thrown error');
@@ -77,13 +77,13 @@ const StoresScreen = () => {
 
 	const renderCards = ({ item }: { item: GameStoreInterface }) => {
 		return (
-			<Card color='#e4e4e4'>
+			<Card style={{ color: '#e4e4e4', aspectRatio: 1 }}>
 				<Pressable
 					onPress={() => handleGameStorePress(item.storeID, item.storeName)}
 					style={({ pressed }) => [pressed ? styles.pressed : null]}>
 					<ImageBackground
 						style={styles.image}
-						source={{ uri: `${STORES_BASE_API_URL}${item.images.logo}` }}
+						source={{ uri: `${CHEAPSHARK_BASE_URL}${item.images.logo}` }}
 					/>
 				</Pressable>
 			</Card>
@@ -126,7 +126,7 @@ const styles = StyleSheet.create({
 	image: {
 		flex: 1,
 		backgroundColor: '#e4e4e4',
-		borderRadius: 30,
+		borderRadius: 40,
 		aspectRatio: 1,
 		elevation: 4,
 		shadowColor: 'black',

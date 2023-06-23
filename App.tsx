@@ -17,7 +17,6 @@ import StoresScreen from './screens/StoresScreen';
 import WishListScreen from './screens/WishListScreen';
 import GamesScreen from './screens/GamesScreen';
 import GameDealsScreen from './screens/GameDealsScreen';
-import GameStoreScreen from './screens/GameStoreScreen';
 import { WishlistContextProvider } from './store/context/wishlist/wishlist-context';
 import { GameStoreContextProvider } from './store/context/game_deals/game-stores-context';
 
@@ -27,7 +26,6 @@ export type RootNavigatorParamList = {
 	GamesScreen: undefined;
 	StoresScreenStack: undefined;
 	GameDealsScreen: { storeID: string; title: string };
-	GameStoreScreen: { dealID: string; title: string };
 };
 
 //App level query client that is passed down to all child components
@@ -43,18 +41,13 @@ export default function App() {
 			<Stack.Navigator>
 				<Stack.Screen
 					options={{ headerShown: false }}
-					name='StoresScreenStack'
+					name='StoresScreen'
 					component={StoresScreen}
 				/>
 				<Stack.Screen
-					options={{ headerStatusBarHeight: 2 }}
+					options={{ headerStatusBarHeight: 2, headerBackTitle: 'Stores' }}
 					name='GameDealsScreen'
 					component={GameDealsScreen}
-				/>
-				<Stack.Screen
-					options={{ headerStatusBarHeight: 2 }}
-					name='GameStoreScreen'
-					component={GameStoreScreen}
 				/>
 			</Stack.Navigator>
 		);
@@ -74,10 +67,7 @@ export default function App() {
 										const currentRoute = state.routes[state.index];
 										const focusedRouteName =
 											getFocusedRouteNameFromRoute(currentRoute);
-										if (
-											focusedRouteName === 'GameDealsScreen' ||
-											focusedRouteName === 'GameStoreScreen'
-										) {
+										if (focusedRouteName === 'GameDealsScreen') {
 											return null; // Hide the tab bar for specific screens with tabBarVisible set to false
 										}
 
@@ -86,21 +76,21 @@ export default function App() {
 										);
 									}}>
 									<Tab.Screen
-										name='StoresScreen'
+										name='StoresScreenMain'
 										component={StoresScreenTab}
 										options={{
-											title: 'Shop Deals',
+											title: 'Store Deals',
 										}}
+									/>
+									<Tab.Screen
+										name='GamesScreen'
+										options={{ title: 'Game Deals' }}
+										component={GamesScreen}
 									/>
 									<Tab.Screen
 										name='WishListScreen'
 										options={{ title: 'Wish List' }}
 										component={WishListScreen}
-									/>
-									<Tab.Screen
-										name='GamesScreen'
-										options={{ title: 'Games' }}
-										component={GamesScreen}
 									/>
 								</Tab.Navigator>
 							</QueryClientProvider>
