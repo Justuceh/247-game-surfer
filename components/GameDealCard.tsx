@@ -8,7 +8,7 @@ interface GameDealCardProps {
 	gameDealItem: GameDealItem;
 	handleGameDealPress: (dealID: string) => void;
 	style?: {
-		width: number;
+		width?: number;
 	};
 }
 
