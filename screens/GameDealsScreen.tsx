@@ -152,15 +152,17 @@ const GameDealsScreen = ({ route }: GameDealsScreenProps) => {
 			<LinearGradient
 				style={styles.linearGradient}
 				colors={['#313131', '#dfdfdf', '#1c1b1b']}>
-				<ScrollView style={styles.scrollContainer}>
-					<View style={styles.listItemContainer}>
-						{topDealsIsLoading ||
-						highlyRatedBySteamIsLoading ||
-						highlyRatedByMetacriticIsLoading ||
-						under20DollarDealsIsLoading ||
-						fiveToTenDollarDealsIsLoading ? (
-							<ActivityIndicatorComponent size='large' color='black' />
-						) : (
+				{topDealsIsLoading ||
+				highlyRatedBySteamIsLoading ||
+				highlyRatedByMetacriticIsLoading ||
+				under20DollarDealsIsLoading ||
+				fiveToTenDollarDealsIsLoading ? (
+					<View style={styles.activityIndicatorContainer}>
+						<ActivityIndicatorComponent size='large' color='black' />
+					</View>
+				) : (
+					<ScrollView style={styles.scrollContainer}>
+						<View style={styles.listItemContainer}>
 							<>
 								{topDeals?.length ? (
 									<GameDealCategoryList
@@ -212,9 +214,9 @@ const GameDealsScreen = ({ route }: GameDealsScreenProps) => {
 									<View></View>
 								)}
 							</>
-						)}
-					</View>
-				</ScrollView>
+						</View>
+					</ScrollView>
+				)}
 			</LinearGradient>
 		</>
 	);
@@ -229,6 +231,11 @@ const styles = StyleSheet.create({
 	scrollContainer: {
 		flex: 1,
 		marginTop: '4%',
+	},
+	activityIndicatorContainer: {
+		flex: 1,
+		justifyContent: 'center',
+		alignItems: 'center',
 	},
 	listItemContainer: {
 		flex: 1,
