@@ -41,11 +41,11 @@ export default function App() {
 			<Stack.Navigator>
 				<Stack.Screen
 					options={{ headerShown: false }}
-					name='StoresScreenStack'
+					name='StoresScreen'
 					component={StoresScreen}
 				/>
 				<Stack.Screen
-					options={{ headerStatusBarHeight: 2 }}
+					options={{ headerStatusBarHeight: 2, headerBackTitle: 'Stores' }}
 					name='GameDealsScreen'
 					component={GameDealsScreen}
 				/>
