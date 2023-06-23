@@ -73,16 +73,6 @@ const GameDealsScreen = ({ route }: GameDealsScreenProps) => {
 	);
 
 	const {
-		data: under20DollarDeals,
-		isLoading: under20DollarDealsIsLoading,
-		refetch: refetchUnder20DollarDeals,
-	} = useQuery<GameDealItem[], unknown>(
-		[`under20DollarDealsDeals-${storeID}`],
-		() => fetchGameStoreDeals({ upperPrice: 20, lowerPrice: 15 }),
-		cacheTime
-	);
-
-	const {
 		data: highlyRatedBySteam,
 		isLoading: highlyRatedBySteamIsLoading,
 		refetch: refetchHighlyRatedBySteam,
@@ -102,6 +92,26 @@ const GameDealsScreen = ({ route }: GameDealsScreenProps) => {
 		cacheTime
 	);
 
+	const {
+		data: under20DollarDeals,
+		isLoading: under20DollarDealsIsLoading,
+		refetch: refetchUnder20DollarDeals,
+	} = useQuery<GameDealItem[], unknown>(
+		[`under20DollarDeals-${storeID}`],
+		() => fetchGameStoreDeals({ upperPrice: 20, lowerPrice: 15 }),
+		cacheTime
+	);
+
+	const {
+		data: fiveToTenDollarDeals,
+		isLoading: fiveToTenDollarDealsIsLoading,
+		refetch: refetchFiveToTenDollarDeals,
+	} = useQuery<GameDealItem[], unknown>(
+		[`fiveToTenDollarDeals-${storeID}`],
+		() => fetchGameStoreDeals({ upperPrice: 10, lowerPrice: 5 }),
+		cacheTime
+	);
+
 	const openBrowserAsync = async (dealID: string) => {
 		await WebBrowser.openBrowserAsync(`${CHEAPSHARK_REDIRECT_API}${dealID}`);
 	};
@@ -117,9 +127,11 @@ const GameDealsScreen = ({ route }: GameDealsScreenProps) => {
 
 	useLayoutEffect(() => {
 		refetchTopDeals();
-		refetchUnder20DollarDeals();
+
 		refetchHighlyRatedBySteam();
 		refetchhighlyRatedByMetacritic();
+		refetchUnder20DollarDeals();
+		refetchFiveToTenDollarDeals();
 		navigation.setOptions({
 			title: `${storeTitle} Deals`,
 			headerStyle: { backgroundColor: 'black' },
@@ -129,9 +141,10 @@ const GameDealsScreen = ({ route }: GameDealsScreenProps) => {
 		navigation,
 		route,
 		topDeals,
-		under20DollarDeals,
 		highlyRatedBySteam,
 		highlyRatedByMetacritic,
+		under20DollarDeals,
+		fiveToTenDollarDeals,
 	]);
 
 	return (
@@ -142,9 +155,10 @@ const GameDealsScreen = ({ route }: GameDealsScreenProps) => {
 				<ScrollView style={styles.scrollContainer}>
 					<View style={styles.listItemContainer}>
 						{topDealsIsLoading ||
-						under20DollarDealsIsLoading ||
 						highlyRatedBySteamIsLoading ||
-						highlyRatedByMetacriticIsLoading ? (
+						highlyRatedByMetacriticIsLoading ||
+						under20DollarDealsIsLoading ||
+						fiveToTenDollarDealsIsLoading ? (
 							<ActivityIndicatorComponent size='large' color='black' />
 						) : (
 							<>
@@ -182,6 +196,16 @@ const GameDealsScreen = ({ route }: GameDealsScreenProps) => {
 									<GameDealCategoryList
 										data={under20DollarDeals}
 										categoryText='$15 - $20'
+										renderItem={renderItem}
+									/>
+								) : (
+									<View></View>
+								)}
+
+								{fiveToTenDollarDeals?.length ? (
+									<GameDealCategoryList
+										data={fiveToTenDollarDeals}
+										categoryText='$5 - $10'
 										renderItem={renderItem}
 									/>
 								) : (
