@@ -42,13 +42,17 @@ type GameDealsScreenProps = {
 const GameDealsScreen = ({ route }: GameDealsScreenProps) => {
 	const navigation = useNavigation<GameDealsScreenNavigationProp>();
 	const { storeID, title: storeTitle } = route.params;
+	const cacheTime = {
+		cacheTime: 1000 * 60 * 60, // Cache the store list for one hour before fetching again
+	};
 
-	async function fetchGameStoreDeals() {
-		const params = {
+	async function fetchGameStoreDeals(filterParams: any) {
+		const globalParams = {
 			storeID: storeID,
 			pageSize: 20,
-			upperPrice: 15,
+			onSale: 1,
 		};
+		const params = { ...globalParams, ...filterParams };
 		return await axios
 			.get(`${CHEAPSHARK_API_URL}/deals`, { params })
 			.then((response) => {
@@ -61,17 +65,25 @@ const GameDealsScreen = ({ route }: GameDealsScreenProps) => {
 	}
 
 	const {
-		data: games,
-		isLoading,
-		error,
-		refetch,
+		data: topDeals,
+		isLoading: topDealsIsLoading,
+		refetch: refetchTopDeals,
 	} = useQuery<GameDealItem[], unknown>(
-		[`gameDeals-${storeID}`],
-		fetchGameStoreDeals,
-		{
-			cacheTime: 1000 * 60 * 60, // Cache the store list for one hour before fetching again
-		}
+		[`topDeals-${storeID}`],
+		() => fetchGameStoreDeals({ upperPrice: 15 }),
+		cacheTime
 	);
+
+	const aAADealsQuery = useQuery<GameDealItem[], unknown>(
+		[`aAADeals-${storeID}`],
+		() => fetchGameStoreDeals({ AAA: 1 }),
+		cacheTime
+	);
+	const aAADeals = aAADealsQuery.data?.filter(
+		(aAADeal) => !topDeals?.map((deal) => deal.dealID).includes(aAADeal.dealID)
+	);
+	const aAADealsIsLoading = aAADealsQuery.isLoading;
+	const refetchaAADeals = aAADealsQuery.refetch;
 
 	const openBrowserAsync = async (dealID: string) => {
 		await WebBrowser.openBrowserAsync(`${CHEAPSHARK_REDIRECT_API}${dealID}`);
@@ -87,7 +99,8 @@ const GameDealsScreen = ({ route }: GameDealsScreenProps) => {
 	};
 
 	useLayoutEffect(() => {
-		refetch;
+		refetchTopDeals;
+		refetchaAADeals;
 		navigation.setOptions({
 			title: `${storeTitle} Deals`,
 			headerStyle: { backgroundColor: 'black' },
@@ -102,13 +115,18 @@ const GameDealsScreen = ({ route }: GameDealsScreenProps) => {
 				colors={['#313131', '#dfdfdf', '#1c1b1b']}>
 				<ScrollView style={styles.scrollContainer}>
 					<View style={styles.listItemContainer}>
-						{isLoading ? (
+						{topDealsIsLoading || aAADealsIsLoading ? (
 							<ActivityIndicatorComponent size='large' color='black' />
 						) : (
 							<>
 								<GameDealCategoryList
-									data={games}
-									categoryText='Top Sale Items'
+									data={topDeals}
+									categoryText='Top Deals'
+									renderItem={renderItem}
+								/>
+								<GameDealCategoryList
+									data={aAADeals}
+									categoryText='Retail > $30'
 									renderItem={renderItem}
 								/>
 								{/* Add more category lists here */}
