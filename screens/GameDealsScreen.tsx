@@ -1,4 +1,4 @@
-import { useLayoutEffect, useState } from 'react';
+import { useLayoutEffect } from 'react';
 import { View, StyleSheet, ScrollView } from 'react-native';
 import { CHEAPSHARK_API_URL } from '@env';
 import { RouteProp, useNavigation } from '@react-navigation/native';
@@ -42,9 +42,6 @@ type GameDealsScreenProps = {
 const GameDealsScreen = ({ route }: GameDealsScreenProps) => {
 	const navigation = useNavigation<GameDealsScreenNavigationProp>();
 	const { storeID, title: storeTitle } = route.params;
-	const [filteredaAAGames, setfilteredaAAGames] = useState<
-		GameDealItem[] | undefined
-	>([]);
 	const cacheTime = {
 		cacheTime: 1000 * 60 * 60, // Cache the store list for one hour before fetching again
 	};
@@ -52,8 +49,6 @@ const GameDealsScreen = ({ route }: GameDealsScreenProps) => {
 	async function fetchGameStoreDeals(filterParams: any) {
 		const globalParams = {
 			storeID: storeID,
-			pageSize: 40,
-			onSale: 1,
 		};
 		const params = { ...globalParams, ...filterParams };
 		return await axios
@@ -67,35 +62,33 @@ const GameDealsScreen = ({ route }: GameDealsScreenProps) => {
 			.catch((err) => err);
 	}
 
-	function filterOutExistingDeals(
-		gamesToFiler: GameDealItem[] | undefined,
-		existingGames: GameDealItem[] | undefined
-	) {
-		return gamesToFiler?.filter(
-			(deal) =>
-				!existingGames
-					?.map((existingDeal) => existingDeal.dealID)
-					.includes(deal.dealID)
-		);
-	}
-
 	const {
 		data: topDeals,
 		isLoading: topDealsIsLoading,
 		refetch: refetchTopDeals,
 	} = useQuery<GameDealItem[], unknown>(
 		[`topDeals-${storeID}`],
-		() => fetchGameStoreDeals({ upperPrice: 15 }),
+		() => fetchGameStoreDeals({ onSale: 1, upperPrice: 15 }),
 		cacheTime
 	);
 
 	const {
-		data: AAADeals,
-		isLoading: aAADealsIsLoading,
-		refetch: refetchaAADeals,
+		data: under20DollarDeals,
+		isLoading: under20DollarDealsIsLoading,
+		refetch: refetchUnder20DollarDeals,
 	} = useQuery<GameDealItem[], unknown>(
-		[`aAADeals-${storeID}`],
-		() => fetchGameStoreDeals({ AAA: 1 }),
+		[`under20DollarDealsDeals-${storeID}`],
+		() => fetchGameStoreDeals({ upperPrice: 20, lowerPrice: 15 }),
+		cacheTime
+	);
+
+	const {
+		data: highlyRatedBySteam,
+		isLoading: highlyRatedBySteamIsLoading,
+		refetch: refetchhighlyRatedBySteam,
+	} = useQuery<GameDealItem[], unknown>(
+		[`highlyRatedBySteam-${storeID}`],
+		() => fetchGameStoreDeals({ steamRating: 90 }),
 		cacheTime
 	);
 
@@ -113,15 +106,15 @@ const GameDealsScreen = ({ route }: GameDealsScreenProps) => {
 	};
 
 	useLayoutEffect(() => {
-		refetchTopDeals;
-		refetchaAADeals;
-		setfilteredaAAGames(filterOutExistingDeals(AAADeals, topDeals));
+		refetchTopDeals();
+		refetchUnder20DollarDeals();
+		refetchhighlyRatedBySteam();
 		navigation.setOptions({
 			title: `${storeTitle} Deals`,
 			headerStyle: { backgroundColor: 'black' },
 			headerTintColor: 'white',
 		});
-	}, [navigation, route, topDeals, AAADeals]);
+	}, [navigation, route, topDeals, under20DollarDeals, highlyRatedBySteam]);
 
 	return (
 		<>
@@ -130,21 +123,41 @@ const GameDealsScreen = ({ route }: GameDealsScreenProps) => {
 				colors={['#313131', '#dfdfdf', '#1c1b1b']}>
 				<ScrollView style={styles.scrollContainer}>
 					<View style={styles.listItemContainer}>
-						{topDealsIsLoading || aAADealsIsLoading ? (
+						{topDealsIsLoading ||
+						under20DollarDealsIsLoading ||
+						highlyRatedBySteamIsLoading ? (
 							<ActivityIndicatorComponent size='large' color='black' />
 						) : (
 							<>
-								<GameDealCategoryList
-									data={topDeals}
-									categoryText='Top Deals'
-									renderItem={renderItem}
-								/>
-								<GameDealCategoryList
-									data={filteredaAAGames}
-									categoryText='Retail > $30'
-									renderItem={renderItem}
-								/>
-								{/* Add more category lists here */}
+								{topDeals?.length ? (
+									<GameDealCategoryList
+										data={topDeals}
+										categoryText='Top Deals'
+										renderItem={renderItem}
+									/>
+								) : (
+									<View></View>
+								)}
+
+								{highlyRatedBySteam?.length ? (
+									<GameDealCategoryList
+										data={highlyRatedBySteam}
+										categoryText='Highly Rated By Steam'
+										renderItem={renderItem}
+									/>
+								) : (
+									<View></View>
+								)}
+
+								{under20DollarDeals?.length ? (
+									<GameDealCategoryList
+										data={under20DollarDeals}
+										categoryText='$15 - $20'
+										renderItem={renderItem}
+									/>
+								) : (
+									<View></View>
+								)}
 							</>
 						)}
 					</View>
