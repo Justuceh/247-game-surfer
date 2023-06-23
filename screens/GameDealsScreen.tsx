@@ -1,5 +1,5 @@
-import { useLayoutEffect } from 'react';
-import { View, StyleSheet, FlatList, ScrollView, Text } from 'react-native';
+import { useLayoutEffect, useState } from 'react';
+import { View, StyleSheet, ScrollView } from 'react-native';
 import { CHEAPSHARK_API_URL } from '@env';
 import { RouteProp, useNavigation } from '@react-navigation/native';
 import { useQuery } from '@tanstack/react-query';
@@ -42,6 +42,9 @@ type GameDealsScreenProps = {
 const GameDealsScreen = ({ route }: GameDealsScreenProps) => {
 	const navigation = useNavigation<GameDealsScreenNavigationProp>();
 	const { storeID, title: storeTitle } = route.params;
+	const [filteredaAAGames, setfilteredaAAGames] = useState<
+		GameDealItem[] | undefined
+	>([]);
 	const cacheTime = {
 		cacheTime: 1000 * 60 * 60, // Cache the store list for one hour before fetching again
 	};
@@ -49,7 +52,7 @@ const GameDealsScreen = ({ route }: GameDealsScreenProps) => {
 	async function fetchGameStoreDeals(filterParams: any) {
 		const globalParams = {
 			storeID: storeID,
-			pageSize: 20,
+			pageSize: 40,
 			onSale: 1,
 		};
 		const params = { ...globalParams, ...filterParams };
@@ -64,6 +67,18 @@ const GameDealsScreen = ({ route }: GameDealsScreenProps) => {
 			.catch((err) => err);
 	}
 
+	function filterOutExistingDeals(
+		gamesToFiler: GameDealItem[] | undefined,
+		existingGames: GameDealItem[] | undefined
+	) {
+		return gamesToFiler?.filter(
+			(deal) =>
+				!existingGames
+					?.map((existingDeal) => existingDeal.dealID)
+					.includes(deal.dealID)
+		);
+	}
+
 	const {
 		data: topDeals,
 		isLoading: topDealsIsLoading,
@@ -74,16 +89,15 @@ const GameDealsScreen = ({ route }: GameDealsScreenProps) => {
 		cacheTime
 	);
 
-	const aAADealsQuery = useQuery<GameDealItem[], unknown>(
+	const {
+		data: AAADeals,
+		isLoading: aAADealsIsLoading,
+		refetch: refetchaAADeals,
+	} = useQuery<GameDealItem[], unknown>(
 		[`aAADeals-${storeID}`],
 		() => fetchGameStoreDeals({ AAA: 1 }),
 		cacheTime
 	);
-	const aAADeals = aAADealsQuery.data?.filter(
-		(aAADeal) => !topDeals?.map((deal) => deal.dealID).includes(aAADeal.dealID)
-	);
-	const aAADealsIsLoading = aAADealsQuery.isLoading;
-	const refetchaAADeals = aAADealsQuery.refetch;
 
 	const openBrowserAsync = async (dealID: string) => {
 		await WebBrowser.openBrowserAsync(`${CHEAPSHARK_REDIRECT_API}${dealID}`);
@@ -101,12 +115,13 @@ const GameDealsScreen = ({ route }: GameDealsScreenProps) => {
 	useLayoutEffect(() => {
 		refetchTopDeals;
 		refetchaAADeals;
+		setfilteredaAAGames(filterOutExistingDeals(AAADeals, topDeals));
 		navigation.setOptions({
 			title: `${storeTitle} Deals`,
 			headerStyle: { backgroundColor: 'black' },
 			headerTintColor: 'white',
 		});
-	}, [navigation, route]);
+	}, [navigation, route, topDeals, AAADeals]);
 
 	return (
 		<>
@@ -125,7 +140,7 @@ const GameDealsScreen = ({ route }: GameDealsScreenProps) => {
 									renderItem={renderItem}
 								/>
 								<GameDealCategoryList
-									data={aAADeals}
+									data={filteredaAAGames}
 									categoryText='Retail > $30'
 									renderItem={renderItem}
 								/>
