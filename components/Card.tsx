@@ -3,15 +3,15 @@ import { Text, View, StyleSheet } from 'react-native';
 
 interface CardProps {
 	children: ReactNode | undefined;
-	color?: string;
+	style?: { color?: string; backgroundColor?: string; aspectRatio?: number };
 }
 
-const Card = ({ children, color }: CardProps) => {
+const Card = ({ children, style }: CardProps) => {
 	return (
 		<View
 			style={
-				color
-					? [{ backgroundColor: color }, styles.cardContainer]
+				style
+					? [{ ...style }, styles.cardContainer]
 					: [{ backgroundColor: 'white' }, styles.cardContainer]
 			}>
 			<Text>{children}</Text>
@@ -34,6 +34,5 @@ const styles = StyleSheet.create({
 		shadowRadius: 6,
 		shadowOpacity: 0.25,
 		flex: 1,
-		aspectRatio: 1,
 	},
 });

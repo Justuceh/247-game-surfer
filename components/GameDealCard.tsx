@@ -14,7 +14,7 @@ const GameDealCard = ({
 	handleGameDealPress,
 }: GameDealCardProps) => {
 	return (
-		<Card color='#120c0c'>
+		<Card style={{ backgroundColor: '#120c0c', aspectRatio: 1 }}>
 			<View style={styles.rootContainer}>
 				<Pressable
 					onPress={() => handleGameDealPress(gameDealItem.dealID)}
@@ -33,10 +33,10 @@ const GameDealCard = ({
 						</View>
 
 						<View style={styles.saleInfoContainer}>
+							<Text style={styles.saleText}>{gameDealItem.salePrice}</Text>
 							<Text style={[styles.strikethroughText, styles.saleText]}>
 								{gameDealItem.normalPrice}
 							</Text>
-							<Text style={styles.saleText}>{gameDealItem.salePrice}</Text>
 							<WishlistButton gameDealItem={gameDealItem} />
 						</View>
 					</View>
