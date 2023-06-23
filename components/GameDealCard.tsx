@@ -7,11 +7,15 @@ import WishlistButton from './WishlistButton';
 interface GameDealCardProps {
 	gameDealItem: GameDealItem;
 	handleGameDealPress: (dealID: string) => void;
+	style?: {
+		width: number;
+	};
 }
 
 const GameDealCard = ({
 	gameDealItem,
 	handleGameDealPress,
+	style,
 }: GameDealCardProps) => {
 	return (
 		<Card style={{ backgroundColor: '#120c0c', aspectRatio: 1 }}>
@@ -22,7 +26,7 @@ const GameDealCard = ({
 						? [styles.pressed, styles.pressableContainer]
 						: styles.pressableContainer
 				}>
-				<View style={styles.imageContainer}>
+				<View style={[styles.imageContainer, style && { width: style.width }]}>
 					<Image style={styles.image} source={{ uri: gameDealItem.thumb }} />
 				</View>
 
@@ -58,6 +62,7 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		margin: '1%',
 		padding: 12,
+		width: 190,
 	},
 	image: {
 		flex: 1,
@@ -72,7 +77,6 @@ const styles = StyleSheet.create({
 	},
 	titleContainer: {
 		flex: 1,
-		width: 200,
 		flexDirection: 'row',
 		justifyContent: 'center',
 		overflow: 'hidden',

@@ -1,29 +1,27 @@
 import { useContext } from 'react';
-import {
-	Text,
-	View,
-	StyleSheet,
-	ImageBackground,
-	FlatList,
-} from 'react-native';
+import { View, StyleSheet, FlatList } from 'react-native';
+import * as WebBrowser from 'expo-web-browser';
 import { WishlistContext } from '../store/context/wishlist/wishlist-context';
 
 import Card from '../components/Card';
 import { GameDealItem } from './GameDealsScreen';
+import GameDealCard from '../components/GameDealCard';
+import { CHEAPSHARK_REDIRECT_API } from '@env';
 
 const WishListScreen = () => {
 	const wishListGames = useContext(WishlistContext);
+	const openBrowserAsync = async (dealID: string) => {
+		await WebBrowser.openBrowserAsync(`${CHEAPSHARK_REDIRECT_API}${dealID}`);
+	};
 	const renderCards = ({ item }: { item: GameDealItem }) => {
 		return (
-			<Card color='#e4e4e4'>
-				<View style={styles.innerCardContainer}>
-					<ImageBackground
-						style={styles.image}
-						source={{ uri: `${item.thumb}` }}
-					/>
-					<Text style={styles.storeText}>{item.title}</Text>
-				</View>
-			</Card>
+			<View style={styles.wishListItemContainer}>
+				<GameDealCard
+					gameDealItem={item}
+					handleGameDealPress={openBrowserAsync}
+					style={{ width: 165 }}
+				/>
+			</View>
 		);
 	};
 
@@ -32,7 +30,7 @@ const WishListScreen = () => {
 			<FlatList
 				data={wishListGames.games}
 				renderItem={renderCards}
-				contentContainerStyle={{ padding: 5 }}
+				numColumns={2}
 				keyExtractor={(item) => `${item.dealID}`}
 			/>
 		</View>
@@ -44,23 +42,12 @@ export default WishListScreen;
 const styles = StyleSheet.create({
 	rootContainer: {
 		flex: 1,
+		alignItems: 'center',
 		justifyContent: 'center',
 		backgroundColor: '#282828',
 	},
-	innerCardContainer: {
-		flex: 1,
-		justifyContent: 'center',
-		alignItems: 'center',
-	},
-	image: {
-		flex: 9,
-		aspectRatio: 1,
-	},
-	storeText: {
-		flex: 1,
-		marginTop: 9,
-		fontWeight: '400',
-		fontSize: 19,
-		color: 'black',
+	wishListItemContainer: {
+		width: 200,
+		overflow: 'hidden',
 	},
 });
