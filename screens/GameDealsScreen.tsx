@@ -85,10 +85,20 @@ const GameDealsScreen = ({ route }: GameDealsScreenProps) => {
 	const {
 		data: highlyRatedBySteam,
 		isLoading: highlyRatedBySteamIsLoading,
-		refetch: refetchhighlyRatedBySteam,
+		refetch: refetchHighlyRatedBySteam,
 	} = useQuery<GameDealItem[], unknown>(
 		[`highlyRatedBySteam-${storeID}`],
 		() => fetchGameStoreDeals({ steamRating: 90 }),
+		cacheTime
+	);
+
+	const {
+		data: highlyRatedByMetacritic,
+		isLoading: highlyRatedByMetacriticIsLoading,
+		refetch: refetchhighlyRatedByMetacritic,
+	} = useQuery<GameDealItem[], unknown>(
+		[`highlyRatedByMetacritic-${storeID}`],
+		() => fetchGameStoreDeals({ metacritic: 90 }),
 		cacheTime
 	);
 
@@ -108,13 +118,21 @@ const GameDealsScreen = ({ route }: GameDealsScreenProps) => {
 	useLayoutEffect(() => {
 		refetchTopDeals();
 		refetchUnder20DollarDeals();
-		refetchhighlyRatedBySteam();
+		refetchHighlyRatedBySteam();
+		refetchhighlyRatedByMetacritic();
 		navigation.setOptions({
 			title: `${storeTitle} Deals`,
 			headerStyle: { backgroundColor: 'black' },
 			headerTintColor: 'white',
 		});
-	}, [navigation, route, topDeals, under20DollarDeals, highlyRatedBySteam]);
+	}, [
+		navigation,
+		route,
+		topDeals,
+		under20DollarDeals,
+		highlyRatedBySteam,
+		highlyRatedByMetacritic,
+	]);
 
 	return (
 		<>
@@ -125,7 +143,8 @@ const GameDealsScreen = ({ route }: GameDealsScreenProps) => {
 					<View style={styles.listItemContainer}>
 						{topDealsIsLoading ||
 						under20DollarDealsIsLoading ||
-						highlyRatedBySteamIsLoading ? (
+						highlyRatedBySteamIsLoading ||
+						highlyRatedByMetacriticIsLoading ? (
 							<ActivityIndicatorComponent size='large' color='black' />
 						) : (
 							<>
@@ -143,6 +162,16 @@ const GameDealsScreen = ({ route }: GameDealsScreenProps) => {
 									<GameDealCategoryList
 										data={highlyRatedBySteam}
 										categoryText='Highly Rated By Steam'
+										renderItem={renderItem}
+									/>
+								) : (
+									<View></View>
+								)}
+
+								{highlyRatedByMetacritic?.length ? (
+									<GameDealCategoryList
+										data={highlyRatedByMetacritic}
+										categoryText='Highly Rated By Metacritic'
 										renderItem={renderItem}
 									/>
 								) : (
