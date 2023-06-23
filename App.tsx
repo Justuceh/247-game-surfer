@@ -76,7 +76,7 @@ export default function App() {
 										);
 									}}>
 									<Tab.Screen
-										name='StoresScreen'
+										name='StoresScreenMain'
 										component={StoresScreenTab}
 										options={{
 											title: 'Store Deals',
