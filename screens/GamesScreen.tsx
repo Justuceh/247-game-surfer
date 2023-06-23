@@ -84,21 +84,12 @@ const GamesScreen = () => {
 							onPress={changeWishlistStatusHandler}
 							style={({ pressed }) => [pressed ? styles.pressed : null]}>
 							<View style={styles.pressableContent}>
-								{!isWishlisted ? (
-									<Icon
-										onPress={changeWishlistStatusHandler}
-										name={'star'}
-										size={30}
-										color='white'
-									/>
-								) : (
-									<Icon
-										onPress={changeWishlistStatusHandler}
-										name={'star'}
-										size={30}
-										color='yellow'
-									/>
-								)}
+								<Icon
+									onPress={changeWishlistStatusHandler}
+									name={'star'}
+									size={30}
+									color={!isWishlisted ? 'white' : 'yellow'}
+								/>
 							</View>
 						</Pressable>
 					</View>

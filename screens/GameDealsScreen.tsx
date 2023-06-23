@@ -1,22 +1,18 @@
+import { useLayoutEffect } from 'react';
+import { View, StyleSheet, ScrollView } from 'react-native';
 import { CHEAPSHARK_API_URL } from '@env';
 import { RouteProp, useNavigation } from '@react-navigation/native';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
-import {
-	View,
-	StyleSheet,
-	Text,
-	Image,
-	FlatList,
-	Pressable,
-} from 'react-native';
 import { RootNavigatorParamList } from '../App';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { useLayoutEffect } from 'react';
 import { LinearGradient } from 'expo-linear-gradient';
+import * as WebBrowser from 'expo-web-browser';
+import { CHEAPSHARK_REDIRECT_API } from '@env';
 
 import ActivityIndicatorComponent from '../components/ActivityIndicator';
-import Card from '../components/Card';
+import GameDealCard from '../components/GameDealCard';
+import GameDealCategoryList from '../components/GameDealCategoryList';
 
 export interface GameDealItem {
 	gameID: string;
@@ -36,7 +32,7 @@ type GameDealsScreenRouteProp = RouteProp<
 >;
 type GameDealsScreenNavigationProp = StackNavigationProp<
 	RootNavigatorParamList,
-	'GameStoreScreen'
+	'GameDealsScreen'
 >;
 
 type GameDealsScreenProps = {
@@ -46,12 +42,15 @@ type GameDealsScreenProps = {
 const GameDealsScreen = ({ route }: GameDealsScreenProps) => {
 	const navigation = useNavigation<GameDealsScreenNavigationProp>();
 	const { storeID, title: storeTitle } = route.params;
-	async function fetchGameStoreDeals() {
-		const params = {
+	const cacheTime = {
+		cacheTime: 1000 * 60 * 60, // Cache the store list for one hour before fetching again
+	};
+
+	async function fetchGameStoreDeals(filterParams: any) {
+		const globalParams = {
 			storeID: storeID,
-			pageSize: 20,
-			upperPrice: 15,
 		};
+		const params = { ...globalParams, ...filterParams };
 		return await axios
 			.get(`${CHEAPSHARK_API_URL}/deals`, { params })
 			.then((response) => {
@@ -64,82 +63,158 @@ const GameDealsScreen = ({ route }: GameDealsScreenProps) => {
 	}
 
 	const {
-		data: games,
-		isLoading,
-		error,
-		refetch,
+		data: topDeals,
+		isLoading: topDealsIsLoading,
+		refetch: refetchTopDeals,
 	} = useQuery<GameDealItem[], unknown>(
-		[`gameDeals-${storeID}`],
-		fetchGameStoreDeals,
-		{
-			cacheTime: 1000 * 60 * 60, // Cache the store list for one hour before fetching again
-		}
+		[`topDeals-${storeID}`],
+		() => fetchGameStoreDeals({ onSale: 1, upperPrice: 15 }),
+		cacheTime
 	);
 
-	function handleGameDealPress(dealID: string, storeID: string) {
-		navigation.navigate('GameStoreScreen', {
-			dealID: dealID,
-			title: storeTitle,
-		});
-	}
+	const {
+		data: highlyRatedBySteam,
+		isLoading: highlyRatedBySteamIsLoading,
+		refetch: refetchHighlyRatedBySteam,
+	} = useQuery<GameDealItem[], unknown>(
+		[`highlyRatedBySteam-${storeID}`],
+		() => fetchGameStoreDeals({ steamRating: 90 }),
+		cacheTime
+	);
+
+	const {
+		data: highlyRatedByMetacritic,
+		isLoading: highlyRatedByMetacriticIsLoading,
+		refetch: refetchhighlyRatedByMetacritic,
+	} = useQuery<GameDealItem[], unknown>(
+		[`highlyRatedByMetacritic-${storeID}`],
+		() => fetchGameStoreDeals({ metacritic: 90 }),
+		cacheTime
+	);
+
+	const {
+		data: under20DollarDeals,
+		isLoading: under20DollarDealsIsLoading,
+		refetch: refetchUnder20DollarDeals,
+	} = useQuery<GameDealItem[], unknown>(
+		[`under20DollarDeals-${storeID}`],
+		() => fetchGameStoreDeals({ upperPrice: 20, lowerPrice: 15 }),
+		cacheTime
+	);
+
+	const {
+		data: fiveToTenDollarDeals,
+		isLoading: fiveToTenDollarDealsIsLoading,
+		refetch: refetchFiveToTenDollarDeals,
+	} = useQuery<GameDealItem[], unknown>(
+		[`fiveToTenDollarDeals-${storeID}`],
+		() => fetchGameStoreDeals({ upperPrice: 10, lowerPrice: 5 }),
+		cacheTime
+	);
+
+	const openBrowserAsync = async (dealID: string) => {
+		await WebBrowser.openBrowserAsync(`${CHEAPSHARK_REDIRECT_API}${dealID}`);
+	};
+
 	const renderItem = ({ item }: { item: GameDealItem }) => {
 		return (
-			<Card color='#e4dddd'>
-				<View style={styles.rootContainer}>
-					<Pressable
-						onPress={() => handleGameDealPress(item.dealID, item.storeID)}
-						style={({ pressed }) =>
-							pressed
-								? [styles.pressed, styles.pressableContainer]
-								: styles.pressableContainer
-						}>
-						<View style={styles.imageContainer}>
-							<Image style={styles.image} source={{ uri: item.thumb }} />
-						</View>
-
-						<View style={styles.descriptionContainer}>
-							<Text style={styles.title}>{item.title}</Text>
-							<View style={styles.saleInfoContainer}>
-								<Text style={[styles.strikethroughText, styles.saleText]}>
-									{item.normalPrice}
-								</Text>
-								<Text style={styles.saleText}>{item.salePrice}</Text>
-							</View>
-						</View>
-					</Pressable>
-				</View>
-			</Card>
+			<GameDealCard
+				gameDealItem={item}
+				handleGameDealPress={openBrowserAsync}
+			/>
 		);
 	};
 
 	useLayoutEffect(() => {
-		refetch;
+		refetchTopDeals();
+
+		refetchHighlyRatedBySteam();
+		refetchhighlyRatedByMetacritic();
+		refetchUnder20DollarDeals();
+		refetchFiveToTenDollarDeals();
 		navigation.setOptions({
 			title: `${storeTitle} Deals`,
 			headerStyle: { backgroundColor: 'black' },
 			headerTintColor: 'white',
 		});
-	}, [navigation, route]);
+	}, [
+		navigation,
+		route,
+		topDeals,
+		highlyRatedBySteam,
+		highlyRatedByMetacritic,
+		under20DollarDeals,
+		fiveToTenDollarDeals,
+	]);
 
 	return (
 		<>
 			<LinearGradient
 				style={styles.linearGradient}
-				colors={['#313131', '#dfdfdf', '#313131']}>
-				<View style={styles.rootContainer}>
-					{isLoading ? (
-						<ActivityIndicatorComponent size='large' color='black' />
-					) : (
-						<View>
-							<FlatList
-								data={games}
-								keyExtractor={(item) => item.dealID}
-								numColumns={2}
-								renderItem={renderItem}
-							/>
-						</View>
-					)}
-				</View>
+				colors={['#313131', '#dfdfdf', '#1c1b1b']}>
+				<ScrollView style={styles.scrollContainer}>
+					<View style={styles.listItemContainer}>
+						{topDealsIsLoading ||
+						highlyRatedBySteamIsLoading ||
+						highlyRatedByMetacriticIsLoading ||
+						under20DollarDealsIsLoading ||
+						fiveToTenDollarDealsIsLoading ? (
+							<ActivityIndicatorComponent size='large' color='black' />
+						) : (
+							<>
+								{topDeals?.length ? (
+									<GameDealCategoryList
+										data={topDeals}
+										categoryText='Top Deals'
+										renderItem={renderItem}
+									/>
+								) : (
+									<View></View>
+								)}
+
+								{highlyRatedBySteam?.length ? (
+									<GameDealCategoryList
+										data={highlyRatedBySteam}
+										categoryText='Highly Rated By Steam'
+										renderItem={renderItem}
+									/>
+								) : (
+									<View></View>
+								)}
+
+								{highlyRatedByMetacritic?.length ? (
+									<GameDealCategoryList
+										data={highlyRatedByMetacritic}
+										categoryText='Highly Rated By Metacritic'
+										renderItem={renderItem}
+									/>
+								) : (
+									<View></View>
+								)}
+
+								{under20DollarDeals?.length ? (
+									<GameDealCategoryList
+										data={under20DollarDeals}
+										categoryText='$15 - $20'
+										renderItem={renderItem}
+									/>
+								) : (
+									<View></View>
+								)}
+
+								{fiveToTenDollarDeals?.length ? (
+									<GameDealCategoryList
+										data={fiveToTenDollarDeals}
+										categoryText='$5 - $10'
+										renderItem={renderItem}
+									/>
+								) : (
+									<View></View>
+								)}
+							</>
+						)}
+					</View>
+				</ScrollView>
 			</LinearGradient>
 		</>
 	);
@@ -151,49 +226,16 @@ const styles = StyleSheet.create({
 	linearGradient: {
 		flex: 1,
 	},
-	rootContainer: {
+	scrollContainer: {
+		flex: 1,
+		marginTop: '4%',
+	},
+	listItemContainer: {
 		flex: 1,
 		elevation: 4,
 		shadowColor: 'black',
 		shadowOffset: { width: 0, height: 2 },
 		shadowRadius: 4,
 		shadowOpacity: 0.5,
-	},
-	pressableContainer: {
-		flex: 1,
-	},
-	pressed: {
-		opacity: 0.5,
-	},
-	imageContainer: {
-		flex: 1,
-		alignItems: 'center',
-	},
-	image: {
-		flex: 1,
-		aspectRatio: 2,
-	},
-	descriptionContainer: {
-		flex: 1,
-	},
-	title: {
-		textAlign: 'center',
-		fontWeight: 'bold',
-		color: 'black',
-		fontSize: 18,
-		padding: 4,
-		margin: 4,
-	},
-	saleInfoContainer: {
-		flexDirection: 'row',
-	},
-	saleText: {
-		flex: 1,
-		padding: 4,
-		textAlign: 'center',
-		fontWeight: '400',
-	},
-	strikethroughText: {
-		textDecorationLine: 'line-through',
 	},
 });
