@@ -44,9 +44,9 @@ const styles = StyleSheet.create({
 		fontWeight: 'bold',
 		textAlign: 'center',
 		color: '#e4dfdf',
-		padding: 8,
+		padding: 5,
 	},
 	listContainer: {
-		height: 300,
+		height: 260,
 	},
 });
