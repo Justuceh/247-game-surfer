@@ -23,8 +23,8 @@ export default Card;
 
 const styles = StyleSheet.create({
 	cardContainer: {
-		margin: 8,
-		padding: 10,
+		margin: 6,
+		padding: 4,
 		borderRadius: 20,
 		justifyContent: 'center',
 		alignItems: 'center',
