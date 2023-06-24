@@ -6,7 +6,7 @@ import { GameDealItem } from '../../../screens/GameDealsScreen';
 interface WishlistContextValue {
 	games: GameDealItem[];
 	addGame: (game: GameDealItem) => void;
-	removeGame: (gameID: string) => void;
+	removeGame: (gameDealID: string) => void;
 }
 
 const WishlistContext = createContext<WishlistContextValue>({
@@ -31,9 +31,11 @@ const WishlistContextProvider = ({
 		}
 	};
 
-	const removeGame = (gameID: string) => {
-		setGames((prevGames) => prevGames.filter((game) => game.gameID !== gameID));
-		removeGameLocally(gameID);
+	const removeGame = (gameDealID: string) => {
+		setGames((prevGames) =>
+			prevGames.filter((game) => game.dealID !== gameDealID)
+		);
+		removeGameLocally(gameDealID);
 	};
 
 	const contextValue: WishlistContextValue = {
