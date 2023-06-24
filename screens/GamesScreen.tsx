@@ -5,6 +5,7 @@ import {
 	KeyboardAvoidingView,
 	FlatList,
 	Platform,
+	Dimensions,
 } from 'react-native';
 import { CHEAPSHARK_API_URL, CHEAPSHARK_REDIRECT_API } from '@env';
 import axios from 'axios';
@@ -53,7 +54,6 @@ const GamesScreen = () => {
 				<GameDealCard
 					gameDealItem={item}
 					handleGameDealPress={openBrowserAsync}
-					style={{ width: 165 }}
 				/>
 			</View>
 		);
@@ -110,7 +110,7 @@ const GamesScreen = () => {
 };
 
 export default GamesScreen;
-
+const { width } = Dimensions.get('window');
 const styles = StyleSheet.create({
 	keyboardAvoidingViewContainer: {
 		flex: 1,
@@ -131,9 +131,13 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 	},
 	listContainer: {
-		flex: 7,
+		flex: 1,
+		alignItems: 'center',
+		justifyContent: 'center',
 	},
 	gameItemContainer: {
-		overflow: 'hidden',
+		flex: 1,
+
+		width: width / 1.4,
 	},
 });

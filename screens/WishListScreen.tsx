@@ -1,10 +1,9 @@
 import { useContext } from 'react';
-import { View, StyleSheet, FlatList } from 'react-native';
+import { View, StyleSheet, FlatList, Dimensions } from 'react-native';
 import * as WebBrowser from 'expo-web-browser';
 import { WishlistContext } from '../store/context/wishlist/wishlist-context';
 import { LinearGradient } from 'expo-linear-gradient';
 
-import Card from '../components/Card';
 import { GameDealItem } from './GameDealsScreen';
 import GameDealCard from '../components/GameDealCard';
 import { CHEAPSHARK_REDIRECT_API } from '@env';
@@ -46,7 +45,7 @@ const WishListScreen = () => {
 };
 
 export default WishListScreen;
-
+const { width } = Dimensions.get('window');
 const styles = StyleSheet.create({
 	rootContainer: {
 		flex: 1,
@@ -59,8 +58,11 @@ const styles = StyleSheet.create({
 	},
 	listContainer: {
 		flex: 1,
+		alignItems: 'center',
+		justifyContent: 'center',
 	},
 	wishListItemContainer: {
 		flex: 1,
+		width: width / 1.4,
 	},
 });

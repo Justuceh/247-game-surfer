@@ -20,8 +20,8 @@ const GameDealCard = ({
 }: GameDealCardProps) => {
 	//TODO write a function to calculate the percentage in savings and add a savings percentage to the card
 
-	const [imageHeight, setImageHeight] = useState<number>();
-	const [imageWidth, setImageWidth] = useState<number>();
+	const [imageHeight, setImageHeight] = useState<number>(0);
+	const [imageWidth, setImageWidth] = useState<number>(0);
 
 	useEffect(() => {
 		Image.getSize(
@@ -34,23 +34,10 @@ const GameDealCard = ({
 				console.error('Failed to get image dimensions:', error);
 			}
 		);
-		test();
 	}, [gameDealItem.thumb]);
 
-	function test() {
-		if (
-			gameDealItem.title === 'Far Cry 5 Gold Edition' ||
-			gameDealItem.title === 'Rayman Origins'
-		) {
-			console.log(
-				`${gameDealItem.title}: width: ${imageWidth}, height: ${imageHeight}`
-			);
-		}
-	}
-	const calculatedWidth =
-		imageWidth !== undefined && imageWidth > 190 ? 190 : imageWidth;
-	const calculatedHeight =
-		imageHeight !== undefined && imageHeight > 200 ? 200 : imageHeight;
+	const calculatedWidth = imageWidth > 190 ? 220 : imageWidth + 50;
+	const calculatedHeight = imageHeight > 200 ? 120 : imageHeight + 60;
 	return (
 		<Card style={{ backgroundColor: '#120c0c', aspectRatio: 1 }}>
 			<Pressable
@@ -62,10 +49,7 @@ const GameDealCard = ({
 				}>
 				<View style={[styles.imageContainer, style && { width: style.width }]}>
 					<Image
-						style={[
-							styles.image,
-							{ height: calculatedHeight, width: calculatedWidth },
-						]}
+						style={{ height: calculatedHeight, width: calculatedWidth }}
 						source={{ uri: gameDealItem.thumb }}
 						resizeMode='contain'
 					/>
@@ -99,14 +83,10 @@ const styles = StyleSheet.create({
 		opacity: 0.5,
 	},
 	imageContainer: {
-		flex: 3,
+		flex: 2,
 		alignItems: 'center',
+		justifyContent: 'center',
 		margin: '1%',
-		padding: 12,
-	},
-	image: {
-		borderRadius: 10,
-		flex: 1,
 	},
 	descriptionContainer: {
 		flex: 1,

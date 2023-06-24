@@ -48,6 +48,6 @@ const styles = StyleSheet.create({
 		padding: 5,
 	},
 	listContainer: {
-		height: height / 2.4,
+		height: height / 3.2,
 	},
 });
