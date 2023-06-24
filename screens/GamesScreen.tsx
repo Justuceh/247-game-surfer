@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import {
 	View,
+	Text,
 	StyleSheet,
 	KeyboardAvoidingView,
 	FlatList,
@@ -87,23 +88,27 @@ const GamesScreen = () => {
 					<LinearGradient
 						style={styles.linearGradient}
 						colors={['#313131', '#dfdfdf', '#313131']}>
-						<View style={styles.listContainer}>
-							{isLoading ? (
-								<View style={styles.activityIndicatorContainer}>
-									<ActivityIndicatorComponent size={'large'} color='black' />
-								</View>
-							) : (
+						{isLoading ? (
+							<View style={styles.activityIndicatorContainer}>
+								<ActivityIndicatorComponent size={'large'} color='black' />
+							</View>
+						) : (
+							<View style={styles.listContainer}>
 								<>
-									<FlatList
-										data={games}
-										renderItem={renderCards}
-										contentContainerStyle={{ padding: 5 }}
-										numColumns={2}
-										keyExtractor={(item) => `${item.dealID}`}
-									/>
+									{games?.length === 0 ? (
+										<Text>No {searchQuery} game data available.</Text>
+									) : (
+										<FlatList
+											data={games}
+											renderItem={renderCards}
+											contentContainerStyle={{ padding: 5 }}
+											numColumns={2}
+											keyExtractor={(item) => `${item.dealID}`}
+										/>
+									)}
 								</>
-							)}
-						</View>
+							</View>
+						)}
 					</LinearGradient>
 				</View>
 			</View>
