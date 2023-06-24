@@ -77,7 +77,11 @@ const StoresScreen = () => {
 
 	const renderCards = ({ item }: { item: GameStoreInterface }) => {
 		return (
-			<Card style={{ color: '#e4e4e4', aspectRatio: 1 }}>
+			<Card
+				style={{
+					backgroundColor: '#b4a727',
+					aspectRatio: 1,
+				}}>
 				<Pressable
 					onPress={() => handleGameStorePress(item.storeID, item.storeName)}
 					style={({ pressed }) => [pressed ? styles.pressed : null]}>
