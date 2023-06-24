@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, FlatList } from 'react-native';
+import { View, Text, StyleSheet, FlatList, Dimensions } from 'react-native';
 import { GameDealItem } from '../screens/GameDealsScreen';
 
 interface GameDealCategoryListProps {
@@ -29,6 +29,7 @@ const GameDealCategoryList = ({
 
 export default GameDealCategoryList;
 
+const { height } = Dimensions.get('window');
 const styles = StyleSheet.create({
 	categoryContainer: {
 		borderBottomWidth: 1,
@@ -47,6 +48,6 @@ const styles = StyleSheet.create({
 		padding: 5,
 	},
 	listContainer: {
-		height: 260,
+		height: height / 2.4,
 	},
 });

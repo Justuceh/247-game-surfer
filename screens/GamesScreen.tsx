@@ -49,7 +49,7 @@ const GamesScreen = () => {
 
 	const renderCards = ({ item }: { item: GameDealItem }) => {
 		return (
-			<View style={styles.wishListItemContainer}>
+			<View style={styles.gameItemContainer}>
 				<GameDealCard
 					gameDealItem={item}
 					handleGameDealPress={openBrowserAsync}
@@ -96,7 +96,6 @@ const GamesScreen = () => {
 									<FlatList
 										data={games}
 										renderItem={renderCards}
-										numColumns={2}
 										contentContainerStyle={{ padding: 5 }}
 										keyExtractor={(item) => `${item.dealID}`}
 									/>
@@ -134,8 +133,7 @@ const styles = StyleSheet.create({
 	listContainer: {
 		flex: 7,
 	},
-	wishListItemContainer: {
-		width: 200,
+	gameItemContainer: {
 		overflow: 'hidden',
 	},
 });
