@@ -54,6 +54,7 @@ const GamesScreen = () => {
 				<GameDealCard
 					gameDealItem={item}
 					handleGameDealPress={openBrowserAsync}
+					style={{ height: 110 }}
 				/>
 			</View>
 		);
@@ -97,6 +98,7 @@ const GamesScreen = () => {
 										data={games}
 										renderItem={renderCards}
 										contentContainerStyle={{ padding: 5 }}
+										numColumns={2}
 										keyExtractor={(item) => `${item.dealID}`}
 									/>
 								</>
@@ -141,7 +143,6 @@ const styles = StyleSheet.create({
 		shadowOpacity: 0.5,
 	},
 	gameItemContainer: {
-		flex: 1,
-		width: width / 1.4,
+		width: width / 2,
 	},
 });

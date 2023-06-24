@@ -10,6 +10,7 @@ interface GameDealCardProps {
 	handleGameDealPress: (dealID: string) => void;
 	style?: {
 		width?: number;
+		height?: number;
 	};
 }
 
@@ -36,8 +37,8 @@ const GameDealCard = ({
 		);
 	}, [gameDealItem.thumb]);
 
-	const calculatedWidth = imageWidth > 190 ? 220 : imageWidth + 50;
-	const calculatedHeight = imageHeight > 200 ? 120 : imageHeight + 60;
+	const calculatedWidth = imageWidth > 190 ? 190 : imageWidth + 50;
+	const calculatedHeight = imageHeight > 190 ? 120 : imageHeight + 60;
 	return (
 		<Card style={{ backgroundColor: '#120c0c', aspectRatio: 1 }}>
 			<Pressable
@@ -49,7 +50,12 @@ const GameDealCard = ({
 				}>
 				<View style={[styles.imageContainer, style && { width: style.width }]}>
 					<Image
-						style={{ height: calculatedHeight, width: calculatedWidth }}
+						style={[
+							{
+								height: style?.height || calculatedHeight,
+								width: style?.width || calculatedWidth,
+							},
+						]}
 						source={{ uri: gameDealItem.thumb }}
 						resizeMode='contain'
 					/>
