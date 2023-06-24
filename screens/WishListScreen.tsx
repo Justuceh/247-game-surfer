@@ -35,6 +35,7 @@ const WishListScreen = () => {
 							data={wishListGames.games}
 							renderItem={renderCards}
 							contentContainerStyle={{ padding: 5 }}
+							numColumns={2}
 							keyExtractor={(item) => `${item.dealID}`}
 						/>
 					</>
@@ -67,7 +68,6 @@ const styles = StyleSheet.create({
 		shadowOpacity: 0.5,
 	},
 	wishListItemContainer: {
-		flex: 1,
-		width: width / 1.4,
+		width: width / 2,
 	},
 });
