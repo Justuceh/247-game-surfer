@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { Text, View, StyleSheet, Pressable, Image } from 'react-native';
 
 import { GameDealItem } from '../screens/GameDealsScreen';
@@ -9,6 +10,7 @@ interface GameDealCardProps {
 	handleGameDealPress: (dealID: string) => void;
 	style?: {
 		width?: number;
+		height?: number;
 	};
 }
 
@@ -18,6 +20,25 @@ const GameDealCard = ({
 	style,
 }: GameDealCardProps) => {
 	//TODO write a function to calculate the percentage in savings and add a savings percentage to the card
+
+	const [imageHeight, setImageHeight] = useState<number>(0);
+	const [imageWidth, setImageWidth] = useState<number>(0);
+
+	useEffect(() => {
+		Image.getSize(
+			gameDealItem.thumb,
+			(width, height) => {
+				setImageHeight(height);
+				setImageWidth(width);
+			},
+			(error) => {
+				console.error('Failed to get image dimensions:', error);
+			}
+		);
+	}, [gameDealItem.thumb]);
+
+	const calculatedWidth = imageWidth > 190 ? 190 : imageWidth + 50;
+	const calculatedHeight = imageHeight > 190 ? 120 : imageHeight + 60;
 	return (
 		<Card style={{ backgroundColor: '#120c0c', aspectRatio: 1 }}>
 			<Pressable
@@ -28,7 +49,16 @@ const GameDealCard = ({
 						: styles.pressableContainer
 				}>
 				<View style={[styles.imageContainer, style && { width: style.width }]}>
-					<Image style={styles.image} source={{ uri: gameDealItem.thumb }} />
+					<Image
+						style={[
+							{
+								height: style?.height || calculatedHeight,
+								width: style?.width || calculatedWidth,
+							},
+						]}
+						source={{ uri: gameDealItem.thumb }}
+						resizeMode='contain'
+					/>
 				</View>
 
 				<View style={styles.descriptionContainer}>
@@ -59,17 +89,10 @@ const styles = StyleSheet.create({
 		opacity: 0.5,
 	},
 	imageContainer: {
-		flex: 1,
+		flex: 2,
 		alignItems: 'center',
+		justifyContent: 'center',
 		margin: '1%',
-		padding: 12,
-		width: 190,
-	},
-	image: {
-		flex: 1,
-		borderRadius: 15,
-		width: '120%',
-		marginHorizontal: 5,
 	},
 	descriptionContainer: {
 		flex: 1,

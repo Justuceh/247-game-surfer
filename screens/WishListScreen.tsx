@@ -1,9 +1,9 @@
 import { useContext } from 'react';
-import { View, StyleSheet, FlatList } from 'react-native';
+import { View, StyleSheet, FlatList, Dimensions } from 'react-native';
 import * as WebBrowser from 'expo-web-browser';
 import { WishlistContext } from '../store/context/wishlist/wishlist-context';
+import { LinearGradient } from 'expo-linear-gradient';
 
-import Card from '../components/Card';
 import { GameDealItem } from './GameDealsScreen';
 import GameDealCard from '../components/GameDealCard';
 import { CHEAPSHARK_REDIRECT_API } from '@env';
@@ -19,26 +19,33 @@ const WishListScreen = () => {
 				<GameDealCard
 					gameDealItem={item}
 					handleGameDealPress={openBrowserAsync}
-					style={{ width: 165 }}
 				/>
 			</View>
 		);
 	};
 
 	return (
-		<View style={styles.rootContainer}>
-			<FlatList
-				data={wishListGames.games}
-				renderItem={renderCards}
-				numColumns={2}
-				keyExtractor={(item) => `${item.dealID}`}
-			/>
+		<View style={styles.linearGradient}>
+			<LinearGradient
+				style={styles.linearGradient}
+				colors={['#313131', '#dfdfdf', '#313131']}>
+				<View style={styles.listContainer}>
+					<>
+						<FlatList
+							data={wishListGames.games}
+							renderItem={renderCards}
+							contentContainerStyle={{ padding: 5 }}
+							keyExtractor={(item) => `${item.dealID}`}
+						/>
+					</>
+				</View>
+			</LinearGradient>
 		</View>
 	);
 };
 
 export default WishListScreen;
-
+const { width } = Dimensions.get('window');
 const styles = StyleSheet.create({
 	rootContainer: {
 		flex: 1,
@@ -46,8 +53,21 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 		backgroundColor: '#282828',
 	},
+	linearGradient: {
+		flex: 1,
+	},
+	listContainer: {
+		flex: 1,
+		alignItems: 'center',
+		justifyContent: 'center',
+		elevation: 4,
+		shadowColor: 'black',
+		shadowOffset: { width: 4, height: 2 },
+		shadowRadius: 4,
+		shadowOpacity: 0.5,
+	},
 	wishListItemContainer: {
-		width: 200,
-		overflow: 'hidden',
+		flex: 1,
+		width: width / 1.4,
 	},
 });
