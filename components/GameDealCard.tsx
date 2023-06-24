@@ -17,6 +17,7 @@ const GameDealCard = ({
 	handleGameDealPress,
 	style,
 }: GameDealCardProps) => {
+	//TODO write a function to calculate the percentage in savings and add a savings percentage to the card
 	return (
 		<Card style={{ backgroundColor: '#120c0c', aspectRatio: 1 }}>
 			<Pressable
