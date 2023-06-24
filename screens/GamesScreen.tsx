@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import {
 	View,
+	Text,
 	StyleSheet,
 	KeyboardAvoidingView,
 	FlatList,
 	Platform,
+	Dimensions,
 } from 'react-native';
 import { CHEAPSHARK_API_URL, CHEAPSHARK_REDIRECT_API } from '@env';
 import axios from 'axios';
@@ -49,11 +51,11 @@ const GamesScreen = () => {
 
 	const renderCards = ({ item }: { item: GameDealItem }) => {
 		return (
-			<View style={styles.wishListItemContainer}>
+			<View style={styles.gameItemContainer}>
 				<GameDealCard
 					gameDealItem={item}
 					handleGameDealPress={openBrowserAsync}
-					style={{ width: 165 }}
+					style={{ height: 110 }}
 				/>
 			</View>
 		);
@@ -86,23 +88,27 @@ const GamesScreen = () => {
 					<LinearGradient
 						style={styles.linearGradient}
 						colors={['#313131', '#dfdfdf', '#313131']}>
-						<View style={styles.listContainer}>
-							{isLoading ? (
-								<View style={styles.activityIndicatorContainer}>
-									<ActivityIndicatorComponent size={'large'} color='black' />
-								</View>
-							) : (
+						{isLoading ? (
+							<View style={styles.activityIndicatorContainer}>
+								<ActivityIndicatorComponent size={'large'} color='black' />
+							</View>
+						) : (
+							<View style={styles.listContainer}>
 								<>
-									<FlatList
-										data={games}
-										renderItem={renderCards}
-										numColumns={2}
-										contentContainerStyle={{ padding: 5 }}
-										keyExtractor={(item) => `${item.dealID}`}
-									/>
+									{games?.length === 0 ? (
+										<Text>No {searchQuery} game data available.</Text>
+									) : (
+										<FlatList
+											data={games}
+											renderItem={renderCards}
+											contentContainerStyle={{ padding: 5 }}
+											numColumns={2}
+											keyExtractor={(item) => `${item.dealID}`}
+										/>
+									)}
 								</>
-							)}
-						</View>
+							</View>
+						)}
 					</LinearGradient>
 				</View>
 			</View>
@@ -111,7 +117,7 @@ const GamesScreen = () => {
 };
 
 export default GamesScreen;
-
+const { width } = Dimensions.get('window');
 const styles = StyleSheet.create({
 	keyboardAvoidingViewContainer: {
 		flex: 1,
@@ -132,10 +138,16 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 	},
 	listContainer: {
-		flex: 7,
+		flex: 1,
+		alignItems: 'center',
+		justifyContent: 'center',
+		elevation: 4,
+		shadowColor: 'black',
+		shadowOffset: { width: 4, height: 2 },
+		shadowRadius: 4,
+		shadowOpacity: 0.5,
 	},
-	wishListItemContainer: {
-		width: 200,
-		overflow: 'hidden',
+	gameItemContainer: {
+		width: width / 2,
 	},
 });

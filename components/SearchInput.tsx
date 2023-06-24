@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Text, View, StyleSheet, TextInput, Pressable } from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 interface SearchInputProps {
 	onSearchHandler: (data: any) => any;
@@ -34,9 +35,22 @@ const SearchInput = ({
 					setSearchQuery(text);
 					onChangeText(text);
 				}}
+				onSubmitEditing={onPressHandler}
 				placeholder='Search...'
 				placeholderTextColor={placeholderTextColor}
 			/>
+			{searchQuery !== '' && (
+				<Pressable
+					onPress={() => {
+						setSearchQuery('');
+					}}
+					style={({ pressed }) => [
+						styles.clearButton,
+						{ opacity: pressed ? 0.3 : 1 },
+					]}>
+					<Icon name='clear' size={20} color={'black'} />
+				</Pressable>
+			)}
 			<Pressable
 				onPress={onPressHandler}
 				style={({ pressed }) => {
@@ -91,5 +105,16 @@ const styles = StyleSheet.create({
 	},
 	buttonPressed: {
 		opacity: 0.5,
+	},
+	clearButton: {
+		marginRight: 10,
+		justifyContent: 'center',
+		alignItems: 'center',
+		width: 25,
+		height: 25,
+		borderRadius: 12.5,
+	},
+	clearText: {
+		fontSize: 16,
 	},
 });
