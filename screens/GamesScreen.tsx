@@ -134,10 +134,14 @@ const styles = StyleSheet.create({
 		flex: 1,
 		alignItems: 'center',
 		justifyContent: 'center',
+		elevation: 4,
+		shadowColor: 'black',
+		shadowOffset: { width: 4, height: 2 },
+		shadowRadius: 4,
+		shadowOpacity: 0.5,
 	},
 	gameItemContainer: {
 		flex: 1,
-
 		width: width / 1.4,
 	},
 });
