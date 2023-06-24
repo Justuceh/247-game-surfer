@@ -1,38 +1,28 @@
-import { useState, useEffect, useContext } from 'react';
+import { useState } from 'react';
 import {
 	View,
 	StyleSheet,
-	ImageBackground,
-	Text,
-	Pressable,
 	KeyboardAvoidingView,
 	FlatList,
 	Platform,
 } from 'react-native';
-import { CHEAPSHARK_API_URL } from '@env';
+import { CHEAPSHARK_API_URL, CHEAPSHARK_REDIRECT_API } from '@env';
 import axios from 'axios';
 import { LinearGradient } from 'expo-linear-gradient';
-import Icon from 'react-native-vector-icons/AntDesign';
-
-import Card from '../components/Card';
-import SearchInput from '../components/SearchInput';
-import ActivityIndicatorComponent from '../components/ActivityIndicator';
-import { WishlistContext } from '../store/context/wishlist/wishlist-context';
+import * as WebBrowser from 'expo-web-browser';
 import { useQuery } from '@tanstack/react-query';
 
+import ActivityIndicatorComponent from '../components/ActivityIndicator';
+import SearchInput from '../components/SearchInput';
 import { GameDealItem } from './GameDealsScreen';
+import GameDealCard from '../components/GameDealCard';
 
 const GamesScreen = () => {
 	const [searchQuery, setSearchQuery] = useState('');
 
-	const wishlistContext = useContext(WishlistContext);
-
-	function handleOnGamePress() {}
-
 	async function fetchGames() {
 		const params = {
 			pageSize: 20,
-			upperPrice: 15,
 			title: searchQuery,
 		};
 		return await axios
@@ -53,50 +43,19 @@ const GamesScreen = () => {
 		refetch,
 	} = useQuery<GameDealItem[], unknown>([`games`], fetchGames);
 
-	const renderCards = ({ item }: { item: GameDealItem }) => {
-		const isWishlisted = wishlistContext.games.some(
-			(game) => game.gameID === item.gameID
-		);
+	const openBrowserAsync = async (dealID: string) => {
+		await WebBrowser.openBrowserAsync(`${CHEAPSHARK_REDIRECT_API}${dealID}`);
+	};
 
-		const changeWishlistStatusHandler = () => {
-			if (isWishlisted) {
-				wishlistContext.removeGame(item.gameID);
-			} else {
-				wishlistContext.addGame(item);
-			}
-		};
-		return item ? (
-			<>
-				<View style={styles.listItemContainer}>
-					<Pressable
-						onPress={handleOnGamePress}
-						style={({ pressed }) => [pressed ? styles.pressed : null]}>
-						<View style={styles.imageContainer}>
-							<ImageBackground
-								source={{ uri: item.thumb }}
-								style={styles.image}
-							/>
-						</View>
-					</Pressable>
-					<View style={styles.titleContainer}>
-						<Text style={styles.title}>{item.title}</Text>
-						<Pressable
-							onPress={changeWishlistStatusHandler}
-							style={({ pressed }) => [pressed ? styles.pressed : null]}>
-							<View style={styles.pressableContent}>
-								<Icon
-									onPress={changeWishlistStatusHandler}
-									name={'star'}
-									size={30}
-									color={!isWishlisted ? 'white' : 'yellow'}
-								/>
-							</View>
-						</Pressable>
-					</View>
-				</View>
-			</>
-		) : (
-			<Card> </Card>
+	const renderCards = ({ item }: { item: GameDealItem }) => {
+		return (
+			<View style={styles.wishListItemContainer}>
+				<GameDealCard
+					gameDealItem={item}
+					handleGameDealPress={openBrowserAsync}
+					style={{ width: 165 }}
+				/>
+			</View>
 		);
 	};
 
@@ -110,7 +69,7 @@ const GamesScreen = () => {
 
 	return (
 		<KeyboardAvoidingView
-			style={styles.rootContainer}
+			style={styles.keyboardAvoidingViewContainer}
 			behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
 			keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}>
 			<View style={styles.rootContainer}>
@@ -129,12 +88,15 @@ const GamesScreen = () => {
 						colors={['#313131', '#dfdfdf', '#313131']}>
 						<View style={styles.listContainer}>
 							{isLoading ? (
-								<ActivityIndicatorComponent size={'large'} color='blue' />
+								<View style={styles.activityIndicatorContainer}>
+									<ActivityIndicatorComponent size={'large'} color='black' />
+								</View>
 							) : (
 								<>
 									<FlatList
 										data={games}
 										renderItem={renderCards}
+										numColumns={2}
 										contentContainerStyle={{ padding: 5 }}
 										keyExtractor={(item) => `${item.dealID}`}
 									/>
@@ -151,6 +113,9 @@ const GamesScreen = () => {
 export default GamesScreen;
 
 const styles = StyleSheet.create({
+	keyboardAvoidingViewContainer: {
+		flex: 1,
+	},
 	rootContainer: {
 		flex: 1,
 		justifyContent: 'center',
@@ -161,46 +126,16 @@ const styles = StyleSheet.create({
 	linearGradient: {
 		flex: 13,
 	},
+	activityIndicatorContainer: {
+		flex: 1,
+		justifyContent: 'center',
+		alignItems: 'center',
+	},
 	listContainer: {
 		flex: 7,
 	},
-	listItemContainer: {
-		elevation: 4,
-		shadowColor: 'black',
-		shadowOffset: { width: 0, height: 2 },
-		shadowRadius: 4,
-		shadowOpacity: 0.5,
-	},
-	titleContainer: {
-		flex: 1,
-		flexDirection: 'row',
-		margin: 10,
-	},
-	title: {
-		flex: 4,
-		fontSize: 20,
-		fontWeight: 'bold',
-		marginVertical: 10,
-		color: 'black',
-	},
-	imageContainer: {
-		flex: 1,
-		borderRadius: 20,
+	wishListItemContainer: {
+		width: 200,
 		overflow: 'hidden',
-	},
-	image: {
-		flex: 1,
-		width: '100%',
-		aspectRatio: 1,
-		overflow: 'hidden',
-	},
-	pressed: {
-		opacity: 0.5,
-	},
-	pressableContent: {
-		flex: 1,
-		padding: 4,
-		justifyContent: 'center',
-		alignItems: 'center',
 	},
 });
