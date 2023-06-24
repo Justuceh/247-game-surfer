@@ -18,6 +18,7 @@ import ActivityIndicatorComponent from '../components/ActivityIndicator';
 import SearchInput from '../components/SearchInput';
 import { GameDealItem } from './GameDealsScreen';
 import GameDealCard from '../components/GameDealCard';
+import GameList from '../components/GameList';
 
 const GamesScreen = () => {
 	const [searchQuery, setSearchQuery] = useState('');
@@ -49,18 +50,6 @@ const GamesScreen = () => {
 		await WebBrowser.openBrowserAsync(`${CHEAPSHARK_REDIRECT_API}${dealID}`);
 	};
 
-	const renderCards = ({ item }: { item: GameDealItem }) => {
-		return (
-			<View style={styles.gameItemContainer}>
-				<GameDealCard
-					gameDealItem={item}
-					handleGameDealPress={openBrowserAsync}
-					style={{ height: 110 }}
-				/>
-			</View>
-		);
-	};
-
 	const onSearchHandler = async () => {
 		await refetch();
 	};
@@ -84,33 +73,11 @@ const GamesScreen = () => {
 						buttonColor='white'
 					/>
 				</View>
-				<View style={styles.linearGradient}>
-					<LinearGradient
-						style={styles.linearGradient}
-						colors={['#313131', '#dfdfdf', '#313131']}>
-						{isLoading ? (
-							<View style={styles.activityIndicatorContainer}>
-								<ActivityIndicatorComponent size={'large'} color='black' />
-							</View>
-						) : (
-							<View style={styles.listContainer}>
-								<>
-									{games?.length === 0 ? (
-										<Text>No {searchQuery} game data available.</Text>
-									) : (
-										<FlatList
-											data={games}
-											renderItem={renderCards}
-											contentContainerStyle={{ padding: 5 }}
-											numColumns={2}
-											keyExtractor={(item) => `${item.dealID}`}
-										/>
-									)}
-								</>
-							</View>
-						)}
-					</LinearGradient>
-				</View>
+				<LinearGradient
+					style={styles.linearGradient}
+					colors={['#313131', '#dfdfdf', '#313131']}>
+					<GameList games={games} />
+				</LinearGradient>
 			</View>
 		</KeyboardAvoidingView>
 	);
@@ -124,30 +91,12 @@ const styles = StyleSheet.create({
 	},
 	rootContainer: {
 		flex: 1,
-		justifyContent: 'center',
 	},
 	searchContainer: {
 		flex: 1,
 	},
 	linearGradient: {
 		flex: 13,
-	},
-	activityIndicatorContainer: {
-		flex: 1,
-		justifyContent: 'center',
 		alignItems: 'center',
-	},
-	listContainer: {
-		flex: 1,
-		alignItems: 'center',
-		justifyContent: 'center',
-		elevation: 4,
-		shadowColor: 'black',
-		shadowOffset: { width: 4, height: 2 },
-		shadowRadius: 4,
-		shadowOpacity: 0.5,
-	},
-	gameItemContainer: {
-		width: width / 2,
 	},
 });

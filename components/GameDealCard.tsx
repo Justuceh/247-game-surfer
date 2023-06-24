@@ -43,7 +43,7 @@ const GameDealCard = ({
 		);
 	}, [gameDealItem.thumb]);
 
-	const calculatedWidth = gameImageWidth > 190 ? 190 : gameImageWidth + 50;
+	const calculatedWidth = gameImageWidth > 165 ? 165 : gameImageWidth + 50;
 	const calculatedHeight = gameImageHeight > 190 ? 120 : gameImageHeight + 60;
 	return (
 		<Card style={{ backgroundColor: '#120c0c', aspectRatio: 1 }}>
@@ -121,6 +121,7 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		justifyContent: 'center',
 		overflow: 'hidden',
+		width: 180,
 	},
 	title: {
 		textAlign: 'center',
@@ -135,20 +136,19 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		alignItems: 'center',
 		marginHorizontal: 10,
+		width: 160,
 	},
 	saleText: {
 		flex: 2,
 		fontWeight: '400',
 		justifyContent: 'center',
 		color: 'yellow',
-		//marginRight: 9,
 	},
 	strikethroughText: {
 		flex: 2,
 		fontWeight: '400',
 		justifyContent: 'center',
 		color: 'yellow',
-		//marginLeft: 4,
 	},
 	strikeThrough: {
 		color: 'white',
