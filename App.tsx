@@ -84,7 +84,7 @@ export default function App() {
 									/>
 									<Tab.Screen
 										name='GamesScreen'
-										options={{ title: 'Game Deals' }}
+										options={{ title: 'Game Search' }}
 										component={GamesScreen}
 									/>
 									<Tab.Screen

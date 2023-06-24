@@ -34,6 +34,7 @@ const SearchInput = ({
 					setSearchQuery(text);
 					onChangeText(text);
 				}}
+				onSubmitEditing={onPressHandler}
 				placeholder='Search...'
 				placeholderTextColor={placeholderTextColor}
 			/>
