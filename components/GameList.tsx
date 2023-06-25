@@ -32,15 +32,13 @@ const GameList = ({ games }: GameListProps) => {
 				style={styles.linearGradient}
 				colors={['#313131', '#dfdfdf', '#313131']}>
 				<View style={styles.listContainer}>
-					<>
-						<FlatList
-							data={games}
-							renderItem={renderCards}
-							contentContainerStyle={{ padding: 5 }}
-							numColumns={2}
-							keyExtractor={(item) => `${item.dealID}`}
-						/>
-					</>
+					<FlatList
+						data={games}
+						renderItem={renderCards}
+						contentContainerStyle={{ padding: 5 }}
+						numColumns={2}
+						keyExtractor={(item) => `${item.dealID}`}
+					/>
 				</View>
 			</LinearGradient>
 		</View>

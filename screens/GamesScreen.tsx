@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import {
+	Text,
 	View,
 	StyleSheet,
 	KeyboardAvoidingView,
 	Platform,
-	Dimensions,
 } from 'react-native';
 import { CHEAPSHARK_API_URL } from '@env';
 import axios from 'axios';
@@ -39,8 +39,7 @@ const GamesScreen = () => {
 	const {
 		data: games,
 		isLoading,
-		error,
-		refetch,
+		error: dataError,
 	} = useQuery<GameDealItem[], unknown>([`games`, apiSearchQuery], fetchGames);
 
 	const onSearchHandler = () => {
@@ -79,8 +78,20 @@ const GamesScreen = () => {
 						<View style={styles.activityIndicatorContainer}>
 							<ActivityIndicatorComponent color='black' size='large' />
 						</View>
-					) : (
+					) : dataError ? (
+						<View style={styles.displayMessagesContainer}>
+							<Text style={styles.displayMessagesText}>
+								Something went wrong
+							</Text>
+						</View>
+					) : games?.length ? (
 						<GameList games={games} />
+					) : (
+						<View style={styles.displayMessagesContainer}>
+							<Text style={styles.displayMessagesText}>
+								No Game Deals Available for {apiSearchQuery} :(
+							</Text>
+						</View>
 					)}
 				</LinearGradient>
 			</View>
@@ -89,7 +100,6 @@ const GamesScreen = () => {
 };
 
 export default GamesScreen;
-const { width } = Dimensions.get('window');
 const styles = StyleSheet.create({
 	keyboardAvoidingViewContainer: {
 		flex: 1,
@@ -108,5 +118,15 @@ const styles = StyleSheet.create({
 		flex: 1,
 		justifyContent: 'center',
 		alignItems: 'center',
+	},
+	displayMessagesContainer: {
+		flex: 1,
+		justifyContent: 'center',
+		alignItems: 'center',
+		padding: 30,
+	},
+	displayMessagesText: {
+		fontSize: 30,
+		fontWeight: 'bold',
 	},
 });
