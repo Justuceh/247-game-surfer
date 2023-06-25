@@ -1,10 +1,8 @@
 import { useState } from 'react';
 import {
 	View,
-	Text,
 	StyleSheet,
 	KeyboardAvoidingView,
-	FlatList,
 	Platform,
 	Dimensions,
 } from 'react-native';
@@ -53,6 +51,10 @@ const GamesScreen = () => {
 	const onSearchHandler = async () => {
 		await refetch();
 	};
+	const onClearHandler = async () => {
+		setSearchQuery('');
+		await refetch();
+	};
 
 	function handleQueryUpdate(searchQuery: string) {
 		setSearchQuery(searchQuery);
@@ -67,6 +69,7 @@ const GamesScreen = () => {
 				<View style={styles.searchContainer}>
 					<SearchInput
 						onSearchHandler={onSearchHandler}
+						onClearHandler={onClearHandler}
 						onChangeText={handleQueryUpdate}
 						placeholderTextColor={'black'}
 						backgroundColor='#fff'
@@ -76,7 +79,11 @@ const GamesScreen = () => {
 				<LinearGradient
 					style={styles.linearGradient}
 					colors={['#313131', '#dfdfdf', '#313131']}>
-					<GameList games={games} />
+					{isLoading ? (
+						<ActivityIndicatorComponent color='black' size='large' />
+					) : (
+						<GameList games={games} />
+					)}
 				</LinearGradient>
 			</View>
 		</KeyboardAvoidingView>
