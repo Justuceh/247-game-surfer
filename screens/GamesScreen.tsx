@@ -6,25 +6,24 @@ import {
 	Platform,
 	Dimensions,
 } from 'react-native';
-import { CHEAPSHARK_API_URL, CHEAPSHARK_REDIRECT_API } from '@env';
+import { CHEAPSHARK_API_URL } from '@env';
 import axios from 'axios';
 import { LinearGradient } from 'expo-linear-gradient';
-import * as WebBrowser from 'expo-web-browser';
 import { useQuery } from '@tanstack/react-query';
 
 import ActivityIndicatorComponent from '../components/ActivityIndicator';
 import SearchInput from '../components/SearchInput';
 import { GameDealItem } from './GameDealsScreen';
-import GameDealCard from '../components/GameDealCard';
 import GameList from '../components/GameList';
 
 const GamesScreen = () => {
 	const [searchQuery, setSearchQuery] = useState('');
+	const [apiSearchQuery, setApiSearchQuery] = useState('');
 
 	async function fetchGames() {
 		const params = {
 			pageSize: 20,
-			title: searchQuery,
+			title: apiSearchQuery,
 		};
 		return await axios
 			.get(`${CHEAPSHARK_API_URL}/deals`, { params })
@@ -42,18 +41,15 @@ const GamesScreen = () => {
 		isLoading,
 		error,
 		refetch,
-	} = useQuery<GameDealItem[], unknown>([`games`], fetchGames);
+	} = useQuery<GameDealItem[], unknown>([`games`, apiSearchQuery], fetchGames);
 
-	const openBrowserAsync = async (dealID: string) => {
-		await WebBrowser.openBrowserAsync(`${CHEAPSHARK_REDIRECT_API}${dealID}`);
+	const onSearchHandler = () => {
+		setApiSearchQuery(searchQuery);
 	};
 
-	const onSearchHandler = async () => {
-		await refetch();
-	};
-	const onClearHandler = async () => {
+	const onClearHandler = () => {
 		setSearchQuery('');
-		await refetch();
+		setApiSearchQuery('');
 	};
 
 	function handleQueryUpdate(searchQuery: string) {
@@ -80,7 +76,9 @@ const GamesScreen = () => {
 					style={styles.linearGradient}
 					colors={['#313131', '#dfdfdf', '#313131']}>
 					{isLoading ? (
-						<ActivityIndicatorComponent color='black' size='large' />
+						<View style={styles.activityIndicatorContainer}>
+							<ActivityIndicatorComponent color='black' size='large' />
+						</View>
 					) : (
 						<GameList games={games} />
 					)}
@@ -104,6 +102,11 @@ const styles = StyleSheet.create({
 	},
 	linearGradient: {
 		flex: 13,
+		alignItems: 'center',
+	},
+	activityIndicatorContainer: {
+		flex: 1,
+		justifyContent: 'center',
 		alignItems: 'center',
 	},
 });
