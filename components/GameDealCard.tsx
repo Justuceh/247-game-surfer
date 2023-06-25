@@ -81,7 +81,7 @@ const GameDealCard = ({
 							style={{
 								width: 16, // verified icon width dimensions
 								height: 16, // verified icon height dimensions
-								flex: 1,
+								flex: 0.5,
 								padding: 1,
 								marginRight: 6,
 							}}
@@ -128,24 +128,23 @@ const styles = StyleSheet.create({
 		fontWeight: 'bold',
 		color: 'white',
 		fontSize: 15,
-		padding: 4,
-		margin: 4,
+		marginHorizontal: 8,
 	},
 	saleInfoContainer: {
 		flex: 1,
 		flexDirection: 'row',
 		alignItems: 'center',
-		marginHorizontal: 10,
+		paddingHorizontal: 9,
 		width: 160,
 	},
 	saleText: {
-		flex: 2,
+		flex: 1,
 		fontWeight: '400',
 		justifyContent: 'center',
 		color: 'yellow',
 	},
 	strikethroughText: {
-		flex: 2,
+		flex: 1,
 		fontWeight: '400',
 		justifyContent: 'center',
 		color: 'yellow',
