@@ -79,7 +79,6 @@ const StoresScreen = () => {
 		return (
 			<Card
 				style={{
-					backgroundColor: '#27b493',
 					aspectRatio: 1,
 				}}>
 				<Pressable
