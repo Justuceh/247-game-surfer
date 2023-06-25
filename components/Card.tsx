@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { Text, View, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 
 interface CardProps {
 	children: ReactNode | undefined;
@@ -14,7 +14,7 @@ const Card = ({ children, style }: CardProps) => {
 					? [{ ...style }, styles.cardContainer]
 					: [{ backgroundColor: 'white' }, styles.cardContainer]
 			}>
-			<Text>{children}</Text>
+			{children}
 		</View>
 	);
 };

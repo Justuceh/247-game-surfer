@@ -1,31 +1,29 @@
 import { useState } from 'react';
 import {
-	View,
 	Text,
+	View,
 	StyleSheet,
 	KeyboardAvoidingView,
-	FlatList,
 	Platform,
-	Dimensions,
 } from 'react-native';
-import { CHEAPSHARK_API_URL, CHEAPSHARK_REDIRECT_API } from '@env';
+import { CHEAPSHARK_API_URL } from '@env';
 import axios from 'axios';
 import { LinearGradient } from 'expo-linear-gradient';
-import * as WebBrowser from 'expo-web-browser';
 import { useQuery } from '@tanstack/react-query';
 
 import ActivityIndicatorComponent from '../components/ActivityIndicator';
 import SearchInput from '../components/SearchInput';
 import { GameDealItem } from './GameDealsScreen';
-import GameDealCard from '../components/GameDealCard';
+import GameList from '../components/GameList';
 
 const GamesScreen = () => {
 	const [searchQuery, setSearchQuery] = useState('');
+	const [apiSearchQuery, setApiSearchQuery] = useState('');
 
 	async function fetchGames() {
 		const params = {
 			pageSize: 20,
-			title: searchQuery,
+			title: apiSearchQuery,
 		};
 		return await axios
 			.get(`${CHEAPSHARK_API_URL}/deals`, { params })
@@ -41,28 +39,16 @@ const GamesScreen = () => {
 	const {
 		data: games,
 		isLoading,
-		error,
-		refetch,
-	} = useQuery<GameDealItem[], unknown>([`games`], fetchGames);
+		error: dataError,
+	} = useQuery<GameDealItem[], unknown>([`games`, apiSearchQuery], fetchGames);
 
-	const openBrowserAsync = async (dealID: string) => {
-		await WebBrowser.openBrowserAsync(`${CHEAPSHARK_REDIRECT_API}${dealID}`);
+	const onSearchHandler = () => {
+		setApiSearchQuery(searchQuery);
 	};
 
-	const renderCards = ({ item }: { item: GameDealItem }) => {
-		return (
-			<View style={styles.gameItemContainer}>
-				<GameDealCard
-					gameDealItem={item}
-					handleGameDealPress={openBrowserAsync}
-					style={{ height: 110 }}
-				/>
-			</View>
-		);
-	};
-
-	const onSearchHandler = async () => {
-		await refetch();
+	const onClearHandler = () => {
+		setSearchQuery('');
+		setApiSearchQuery('');
 	};
 
 	function handleQueryUpdate(searchQuery: string) {
@@ -78,76 +64,69 @@ const GamesScreen = () => {
 				<View style={styles.searchContainer}>
 					<SearchInput
 						onSearchHandler={onSearchHandler}
+						onClearHandler={onClearHandler}
 						onChangeText={handleQueryUpdate}
 						placeholderTextColor={'black'}
 						backgroundColor='#fff'
 						buttonColor='white'
 					/>
 				</View>
-				<View style={styles.linearGradient}>
-					<LinearGradient
-						style={styles.linearGradient}
-						colors={['#313131', '#dfdfdf', '#313131']}>
-						{isLoading ? (
-							<View style={styles.activityIndicatorContainer}>
-								<ActivityIndicatorComponent size={'large'} color='black' />
-							</View>
-						) : (
-							<View style={styles.listContainer}>
-								<>
-									{games?.length === 0 ? (
-										<Text>No {searchQuery} game data available.</Text>
-									) : (
-										<FlatList
-											data={games}
-											renderItem={renderCards}
-											contentContainerStyle={{ padding: 5 }}
-											numColumns={2}
-											keyExtractor={(item) => `${item.dealID}`}
-										/>
-									)}
-								</>
-							</View>
-						)}
-					</LinearGradient>
-				</View>
+				<LinearGradient
+					style={styles.linearGradient}
+					colors={['#313131', '#dfdfdf', '#313131']}>
+					{isLoading ? (
+						<View style={styles.activityIndicatorContainer}>
+							<ActivityIndicatorComponent color='black' size='large' />
+						</View>
+					) : dataError ? (
+						<View style={styles.displayMessagesContainer}>
+							<Text style={styles.displayMessagesText}>
+								Something went wrong
+							</Text>
+						</View>
+					) : games?.length ? (
+						<GameList games={games} />
+					) : (
+						<View style={styles.displayMessagesContainer}>
+							<Text style={styles.displayMessagesText}>
+								No Game Deals Available for {apiSearchQuery} :(
+							</Text>
+						</View>
+					)}
+				</LinearGradient>
 			</View>
 		</KeyboardAvoidingView>
 	);
 };
 
 export default GamesScreen;
-const { width } = Dimensions.get('window');
 const styles = StyleSheet.create({
 	keyboardAvoidingViewContainer: {
 		flex: 1,
 	},
 	rootContainer: {
 		flex: 1,
-		justifyContent: 'center',
 	},
 	searchContainer: {
 		flex: 1,
 	},
 	linearGradient: {
 		flex: 13,
+		alignItems: 'center',
 	},
 	activityIndicatorContainer: {
 		flex: 1,
 		justifyContent: 'center',
 		alignItems: 'center',
 	},
-	listContainer: {
+	displayMessagesContainer: {
 		flex: 1,
-		alignItems: 'center',
 		justifyContent: 'center',
-		elevation: 4,
-		shadowColor: 'black',
-		shadowOffset: { width: 4, height: 2 },
-		shadowRadius: 4,
-		shadowOpacity: 0.5,
+		alignItems: 'center',
+		padding: 30,
 	},
-	gameItemContainer: {
-		width: width / 2,
+	displayMessagesText: {
+		fontSize: 30,
+		fontWeight: 'bold',
 	},
 });
