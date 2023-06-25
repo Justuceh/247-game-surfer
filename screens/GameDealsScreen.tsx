@@ -127,7 +127,6 @@ const GameDealsScreen = ({ route }: GameDealsScreenProps) => {
 
 	useLayoutEffect(() => {
 		refetchTopDeals();
-
 		refetchHighlyRatedBySteam();
 		refetchhighlyRatedByMetacritic();
 		refetchUnder20DollarDeals();

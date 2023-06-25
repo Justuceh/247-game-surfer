@@ -16,14 +16,14 @@ const GameStoreContextProvider = ({
 }: {
 	children: React.ReactNode;
 }) => {
-	const [stoes, setGameStores] = useState<GameStoreInterface[]>([]);
+	const [stores, setGameStores] = useState<GameStoreInterface[]>([]);
 
 	const addGameStores = (gameStores: GameStoreInterface[]) => {
 		setGameStores((prevStores) => [...prevStores, ...gameStores]);
 	};
 
 	const contextValue: GameStoreContextValue = {
-		stores: stoes,
+		stores: stores,
 		addGameStores,
 	};
 

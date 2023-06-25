@@ -1,9 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Text, View, StyleSheet, Pressable, Image } from 'react-native';
 
+import { GameStoreContext } from '../store/context/game_deals/game-stores-context';
 import { GameDealItem } from '../screens/GameDealsScreen';
 import Card from './Card';
 import WishlistButton from './WishlistButton';
+import { CHEAPSHARK_BASE_URL } from '@env';
 
 interface GameDealCardProps {
 	gameDealItem: GameDealItem;
@@ -20,16 +22,20 @@ const GameDealCard = ({
 	style,
 }: GameDealCardProps) => {
 	//TODO write a function to calculate the percentage in savings and add a savings percentage to the card
-
-	const [imageHeight, setImageHeight] = useState<number>(0);
-	const [imageWidth, setImageWidth] = useState<number>(0);
+	const storesContext = useContext(GameStoreContext);
+	const [gameImageHeight, setGameImageHeight] = useState<number>(0);
+	const [gameImageWidth, setGameImageWidth] = useState<number>(0);
+	const storeIcon = storesContext.stores.find(
+		(store) => store.storeID === gameDealItem.storeID
+	)?.images.icon;
+	const storeIconUri = `${CHEAPSHARK_BASE_URL}${storeIcon}`;
 
 	useEffect(() => {
 		Image.getSize(
 			gameDealItem.thumb,
 			(width, height) => {
-				setImageHeight(height);
-				setImageWidth(width);
+				setGameImageHeight(height);
+				setGameImageWidth(width);
 			},
 			(error) => {
 				console.error('Failed to get image dimensions:', error);
@@ -37,8 +43,8 @@ const GameDealCard = ({
 		);
 	}, [gameDealItem.thumb]);
 
-	const calculatedWidth = imageWidth > 190 ? 190 : imageWidth + 50;
-	const calculatedHeight = imageHeight > 190 ? 120 : imageHeight + 60;
+	const calculatedWidth = gameImageWidth > 165 ? 165 : gameImageWidth + 50;
+	const calculatedHeight = gameImageHeight > 190 ? 120 : gameImageHeight + 60;
 	return (
 		<Card style={{ backgroundColor: '#120c0c', aspectRatio: 1 }}>
 			<Pressable
@@ -71,6 +77,17 @@ const GameDealCard = ({
 						<Text style={[styles.strikethroughText, styles.strikeThrough]}>
 							{gameDealItem.normalPrice}
 						</Text>
+						<Image
+							style={{
+								width: 16, // verified icon width dimensions
+								height: 16, // verified icon height dimensions
+								flex: 0.5,
+								padding: 1,
+								marginRight: 6,
+							}}
+							source={{ uri: storeIconUri }}
+							resizeMode='contain'
+						/>
 						<WishlistButton gameDealItem={gameDealItem} />
 					</View>
 				</View>
@@ -104,20 +121,21 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		justifyContent: 'center',
 		overflow: 'hidden',
+		width: 180,
 	},
 	title: {
 		textAlign: 'center',
 		fontWeight: 'bold',
 		color: 'white',
 		fontSize: 15,
-		padding: 4,
-		margin: 4,
+		marginHorizontal: 8,
 	},
 	saleInfoContainer: {
 		flex: 1,
 		flexDirection: 'row',
 		alignItems: 'center',
-		marginHorizontal: 10,
+		paddingHorizontal: 9,
+		width: 160,
 	},
 	saleText: {
 		flex: 1,
@@ -126,7 +144,7 @@ const styles = StyleSheet.create({
 		color: 'yellow',
 	},
 	strikethroughText: {
-		flex: 2,
+		flex: 1,
 		fontWeight: '400',
 		justifyContent: 'center',
 		color: 'yellow',

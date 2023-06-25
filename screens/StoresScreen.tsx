@@ -66,7 +66,7 @@ const StoresScreen = () => {
 		}
 	}, [gameStores, storesContext.stores]);
 
-	const filteredGames = storesContext.stores.filter((game) => game.isActive);
+	const filteredGames = storesContext.stores.filter((store) => store.isActive);
 
 	const handleGameStorePress = (storeID: string, storeName: string) => {
 		navigation.navigate('GameDealsScreen', {
@@ -79,7 +79,6 @@ const StoresScreen = () => {
 		return (
 			<Card
 				style={{
-					backgroundColor: '#27b493',
 					aspectRatio: 1,
 				}}>
 				<Pressable

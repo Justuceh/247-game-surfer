@@ -4,6 +4,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 
 interface SearchInputProps {
 	onSearchHandler: (data: any) => any;
+	onClearHandler: () => void;
 	onChangeText: (text: string) => void;
 	backgroundColor?: string;
 	buttonColor?: string;
@@ -13,6 +14,7 @@ interface SearchInputProps {
 
 const SearchInput = ({
 	onSearchHandler,
+	onClearHandler,
 	onChangeText,
 	placeholderTextColor,
 	buttonTextColor,
@@ -43,6 +45,7 @@ const SearchInput = ({
 				<Pressable
 					onPress={() => {
 						setSearchQuery('');
+						onClearHandler();
 					}}
 					style={({ pressed }) => [
 						styles.clearButton,
