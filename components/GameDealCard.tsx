@@ -113,7 +113,7 @@ const styles = StyleSheet.create({
 		margin: '1%',
 	},
 	descriptionContainer: {
-		flex: 1,
+		flex: 1.1,
 		alignItems: 'center',
 		justifyContent: 'center',
 	},
@@ -122,7 +122,6 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		justifyContent: 'center',
 		overflow: 'hidden',
-		width: 180,
 	},
 	title: {
 		textAlign: 'center',
@@ -143,12 +142,14 @@ const styles = StyleSheet.create({
 		fontWeight: '400',
 		justifyContent: 'center',
 		color: 'yellow',
+		fontFamily: Fonts.itim,
 	},
 	strikethroughText: {
 		flex: 1,
 		fontWeight: '400',
 		justifyContent: 'center',
 		color: 'yellow',
+		fontFamily: Fonts.itim,
 	},
 	strikeThrough: {
 		color: 'white',

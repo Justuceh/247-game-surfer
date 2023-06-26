@@ -21,7 +21,7 @@ const GameList = ({ games }: GameListProps) => {
 				<GameDealCard
 					gameDealItem={item}
 					handleGameDealPress={openBrowserAsync}
-					style={{ height: 110 }}
+					style={{ height: 100 }}
 				/>
 			</View>
 		);
