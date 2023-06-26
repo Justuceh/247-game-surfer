@@ -15,6 +15,7 @@ import ActivityIndicatorComponent from '../components/ActivityIndicator';
 import SearchInput from '../components/SearchInput';
 import { GameDealItem } from './GameDealsScreen';
 import GameList from '../components/GameList';
+import Colors from '../constants/colors';
 
 const GamesScreen = () => {
 	const [searchQuery, setSearchQuery] = useState('');
@@ -73,7 +74,11 @@ const GamesScreen = () => {
 				</View>
 				<LinearGradient
 					style={styles.linearGradient}
-					colors={['#313131', '#dfdfdf', '#313131']}>
+					colors={[
+						Colors.linearGradient.topColor,
+						Colors.linearGradient.middleColor,
+						Colors.linearGradient.bottomColor,
+					]}>
 					{isLoading ? (
 						<View style={styles.activityIndicatorContainer}>
 							<ActivityIndicatorComponent color='black' size='large' />

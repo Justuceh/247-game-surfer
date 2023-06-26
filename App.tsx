@@ -12,6 +12,7 @@ import {
 } from '@react-navigation/material-top-tabs';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { createStackNavigator } from '@react-navigation/stack';
+import { useFonts, Itim_400Regular } from '@expo-google-fonts/dev';
 
 import StoresScreen from './screens/StoresScreen';
 import WishListScreen from './screens/WishListScreen';
@@ -19,6 +20,8 @@ import GamesScreen from './screens/GamesScreen';
 import GameDealsScreen from './screens/GameDealsScreen';
 import { WishlistContextProvider } from './store/context/wishlist/wishlist-context';
 import { GameStoreContextProvider } from './store/context/game_deals/game-stores-context';
+import AppLoading from 'expo-app-loading';
+import Fonts from './constants/fonts';
 
 export type RootNavigatorParamList = {
 	StoresScreen: undefined;
@@ -30,11 +33,20 @@ export type RootNavigatorParamList = {
 
 //App level query client that is passed down to all child components
 const queryClient = new QueryClient();
-const Stack = createStackNavigator();
 
 export default function App() {
+	const [fontLoaded] = useFonts({
+		Itim_400Regular,
+		// Add more font assignments here as required
+	});
+
+	if (!fontLoaded) {
+		return <AppLoading />;
+	}
 	const Tab = createMaterialTopTabNavigator();
 	const Stack = createStackNavigator<RootNavigatorParamList>();
+	//TODO add logic for loading fonts behind the splash screen once I add a splash screen
+	//TODO add splash screen
 
 	const StoresScreenTab = () => {
 		return (
@@ -80,16 +92,23 @@ export default function App() {
 										component={StoresScreenTab}
 										options={{
 											title: 'Store Deals',
+											tabBarLabelStyle: styles.tabBarText,
 										}}
 									/>
 									<Tab.Screen
 										name='GamesScreen'
-										options={{ title: 'Game Search' }}
+										options={{
+											title: 'Game Search',
+											tabBarLabelStyle: styles.tabBarText,
+										}}
 										component={GamesScreen}
 									/>
 									<Tab.Screen
 										name='WishListScreen'
-										options={{ title: 'Wish List' }}
+										options={{
+											title: 'Wish List',
+											tabBarLabelStyle: styles.tabBarText,
+										}}
 										component={WishListScreen}
 									/>
 								</Tab.Navigator>
@@ -105,5 +124,9 @@ export default function App() {
 const styles = StyleSheet.create({
 	rootContainer: {
 		flex: 1,
+	},
+	tabBarText: {
+		fontFamily: Fonts.itim,
+		fontSize: 15,
 	},
 });

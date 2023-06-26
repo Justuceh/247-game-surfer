@@ -13,6 +13,7 @@ import { CHEAPSHARK_REDIRECT_API } from '@env';
 import ActivityIndicatorComponent from '../components/ActivityIndicator';
 import GameDealCard from '../components/GameDealCard';
 import GameDealCategoryList from '../components/GameDealCategoryList';
+import Colors from '../constants/colors';
 
 export interface GameDealItem {
 	gameID: string;
@@ -150,7 +151,11 @@ const GameDealsScreen = ({ route }: GameDealsScreenProps) => {
 		<>
 			<LinearGradient
 				style={styles.linearGradient}
-				colors={['#313131', '#dfdfdf', '#1c1b1b']}>
+				colors={[
+					Colors.linearGradient.topColor,
+					Colors.linearGradient.middleColor,
+					Colors.linearGradient.bottomColor,
+				]}>
 				{topDealsIsLoading ||
 				highlyRatedBySteamIsLoading ||
 				highlyRatedByMetacriticIsLoading ||

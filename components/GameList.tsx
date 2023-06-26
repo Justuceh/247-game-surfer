@@ -5,6 +5,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import GameDealCard from '../components/GameDealCard';
 import { CHEAPSHARK_REDIRECT_API } from '@env';
 import { GameDealItem } from '../screens/GameDealsScreen';
+import Colors from '../constants/colors';
 
 interface GameListProps {
 	games: GameDealItem[] | undefined;
@@ -30,7 +31,11 @@ const GameList = ({ games }: GameListProps) => {
 		<View style={styles.linearGradient}>
 			<LinearGradient
 				style={styles.linearGradient}
-				colors={['#313131', '#dfdfdf', '#313131']}>
+				colors={[
+					Colors.linearGradient.topColor,
+					Colors.linearGradient.middleColor,
+					Colors.linearGradient.bottomColor,
+				]}>
 				<View style={styles.listContainer}>
 					<FlatList
 						data={games}

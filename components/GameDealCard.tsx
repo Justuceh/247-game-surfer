@@ -6,6 +6,7 @@ import { GameDealItem } from '../screens/GameDealsScreen';
 import Card from './Card';
 import WishlistButton from './WishlistButton';
 import { CHEAPSHARK_BASE_URL } from '@env';
+import Fonts from '../constants/fonts';
 
 interface GameDealCardProps {
 	gameDealItem: GameDealItem;
@@ -125,9 +126,9 @@ const styles = StyleSheet.create({
 	},
 	title: {
 		textAlign: 'center',
-		fontWeight: 'bold',
+		fontFamily: Fonts.itim,
 		color: 'white',
-		fontSize: 15,
+		fontSize: 18,
 		marginHorizontal: 8,
 	},
 	saleInfoContainer: {

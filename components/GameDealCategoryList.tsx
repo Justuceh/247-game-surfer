@@ -1,5 +1,7 @@
 import { View, Text, StyleSheet, FlatList, Dimensions } from 'react-native';
+
 import { GameDealItem } from '../screens/GameDealsScreen';
+import Fonts from '../constants/fonts';
 
 interface GameDealCategoryListProps {
 	categoryText: string;
@@ -42,6 +44,7 @@ const styles = StyleSheet.create({
 	},
 	categoryText: {
 		fontSize: 20,
+		fontFamily: Fonts.itim,
 		fontWeight: 'bold',
 		textAlign: 'center',
 		color: '#e4dfdf',
