@@ -36,18 +36,13 @@ const styles = StyleSheet.create({
 	categoryContainer: {
 		borderBottomWidth: 1,
 		borderBottomColor: 'black',
-		elevation: 4,
-		shadowColor: 'black',
-		shadowOffset: { width: 0, height: 2 },
-		shadowRadius: 4,
-		shadowOpacity: 0.6,
 	},
 	categoryText: {
-		fontSize: 20,
-		fontFamily: Fonts.itim,
+		fontSize: 23,
+		fontFamily: Fonts.gameTitleFont,
 		fontWeight: 'bold',
 		textAlign: 'center',
-		color: '#e4dfdf',
+		color: '#ffffff',
 		padding: 5,
 	},
 	listContainer: {

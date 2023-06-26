@@ -12,7 +12,12 @@ import {
 } from '@react-navigation/material-top-tabs';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { createStackNavigator } from '@react-navigation/stack';
-import { useFonts, Itim_400Regular } from '@expo-google-fonts/dev';
+import {
+	useFonts,
+	Itim_400Regular,
+	YatraOne_400Regular,
+	Righteous_400Regular,
+} from '@expo-google-fonts/dev';
 
 import StoresScreen from './screens/StoresScreen';
 import WishListScreen from './screens/WishListScreen';
@@ -22,6 +27,7 @@ import { WishlistContextProvider } from './store/context/wishlist/wishlist-conte
 import { GameStoreContextProvider } from './store/context/game_deals/game-stores-context';
 import AppLoading from 'expo-app-loading';
 import Fonts from './constants/fonts';
+import Colors from './constants/colors';
 
 export type RootNavigatorParamList = {
 	StoresScreen: undefined;
@@ -37,6 +43,8 @@ const queryClient = new QueryClient();
 export default function App() {
 	const [fontLoaded] = useFonts({
 		Itim_400Regular,
+		YatraOne_400Regular,
+		Righteous_400Regular,
 		// Add more font assignments here as required
 	});
 
@@ -86,6 +94,15 @@ export default function App() {
 										return (
 											<MaterialTopTabBar {...props} /> // Render the default tab bar otherwise
 										);
+									}}
+									screenOptions={{
+										tabBarStyle: { backgroundColor: Colors.charcoal },
+										tabBarActiveTintColor: 'white',
+										tabBarInactiveTintColor: '#a9a6a6',
+										tabBarIndicatorStyle: {
+											backgroundColor: 'white',
+											opacity: 0.7,
+										},
 									}}>
 									<Tab.Screen
 										name='StoresScreenMain'
@@ -126,7 +143,7 @@ const styles = StyleSheet.create({
 		flex: 1,
 	},
 	tabBarText: {
-		fontFamily: Fonts.itim,
+		fontFamily: Fonts.tabBarFont,
 		fontSize: 15,
 	},
 });

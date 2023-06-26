@@ -114,6 +114,7 @@ const styles = StyleSheet.create({
 	},
 	searchContainer: {
 		flex: 1,
+		backgroundColor: Colors.charcoal,
 	},
 	linearGradient: {
 		flex: 13,

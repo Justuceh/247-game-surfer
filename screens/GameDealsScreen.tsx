@@ -14,6 +14,7 @@ import ActivityIndicatorComponent from '../components/ActivityIndicator';
 import GameDealCard from '../components/GameDealCard';
 import GameDealCategoryList from '../components/GameDealCategoryList';
 import Colors from '../constants/colors';
+import Fonts from '../constants/fonts';
 
 export interface GameDealItem {
 	gameID: string;
@@ -135,6 +136,7 @@ const GameDealsScreen = ({ route }: GameDealsScreenProps) => {
 		navigation.setOptions({
 			title: `${storeTitle} Deals`,
 			headerStyle: { backgroundColor: 'black' },
+			headerTitleStyle: { fontFamily: Fonts.storeNameFont, fontSize: 20 },
 			headerTintColor: 'white',
 		});
 	}, [
