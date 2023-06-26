@@ -9,9 +9,9 @@
 		"web": "expo start --web"
 	},
 	"dependencies": {
-		"@expo-google-fonts/dev": "^0.2.3",
-		"@expo-google-fonts/inter": "^0.2.3",
-		"@expo-google-fonts/roboto": "^0.2.3",
+		"@expo-google-fonts/itim": "^0.2.3",
+		"@expo-google-fonts/righteous": "^0.2.3",
+		"@expo-google-fonts/yatra-one": "^0.2.3",
 		"@react-native-async-storage/async-storage": "1.17.11",
 		"@react-navigation/material-top-tabs": "^6.6.2",
 		"@react-navigation/native": "^6.1.6",
@@ -20,9 +20,9 @@
 		"@tanstack/react-query": "^4.29.12",
 		"axios": "^1.4.0",
 		"expo": "~48.0.18",
-		"expo-app-loading": "^2.1.1",
 		"expo-font": "~11.1.1",
 		"expo-linear-gradient": "~12.1.2",
+		"expo-splash-screen": "~0.18.2",
 		"expo-status-bar": "~1.4.4",
 		"expo-web-browser": "~12.1.1",
 		"fast-xml-parser": "^4.2.4",

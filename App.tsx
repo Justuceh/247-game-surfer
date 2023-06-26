@@ -1,3 +1,4 @@
+import { useCallback } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { StyleSheet } from 'react-native';
@@ -12,12 +13,10 @@ import {
 } from '@react-navigation/material-top-tabs';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { createStackNavigator } from '@react-navigation/stack';
-import {
-	useFonts,
-	Itim_400Regular,
-	YatraOne_400Regular,
-	Righteous_400Regular,
-} from '@expo-google-fonts/dev';
+import { useFonts, Itim_400Regular } from '@expo-google-fonts/itim';
+import { YatraOne_400Regular } from '@expo-google-fonts/yatra-one';
+import { Righteous_400Regular } from '@expo-google-fonts/righteous';
+import * as SplashScreen from 'expo-splash-screen';
 
 import StoresScreen from './screens/StoresScreen';
 import WishListScreen from './screens/WishListScreen';
@@ -25,7 +24,6 @@ import GamesScreen from './screens/GamesScreen';
 import GameDealsScreen from './screens/GameDealsScreen';
 import { WishlistContextProvider } from './store/context/wishlist/wishlist-context';
 import { GameStoreContextProvider } from './store/context/game_deals/game-stores-context';
-import AppLoading from 'expo-app-loading';
 import Fonts from './constants/fonts';
 import Colors from './constants/colors';
 
@@ -37,19 +35,27 @@ export type RootNavigatorParamList = {
 	GameDealsScreen: { storeID: string; title: string };
 };
 
+// Keep the splash screen visible while we fetch resources
+SplashScreen.preventAutoHideAsync();
+
 //App level query client that is passed down to all child components
 const queryClient = new QueryClient();
 
 export default function App() {
-	const [fontLoaded] = useFonts({
-		Itim_400Regular,
+	let [fontsLoaded] = useFonts({
 		YatraOne_400Regular,
+		Itim_400Regular,
 		Righteous_400Regular,
-		// Add more font assignments here as required
 	});
 
-	if (!fontLoaded) {
-		return <AppLoading />;
+	const onLayoutRootView = useCallback(async () => {
+		if (fontsLoaded) {
+			await SplashScreen.hideAsync();
+		}
+	}, [fontsLoaded]);
+
+	if (!fontsLoaded) {
+		return null;
 	}
 	const Tab = createMaterialTopTabNavigator();
 	const Stack = createStackNavigator<RootNavigatorParamList>();
@@ -75,7 +81,7 @@ export default function App() {
 
 	return (
 		<SafeAreaProvider>
-			<SafeAreaView style={styles.rootContainer}>
+			<SafeAreaView style={styles.rootContainer} onLayout={onLayoutRootView}>
 				<StatusBar style='auto' />
 				<GameStoreContextProvider>
 					<WishlistContextProvider>
@@ -97,6 +103,7 @@ export default function App() {
 									}}
 									screenOptions={{
 										tabBarStyle: { backgroundColor: Colors.charcoal },
+										tabBarLabelStyle: styles.tabBarText,
 										tabBarActiveTintColor: 'white',
 										tabBarInactiveTintColor: '#a9a6a6',
 										tabBarIndicatorStyle: {
@@ -109,14 +116,12 @@ export default function App() {
 										component={StoresScreenTab}
 										options={{
 											title: 'Store Deals',
-											tabBarLabelStyle: styles.tabBarText,
 										}}
 									/>
 									<Tab.Screen
 										name='GamesScreen'
 										options={{
 											title: 'Game Search',
-											tabBarLabelStyle: styles.tabBarText,
 										}}
 										component={GamesScreen}
 									/>
@@ -124,7 +129,6 @@ export default function App() {
 										name='WishListScreen'
 										options={{
 											title: 'Wish List',
-											tabBarLabelStyle: styles.tabBarText,
 										}}
 										component={WishListScreen}
 									/>
