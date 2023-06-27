@@ -6,6 +6,8 @@ import { GameDealItem } from '../screens/GameDealsScreen';
 import Card from './Card';
 import WishlistButton from './WishlistButton';
 import { CHEAPSHARK_BASE_URL } from '@env';
+import Fonts from '../constants/fonts';
+import Colors from '../constants/colors';
 
 interface GameDealCardProps {
 	gameDealItem: GameDealItem;
@@ -46,7 +48,7 @@ const GameDealCard = ({
 	const calculatedWidth = gameImageWidth > 165 ? 165 : gameImageWidth + 50;
 	const calculatedHeight = gameImageHeight > 190 ? 120 : gameImageHeight + 60;
 	return (
-		<Card style={{ backgroundColor: '#120c0c', aspectRatio: 1 }}>
+		<Card style={{ backgroundColor: Colors.charcoal, aspectRatio: 1 }}>
 			<Pressable
 				onPress={() => handleGameDealPress(gameDealItem.dealID)}
 				style={({ pressed }) =>
@@ -112,7 +114,7 @@ const styles = StyleSheet.create({
 		margin: '1%',
 	},
 	descriptionContainer: {
-		flex: 1,
+		flex: 1.1,
 		alignItems: 'center',
 		justifyContent: 'center',
 	},
@@ -121,13 +123,12 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		justifyContent: 'center',
 		overflow: 'hidden',
-		width: 180,
 	},
 	title: {
 		textAlign: 'center',
-		fontWeight: 'bold',
+		fontFamily: Fonts.gameTitleFont,
 		color: 'white',
-		fontSize: 15,
+		fontSize: 18,
 		marginHorizontal: 8,
 	},
 	saleInfoContainer: {
@@ -142,12 +143,16 @@ const styles = StyleSheet.create({
 		fontWeight: '400',
 		justifyContent: 'center',
 		color: 'yellow',
+		fontFamily: Fonts.saletextFont,
+		fontSize: 13,
 	},
 	strikethroughText: {
 		flex: 1,
 		fontWeight: '400',
 		justifyContent: 'center',
 		color: 'yellow',
+		fontFamily: Fonts.saletextFont,
+		fontSize: 13,
 	},
 	strikeThrough: {
 		color: 'white',
