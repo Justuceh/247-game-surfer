@@ -6,18 +6,18 @@ import {
 	Pressable,
 	FlatList,
 } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import { useQuery } from '@tanstack/react-query';
 import { CHEAPSHARK_BASE_URL, CHEAPSHARK_API_URL } from '@env';
 import axios from 'axios';
 
 import Card from '../components/Card';
 import ActivityIndicatorComponent from '../components/ActivityIndicator';
-import { useNavigation } from '@react-navigation/native';
-
 import { GameStoreContext } from '../store/context/game_deals/game-stores-context';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootNavigatorParamList } from '../App';
 import { LinearGradient } from 'expo-linear-gradient';
+import Colors from '../constants/colors';
 
 export interface GameStoreInterface {
 	storeID: string;
@@ -97,7 +97,11 @@ const StoresScreen = () => {
 		<>
 			<LinearGradient
 				style={styles.linearGradient}
-				colors={['#313131', '#dfdfdf', '#313131']}>
+				colors={[
+					Colors.linearGradient.topColor,
+					Colors.linearGradient.middleColor,
+					Colors.linearGradient.bottomColor,
+				]}>
 				<View style={styles.rootContainer}>
 					{isLoading ? (
 						<ActivityIndicatorComponent size='large' color='blue' />
