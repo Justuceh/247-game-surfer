@@ -1,4 +1,4 @@
-import { useLayoutEffect } from 'react';
+import { useLayoutEffect, useState } from 'react';
 import { View, StyleSheet, ScrollView } from 'react-native';
 import { CHEAPSHARK_API_URL } from '@env';
 import { RouteProp, useNavigation } from '@react-navigation/native';
@@ -7,14 +7,13 @@ import axios from 'axios';
 import { RootNavigatorParamList } from '../App';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { LinearGradient } from 'expo-linear-gradient';
-import * as WebBrowser from 'expo-web-browser';
-import { CHEAPSHARK_REDIRECT_API } from '@env';
 
 import ActivityIndicatorComponent from '../components/ActivityIndicator';
 import GameDealCard from '../components/GameDealCard';
 import GameDealCategoryList from '../components/GameDealCategoryList';
 import Colors from '../constants/colors';
 import Fonts from '../constants/fonts';
+import GameDetails from '../components/GameDetails';
 
 export interface GameDealItem {
 	gameID: string;
@@ -42,11 +41,22 @@ type GameDealsScreenProps = {
 };
 
 const GameDealsScreen = ({ route }: GameDealsScreenProps) => {
+	const [showGameDetails, setShowGameDetails] = useState(false);
+	const [modalDealItem, setModalDealItem] = useState<GameDealItem>();
 	const navigation = useNavigation<GameDealsScreenNavigationProp>();
 	const { storeID, title: storeTitle } = route.params;
 	const cacheTime = {
 		cacheTime: 1000 * 60 * 60, // Cache the store list for one hour before fetching again
 	};
+
+	function closeGameDetailsModal() {
+		setShowGameDetails(false);
+		setModalDealItem(undefined);
+	}
+	function openGameDetailsModal(dealItem: GameDealItem) {
+		setShowGameDetails(true);
+		setModalDealItem(dealItem);
+	}
 
 	async function fetchGameStoreDeals(filterParams: any) {
 		const globalParams = {
@@ -114,15 +124,11 @@ const GameDealsScreen = ({ route }: GameDealsScreenProps) => {
 		cacheTime
 	);
 
-	const openBrowserAsync = async (dealID: string) => {
-		await WebBrowser.openBrowserAsync(`${CHEAPSHARK_REDIRECT_API}${dealID}`);
-	};
-
 	const renderItem = ({ item }: { item: GameDealItem }) => {
 		return (
 			<GameDealCard
 				gameDealItem={item}
-				handleGameDealPress={openBrowserAsync}
+				handleGameDealPress={openGameDetailsModal}
 			/>
 		);
 	};
@@ -170,6 +176,13 @@ const GameDealsScreen = ({ route }: GameDealsScreenProps) => {
 					<ScrollView style={styles.scrollContainer}>
 						<View style={styles.listItemContainer}>
 							<>
+								{showGameDetails && (
+									<GameDetails
+										showDetails={showGameDetails}
+										onClose={closeGameDetailsModal}
+										gameDealItem={modalDealItem}
+									/>
+								)}
 								{topDeals?.length ? (
 									<GameDealCategoryList
 										data={topDeals}
