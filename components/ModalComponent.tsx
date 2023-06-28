@@ -1,5 +1,6 @@
 import React, { ReactNode, useRef, useState } from 'react';
 import {
+	View,
 	Modal,
 	StyleSheet,
 	Pressable,
@@ -7,6 +8,8 @@ import {
 	Animated,
 	Dimensions,
 } from 'react-native';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+
 import Colors from '../constants/colors';
 
 interface ModalComponentProps {
@@ -23,6 +26,11 @@ const ModalComponent = ({
 	const [showModal, setShowModal] = useState(visible || false);
 	const pan = useRef(new Animated.ValueXY()).current;
 
+	function closeModal() {
+		setShowModal(false);
+		onClose();
+	}
+
 	const panResponder = useRef(
 		PanResponder.create({
 			onStartShouldSetPanResponder: () => true,
@@ -36,8 +44,7 @@ const ModalComponent = ({
 						duration: 300, // adjust duration as needed
 						useNativeDriver: true,
 					}).start(() => {
-						setShowModal(false);
-						onClose();
+						closeModal();
 						pan.setValue({ x: 0, y: 0 }); // reset pan values for next opening of the modal
 					});
 				} else {
@@ -60,10 +67,26 @@ const ModalComponent = ({
 
 	return (
 		<Modal animationType='slide' transparent visible={showModal}>
-			<Pressable style={styles.overlay} onPress={onClose}>
+			<Pressable style={styles.overlay} onPress={closeModal}>
 				<Animated.View
 					style={[styles.modalContainer, animatedStyle]}
 					{...panResponder.panHandlers}>
+					<View style={styles.modalSliderContainer}>
+						<View style={styles.modalArrowSection}>
+							<Ionicons name='md-chevron-up' size={15} color='#c1c1c1' />
+							<Ionicons name='md-chevron-down' size={15} color='#c1c1c1' />
+						</View>
+						<Pressable
+							onPress={closeModal}
+							style={({ pressed }) => [
+								{
+									opacity: pressed ? 0.3 : 1,
+								},
+							]}>
+							<Ionicons name='ios-close' size={22} color='#c1c1c1' />
+						</Pressable>
+					</View>
+
 					{children}
 				</Animated.View>
 			</Pressable>
@@ -89,6 +112,17 @@ const styles = StyleSheet.create({
 		shadowOffset: { width: 4, height: 2 },
 		shadowRadius: 4,
 		shadowOpacity: 0.5,
+	},
+	modalSliderContainer: {
+		flexDirection: 'row',
+		borderColor: 'grey',
+		borderBottomWidth: 0.2,
+	},
+	modalArrowSection: {
+		flex: 1,
+		marginLeft: '10%',
+		justifyContent: 'center',
+		alignItems: 'center',
 	},
 });
 
