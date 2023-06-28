@@ -120,7 +120,7 @@ const styles = StyleSheet.create({
 	},
 	modalArrowSection: {
 		flex: 1,
-		marginLeft: '10%',
+		marginLeft: '9%',
 		justifyContent: 'center',
 		alignItems: 'center',
 	},
