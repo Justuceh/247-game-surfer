@@ -30,10 +30,16 @@ const ModalComponent = ({
 				pan.setValue({ x: 0, y: gestureState.dy });
 			},
 			onPanResponderRelease: (_, gestureState) => {
-				if (gestureState.dy > 50) {
-					pan.setValue({ x: 0, y: 0 });
-					setShowModal(false);
-					onClose();
+				if (gestureState.dy > 50 || gestureState.dy < 0) {
+					Animated.timing(pan, {
+						toValue: { x: 0, y: Dimensions.get('window').height },
+						duration: 300, // adjust duration as needed
+						useNativeDriver: true,
+					}).start(() => {
+						setShowModal(false);
+						onClose();
+						pan.setValue({ x: 0, y: 0 }); // reset pan values for next opening of the modal
+					});
 				} else {
 					Animated.spring(pan, {
 						toValue: { x: 0, y: 0 },
