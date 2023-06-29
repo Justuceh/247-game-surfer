@@ -34,21 +34,23 @@ const GameDetails = ({
 	// Second Query, only if game is loaded and has a cover id
 	const { data: cover, isLoading: isCoverLoading } = useQuery<any, unknown>(
 		[`coverId-${game?.[0]?.cover}`, game?.[0]?.cover],
-		() => fetchGameData(coversQuery, 'covers'),
+		() => fetchGameData(queryById(game?.[0]?.cover), 'covers'),
 		{ enabled: !isGameLoading }
 	);
 
 	const gameQuery = `
-    fields *; 
-    search "${gameDealItem?.title}"; 
-    limit 1; 
-`;
+		fields *; 
+		search "${gameDealItem?.title}"; 
+		limit 1; 
+	`;
 
-	const coversQuery = `
-    fields *;
-    where id = ${game?.[0]?.cover};
-    limit 1;
-`;
+	const queryById = (id: number) => {
+		return `
+			fields *;
+			where id = ${id};
+			limit 1;
+		`;
+	};
 
 	async function fetchGameData(query: string, endpoint: string) {
 		return await axios
