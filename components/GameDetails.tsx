@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { Text, View, StyleSheet, Dimensions } from 'react-native';
+import { Text, View, StyleSheet, Dimensions, Image } from 'react-native';
 import * as WebBrowser from 'expo-web-browser';
 import { CHEAPSHARK_REDIRECT_API, IGDB_BASE_URL } from '@env';
 
@@ -25,14 +25,36 @@ const GameDetails = ({
 	const authContext = useContext(AuthContext);
 	const headers = authContext.getRequestHeaders();
 
-	async function fetchGames() {
-		const query = `
-      fields *; 
-      search "${gameDealItem?.title}"; 
-      limit 1; 
-    `;
+	// First Query
+	const { data: game, isLoading: isGameLoading } = useQuery<any, unknown>(
+		[`gameName-${gameDealItem?.title.replace(/\s+/g, '')}`],
+		() => fetchGameData(gameQuery, 'games')
+	);
+
+	// Second Query, only if game is loaded and has a cover id
+	const { data: cover, isLoading: isCoverLoading } = useQuery<any, unknown>(
+		[`coverId-${game?.[0]?.cover}`, game?.[0]?.cover],
+		() => fetchGameData(coversQuery, 'covers'),
+		{ enabled: !isGameLoading }
+	);
+
+	const gameQuery = `
+    fields *; 
+    search "${gameDealItem?.title}"; 
+    limit 1; 
+`;
+
+	const coversQuery = `
+    fields *;
+    where id = ${game?.[0]?.cover};
+    limit 1;
+`;
+
+	async function fetchGameData(query: string, endpoint: string) {
 		return await axios
-			.post(`${IGDB_BASE_URL}games`, query, { headers: headers })
+			.post(`${IGDB_BASE_URL}${endpoint}`, query, {
+				headers: { ...headers, 'Content-Type': 'text/plain' },
+			})
 			.then((response) => {
 				if (!response) {
 					throw new Error('Network response was not ok');
@@ -42,25 +64,25 @@ const GameDetails = ({
 			.catch((err) => console.log(err));
 	}
 
-	const {
-		data: game,
-		isLoading,
-		refetch,
-	} = useQuery<any, unknown>(
-		[`gameName-${gameDealItem?.title.replace(/\s+/g, '')}`],
-		fetchGames
-	);
-
 	const openBrowserAsync = async (dealID: string) => {
 		await WebBrowser.openBrowserAsync(`${CHEAPSHARK_REDIRECT_API}${dealID}`);
 	};
 	return (
 		<ModalComponent onClose={onClose} visible={showDetails}>
 			<View style={styles.rootContainer}>
-				{isLoading ? (
+				{isGameLoading || isCoverLoading ? (
 					<ActivityIndicatorComponent color='white' size='large' />
 				) : (
-					<Text style={{ color: 'white' }}>{game?.[0]?.name}</Text>
+					<View style={{ flex: 1 }}>
+						<Image
+							source={{
+								uri: `https://images.igdb.com/igdb/image/upload/t_cover_big/${cover?.[0]?.image_id}.jpg`,
+							}}
+							style={{ flex: 1, width: 300 }}
+							resizeMode='contain'
+						/>
+						<Text style={{ color: 'white', flex: 1 }}>{game?.[0]?.name}</Text>
+					</View>
 				)}
 			</View>
 		</ModalComponent>
