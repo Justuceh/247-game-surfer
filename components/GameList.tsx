@@ -1,26 +1,35 @@
+import { useState } from 'react';
 import { View, StyleSheet, FlatList, Dimensions } from 'react-native';
-import * as WebBrowser from 'expo-web-browser';
+
 import { LinearGradient } from 'expo-linear-gradient';
 
 import GameDealCard from '../components/GameDealCard';
-import { CHEAPSHARK_REDIRECT_API } from '@env';
 import { GameDealItem } from '../screens/GameDealsScreen';
 import Colors from '../constants/colors';
+import GameDetails from './GameDetails';
 
 interface GameListProps {
 	games: GameDealItem[] | undefined;
 }
 
 const GameList = ({ games }: GameListProps) => {
-	const openBrowserAsync = async (dealID: string) => {
-		await WebBrowser.openBrowserAsync(`${CHEAPSHARK_REDIRECT_API}${dealID}`);
-	};
+	const [showGameDetails, setShowGameDetails] = useState(false);
+	const [modalDealItem, setModalDealItem] = useState<GameDealItem>();
+
+	function closeGameDetailsModal() {
+		setShowGameDetails(false);
+		setModalDealItem(undefined);
+	}
+	function openGameDetailsModal(dealItem: GameDealItem) {
+		setShowGameDetails(true);
+		setModalDealItem(dealItem);
+	}
 	const renderCards = ({ item }: { item: GameDealItem }) => {
 		return (
 			<View style={styles.gameDealItemContainer}>
 				<GameDealCard
 					gameDealItem={item}
-					handleGameDealPress={openBrowserAsync}
+					handleGameDealPress={openGameDetailsModal}
 					style={{ height: 100 }}
 				/>
 			</View>
@@ -37,6 +46,13 @@ const GameList = ({ games }: GameListProps) => {
 					Colors.linearGradient.bottomColor,
 				]}>
 				<View style={styles.listContainer}>
+					{showGameDetails && (
+						<GameDetails
+							showDetails={showGameDetails}
+							onClose={closeGameDetailsModal}
+							gameDealItem={modalDealItem}
+						/>
+					)}
 					<FlatList
 						data={games}
 						renderItem={renderCards}
