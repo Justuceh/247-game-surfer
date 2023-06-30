@@ -104,7 +104,7 @@ export default function App() {
 											);
 										}}
 										screenOptions={{
-											tabBarStyle: { backgroundColor: Colors.charcoal },
+											tabBarStyle: { backgroundColor: Colors.charcoalDark },
 											tabBarLabelStyle: styles.tabBarText,
 											tabBarActiveTintColor: 'white',
 											tabBarInactiveTintColor: '#a9a6a6',
