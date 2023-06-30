@@ -10,7 +10,7 @@ import { AuthContext } from '../store/context/auth/auth-context';
 import axios from 'axios';
 import { useQuery } from '@tanstack/react-query';
 import ActivityIndicatorComponent from './ActivityIndicator';
-import { findClosestString } from '../utils/stringUtils';
+import { findClosestString, removeEditionWords } from '../utils/stringUtils';
 import YouTubePlayer from './YouTubePlayer';
 
 interface GameDetailsProps {
@@ -27,9 +27,10 @@ const GameDetails = ({
 	const authContext = useContext(AuthContext);
 	const headers = authContext.getRequestHeaders();
 	const cacheTime = Infinity;
+	const plainGameTitle = removeEditionWords(gameDealItem?.title);
 	const gameQuery = `
     fields *; 
-    search "${gameDealItem?.title}"; 
+    search "${plainGameTitle}"; 
     limit 20; 
   `;
 
@@ -61,7 +62,7 @@ const GameDetails = ({
 	useEffect(() => {
 		if (gameList) {
 			const closestGameName = findClosestString(
-				gameDealItem?.title,
+				plainGameTitle,
 				gameList?.map((game) => game.name) || []
 			);
 			const game = gameList?.find((game) => game.name == closestGameName);
@@ -111,41 +112,51 @@ const GameDetails = ({
 	};
 	return (
 		<ModalComponent onClose={onClose} visible={showDetails}>
-			<View style={styles.rootContainer}>
-				{isGameLoading ||
-				isCoverLoading ||
-				(isVideosLoading && videos !== undefined) ? (
-					<ActivityIndicatorComponent color='white' size='large' />
-				) : (
-					<View style={{ flex: 1, alignItems: 'center' }}>
-						<Image
-							source={{
-								uri: `https://images.igdb.com/igdb/image/upload/t_cover_big/${cover?.[0]?.image_id}.jpg`,
-							}}
-							style={{ flex: 1, width: 300 }}
-							resizeMode='contain'
-						/>
-						<Text style={{ color: 'white', flex: 1, justifyContent: 'center' }}>
-							{filteredGame.name}
-						</Text>
-						{videos !== undefined ? (
-							<View style={{ flex: 1, justifyContent: 'center' }}>
-								<YouTubePlayer
-									height={180}
-									webViewStyle={{
-										flex: 1,
-										justifyContent: 'center',
-										borderRadius: 10,
-									}}
-									videoId={videos?.[0].video_id}
-								/>
-							</View>
-						) : (
-							<></>
-						)}
-					</View>
-				)}
-			</View>
+			{gameList !== null && gameList?.length ? (
+				<View style={styles.rootContainer}>
+					{isGameLoading ||
+					isCoverLoading ||
+					(isVideosLoading && videos !== undefined && videos > 0) ? (
+						<ActivityIndicatorComponent color='white' size='large' />
+					) : (
+						<View style={{ flex: 1, alignItems: 'center' }}>
+							<Image
+								source={{
+									uri: `https://images.igdb.com/igdb/image/upload/t_cover_big/${cover?.[0]?.image_id}.jpg`,
+								}}
+								style={{ flex: 1, width: 300 }}
+								resizeMode='contain'
+							/>
+							<Text
+								style={{ color: 'white', flex: 1, justifyContent: 'center' }}>
+								{filteredGame.name}
+							</Text>
+							{videos !== undefined ? (
+								<View style={{ flex: 1, justifyContent: 'center' }}>
+									<YouTubePlayer
+										height={180}
+										webViewStyle={{
+											flex: 1,
+											justifyContent: 'center',
+											borderRadius: 10,
+										}}
+										videoId={videos?.[0].video_id}
+									/>
+								</View>
+							) : (
+								<></>
+							)}
+						</View>
+					)}
+				</View>
+			) : (
+				<View
+					style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+					<Text style={{ color: 'white' }}>
+						No game data available for {gameDealItem?.title}
+					</Text>
+				</View>
+			)}
 		</ModalComponent>
 	);
 };

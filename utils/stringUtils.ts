@@ -11,8 +11,19 @@ export function findClosestString(searchString: any, stringList: any[]) {
 			closestString = currentString;
 		}
 	}
-
 	return closestString;
+}
+
+export function removeEditionWords(str: string | undefined) {
+	const editionWords = [
+		'gold edition',
+		'deluxe edition',
+		'ultimate edition',
+		'special edition',
+	];
+	const regex = new RegExp(editionWords.join('|'), 'gi');
+	const modifiedString = str?.replace(regex, '').trim();
+	return modifiedString?.replace(/:$/, '');
 }
 
 function levenshteinDistance(source: any, target: any) {
