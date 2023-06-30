@@ -39,6 +39,12 @@ const GameDetails = ({
       limit 1;
     `;
 	};
+	const queryByIds = (ids: number[]) => {
+		return `
+      fields *;
+      where id = (${[...ids]});
+    `;
+	};
 
 	// First Query
 	const { data: gameList, isLoading: isGameLoading } = useQuery<any[], unknown>(
@@ -49,6 +55,7 @@ const GameDetails = ({
 
 	const [filteredGame, setFilteredGame] = useState<any>(undefined);
 	const [coverId, setCoverId] = useState<number | undefined>(undefined);
+	const [videoIds, setVideoIds] = useState<number[] | undefined>(undefined);
 
 	useEffect(() => {
 		if (gameList) {
@@ -60,6 +67,9 @@ const GameDetails = ({
 			if (game) {
 				setFilteredGame(game);
 				setCoverId(game.cover);
+				if (game.videos) {
+					setVideoIds(game.videos);
+				}
 			}
 		}
 	}, [gameList, gameDealItem]);
@@ -71,6 +81,16 @@ const GameDetails = ({
 		{
 			cacheTime: cacheTime,
 			enabled: coverId !== undefined,
+		}
+	);
+
+	// Third Query
+	const { data: videos, isLoading: isVideosLoading } = useQuery<any[], unknown>(
+		[`videosId-${videoIds?.[0]}`],
+		() => fetchGameData(queryByIds(videoIds || []), 'game_videos'),
+		{
+			cacheTime: cacheTime,
+			enabled: videoIds !== undefined,
 		}
 	);
 
@@ -88,11 +108,10 @@ const GameDetails = ({
 	const openBrowserAsync = async (dealID: string) => {
 		await WebBrowser.openBrowserAsync(`${CHEAPSHARK_REDIRECT_API}${dealID}`);
 	};
-
 	return (
 		<ModalComponent onClose={onClose} visible={showDetails}>
 			<View style={styles.rootContainer}>
-				{isGameLoading || isCoverLoading ? (
+				{isGameLoading || isCoverLoading || isVideosLoading ? (
 					<ActivityIndicatorComponent color='white' size='large' />
 				) : (
 					<View style={{ flex: 1 }}>
