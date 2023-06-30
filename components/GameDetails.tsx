@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Text, View, StyleSheet, Dimensions, Image } from 'react-native';
 import * as WebBrowser from 'expo-web-browser';
 import { CHEAPSHARK_REDIRECT_API, IGDB_BASE_URL } from '@env';
@@ -10,6 +10,7 @@ import { AuthContext } from '../store/context/auth/auth-context';
 import axios from 'axios';
 import { useQuery } from '@tanstack/react-query';
 import ActivityIndicatorComponent from './ActivityIndicator';
+import { findClosestString } from '../utils/stringUtils';
 
 interface GameDetailsProps {
 	gameDealItem: GameDealItem | undefined;
@@ -24,24 +25,27 @@ const GameDetails = ({
 }: GameDetailsProps) => {
 	const authContext = useContext(AuthContext);
 	const headers = authContext.getRequestHeaders();
+	const [filteredGame, setFilteredGame] = useState<any>({});
 
 	// First Query
-	const { data: game, isLoading: isGameLoading } = useQuery<any, unknown>(
+	const { data: gameList, isLoading: isGameLoading } = useQuery<any[], unknown>(
 		[`gameName-${gameDealItem?.title.replace(/\s+/g, '')}`],
 		() => fetchGameData(gameQuery, 'games')
 	);
 
 	// Second Query, only if game is loaded and has a cover id
 	const { data: cover, isLoading: isCoverLoading } = useQuery<any, unknown>(
-		[`coverId-${game?.[0]?.cover}`, game?.[0]?.cover],
-		() => fetchGameData(queryById(game?.[0]?.cover), 'covers'),
-		{ enabled: !isGameLoading }
+		[`coverId-${gameList?.[0]?.cover}`, gameList?.[0]?.cover],
+		() => fetchGameData(queryById(filteredGame.cover), 'covers'),
+		{
+			enabled: filteredGame !== undefined,
+		}
 	);
 
 	const gameQuery = `
 		fields *; 
 		search "${gameDealItem?.title}"; 
-		limit 1; 
+		limit 20; 
 	`;
 
 	const queryById = (id: number) => {
@@ -51,6 +55,15 @@ const GameDetails = ({
 			limit 1;
 		`;
 	};
+
+	useEffect(() => {
+		const closestGameName = findClosestString(
+			gameDealItem?.title,
+			gameList?.map((game) => game.name) || []
+		);
+		const game = gameList?.find((game) => game.name == closestGameName);
+		setFilteredGame(game);
+	}, [gameList]);
 
 	async function fetchGameData(query: string, endpoint: string) {
 		return await axios
@@ -83,7 +96,7 @@ const GameDetails = ({
 							style={{ flex: 1, width: 300 }}
 							resizeMode='contain'
 						/>
-						<Text style={{ color: 'white', flex: 1 }}>{game?.[0]?.name}</Text>
+						<Text style={{ color: 'white', flex: 1 }}>{filteredGame.name}</Text>
 					</View>
 				)}
 			</View>
