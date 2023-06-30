@@ -1,5 +1,12 @@
 import { useContext, useEffect, useState } from 'react';
-import { Text, View, StyleSheet, Dimensions, Image } from 'react-native';
+import {
+	Text,
+	View,
+	StyleSheet,
+	Dimensions,
+	Image,
+	FlatList,
+} from 'react-native';
 import * as WebBrowser from 'expo-web-browser';
 import { CHEAPSHARK_REDIRECT_API, IGDB_BASE_URL } from '@env';
 
@@ -17,6 +24,39 @@ interface GameDetailsProps {
 	gameDealItem: GameDealItem | undefined;
 	showDetails: boolean;
 	onClose: () => void;
+}
+
+interface IgdbGame {
+	id: number;
+	cover: number;
+	name: string;
+	screenshots: number[];
+	summary: string;
+	videos: number[];
+}
+
+interface IgdbCover {
+	id: number;
+	height: number;
+	width: number;
+	game: number;
+	image_id: number;
+	url: string;
+}
+
+interface IgdbVideo {
+	id: number;
+	game: number;
+	name: string;
+	video_id: string;
+}
+
+interface IgdbScreenshots {
+	id: number;
+	height: number;
+	width: number;
+	image_id: number;
+	url: string;
 }
 
 const GameDetails = ({
@@ -49,13 +89,18 @@ const GameDetails = ({
 	};
 
 	// First Query
-	const { data: gameList, isLoading: isGameLoading } = useQuery<any[], unknown>(
+	const { data: gameList, isLoading: isGameLoading } = useQuery<
+		IgdbGame[],
+		unknown
+	>(
 		[`gameName-${gameDealItem?.dealID}`],
 		() => fetchGameData(gameQuery, 'games'),
 		{ cacheTime: cacheTime }
 	);
 
-	const [filteredGame, setFilteredGame] = useState<any>(undefined);
+	const [filteredGame, setFilteredGame] = useState<IgdbGame | undefined>(
+		undefined
+	);
 	const [coverId, setCoverId] = useState<number | undefined>(undefined);
 	const [videoIds, setVideoIds] = useState<number[] | undefined>(undefined);
 
@@ -77,7 +122,10 @@ const GameDetails = ({
 	}, [gameList, gameDealItem]);
 
 	// Second Query
-	const { data: cover, isLoading: isCoverLoading } = useQuery<any, unknown>(
+	const { data: cover, isLoading: isCoverLoading } = useQuery<
+		IgdbCover[],
+		unknown
+	>(
 		[`coverId-${coverId}`],
 		() => fetchGameData(queryById(coverId || 0), 'covers'),
 		{
@@ -87,7 +135,10 @@ const GameDetails = ({
 	);
 
 	// Third Query
-	const { data: videos, isLoading: isVideosLoading } = useQuery<any[], unknown>(
+	const { data: videos, isLoading: isVideosLoading } = useQuery<
+		IgdbVideo[],
+		unknown
+	>(
 		[`videosId-${videoIds?.[0]}`],
 		() => fetchGameData(queryByIds(videoIds || []), 'game_videos'),
 		{
@@ -110,6 +161,23 @@ const GameDetails = ({
 	const openBrowserAsync = async (dealID: string) => {
 		await WebBrowser.openBrowserAsync(`${CHEAPSHARK_REDIRECT_API}${dealID}`);
 	};
+
+	const renderVideos = ({ item }: { item: IgdbVideo }) => {
+		return (
+			<View style={{ flex: 1 }}>
+				<YouTubePlayer
+					height={180}
+					webViewStyle={{
+						flex: 1,
+						justifyContent: 'center',
+						borderRadius: 10,
+					}}
+					videoId={item.video_id}
+				/>
+			</View>
+		);
+	};
+
 	return (
 		<ModalComponent onClose={onClose} visible={showDetails}>
 			{gameList !== null && gameList?.length ? (
@@ -129,18 +197,19 @@ const GameDetails = ({
 							/>
 							<Text
 								style={{ color: 'white', flex: 1, justifyContent: 'center' }}>
-								{filteredGame.name}
+								{filteredGame?.name}
 							</Text>
 							{videos !== undefined ? (
-								<View style={{ flex: 1, justifyContent: 'center' }}>
-									<YouTubePlayer
-										height={180}
-										webViewStyle={{
-											flex: 1,
-											justifyContent: 'center',
-											borderRadius: 10,
-										}}
-										videoId={videos?.[0].video_id}
+								<View
+									style={{
+										flex: 1,
+										justifyContent: 'center',
+										alignItems: 'center',
+									}}>
+									<FlatList
+										data={videos}
+										keyExtractor={(item) => `${item.id}`}
+										renderItem={renderVideos}
 									/>
 								</View>
 							) : (
