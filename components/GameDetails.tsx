@@ -11,6 +11,7 @@ import axios from 'axios';
 import { useQuery } from '@tanstack/react-query';
 import ActivityIndicatorComponent from './ActivityIndicator';
 import { findClosestString } from '../utils/stringUtils';
+import YouTubePlayer from './YouTubePlayer';
 
 interface GameDetailsProps {
 	gameDealItem: GameDealItem | undefined;
@@ -111,10 +112,12 @@ const GameDetails = ({
 	return (
 		<ModalComponent onClose={onClose} visible={showDetails}>
 			<View style={styles.rootContainer}>
-				{isGameLoading || isCoverLoading || isVideosLoading ? (
+				{isGameLoading ||
+				isCoverLoading ||
+				(isVideosLoading && videos !== undefined) ? (
 					<ActivityIndicatorComponent color='white' size='large' />
 				) : (
-					<View style={{ flex: 1 }}>
+					<View style={{ flex: 1, alignItems: 'center' }}>
 						<Image
 							source={{
 								uri: `https://images.igdb.com/igdb/image/upload/t_cover_big/${cover?.[0]?.image_id}.jpg`,
@@ -122,7 +125,24 @@ const GameDetails = ({
 							style={{ flex: 1, width: 300 }}
 							resizeMode='contain'
 						/>
-						<Text style={{ color: 'white', flex: 1 }}>{filteredGame.name}</Text>
+						<Text style={{ color: 'white', flex: 1, justifyContent: 'center' }}>
+							{filteredGame.name}
+						</Text>
+						{videos !== undefined ? (
+							<View style={{ flex: 1, justifyContent: 'center' }}>
+								<YouTubePlayer
+									height={180}
+									webViewStyle={{
+										flex: 1,
+										justifyContent: 'center',
+										borderRadius: 10,
+									}}
+									videoId={videos?.[0].video_id}
+								/>
+							</View>
+						) : (
+							<></>
+						)}
 					</View>
 				)}
 			</View>
