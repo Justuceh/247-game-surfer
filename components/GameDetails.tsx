@@ -25,63 +25,70 @@ const GameDetails = ({
 }: GameDetailsProps) => {
 	const authContext = useContext(AuthContext);
 	const headers = authContext.getRequestHeaders();
-	const [filteredGame, setFilteredGame] = useState<any>({});
-
-	// First Query
-	const { data: gameList, isLoading: isGameLoading } = useQuery<any[], unknown>(
-		[`gameName-${gameDealItem?.title.replace(/\s+/g, '')}`],
-		() => fetchGameData(gameQuery, 'games')
-	);
-
-	// Second Query, only if game is loaded and has a cover id
-	const { data: cover, isLoading: isCoverLoading } = useQuery<any, unknown>(
-		[`coverId-${gameList?.[0]?.cover}`, gameList?.[0]?.cover],
-		() => fetchGameData(queryById(filteredGame.cover), 'covers'),
-		{
-			enabled: filteredGame !== undefined,
-		}
-	);
-
+	const cacheTime = Infinity;
 	const gameQuery = `
-		fields *; 
-		search "${gameDealItem?.title}"; 
-		limit 20; 
-	`;
+    fields *; 
+    search "${gameDealItem?.title}"; 
+    limit 20; 
+  `;
 
 	const queryById = (id: number) => {
 		return `
-			fields *;
-			where id = ${id};
-			limit 1;
-		`;
+      fields *;
+      where id = ${id};
+      limit 1;
+    `;
 	};
 
+	// First Query
+	const { data: gameList, isLoading: isGameLoading } = useQuery<any[], unknown>(
+		[`gameName-${gameDealItem?.dealID}`],
+		() => fetchGameData(gameQuery, 'games'),
+		{ cacheTime: cacheTime }
+	);
+
+	const [filteredGame, setFilteredGame] = useState<any>(undefined);
+	const [coverId, setCoverId] = useState<number | undefined>(undefined);
+
 	useEffect(() => {
-		const closestGameName = findClosestString(
-			gameDealItem?.title,
-			gameList?.map((game) => game.name) || []
-		);
-		const game = gameList?.find((game) => game.name == closestGameName);
-		setFilteredGame(game);
-	}, [gameList]);
+		if (gameList) {
+			const closestGameName = findClosestString(
+				gameDealItem?.title,
+				gameList?.map((game) => game.name) || []
+			);
+			const game = gameList?.find((game) => game.name == closestGameName);
+			if (game) {
+				setFilteredGame(game);
+				setCoverId(game.cover);
+			}
+		}
+	}, [gameList, gameDealItem]);
+
+	// Second Query
+	const { data: cover, isLoading: isCoverLoading } = useQuery<any, unknown>(
+		[`coverId-${coverId}`],
+		() => fetchGameData(queryById(coverId || 0), 'covers'),
+		{
+			cacheTime: cacheTime,
+			enabled: coverId !== undefined,
+		}
+	);
 
 	async function fetchGameData(query: string, endpoint: string) {
-		return await axios
-			.post(`${IGDB_BASE_URL}${endpoint}`, query, {
+		try {
+			const response = await axios.post(`${IGDB_BASE_URL}${endpoint}`, query, {
 				headers: { ...headers, 'Content-Type': 'text/plain' },
-			})
-			.then((response) => {
-				if (!response) {
-					throw new Error('Network response was not ok');
-				}
-				return response.data;
-			})
-			.catch((err) => console.log(err));
+			});
+			return response.data;
+		} catch (err) {
+			console.log(err);
+		}
 	}
 
 	const openBrowserAsync = async (dealID: string) => {
 		await WebBrowser.openBrowserAsync(`${CHEAPSHARK_REDIRECT_API}${dealID}`);
 	};
+
 	return (
 		<ModalComponent onClose={onClose} visible={showDetails}>
 			<View style={styles.rootContainer}>
@@ -105,6 +112,7 @@ const GameDetails = ({
 };
 
 export default GameDetails;
+
 const { height, width } = Dimensions.get('window');
 const styles = StyleSheet.create({
 	rootContainer: {
