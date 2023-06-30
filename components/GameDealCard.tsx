@@ -1,17 +1,18 @@
 import { useContext, useEffect, useState } from 'react';
 import { Text, View, StyleSheet, Pressable, Image } from 'react-native';
+import * as WebBrowser from 'expo-web-browser';
 
 import { GameStoreContext } from '../store/context/game_deals/game-stores-context';
 import { GameDealItem } from '../screens/GameDealsScreen';
 import Card from './Card';
 import WishlistButton from './WishlistButton';
-import { CHEAPSHARK_BASE_URL } from '@env';
+import { CHEAPSHARK_BASE_URL, CHEAPSHARK_REDIRECT_API } from '@env';
 import Fonts from '../constants/fonts';
 import Colors from '../constants/colors';
 
 interface GameDealCardProps {
 	gameDealItem: GameDealItem;
-	handleGameDealPress: (dealID: string) => void;
+	handleGameDealPress: (gameDealItem: GameDealItem) => void;
 	style?: {
 		width?: number;
 		height?: number;
@@ -32,6 +33,10 @@ const GameDealCard = ({
 	)?.images.icon;
 	const storeIconUri = `${CHEAPSHARK_BASE_URL}${storeIcon}`;
 
+	const openBrowserAsync = async (dealID: string) => {
+		await WebBrowser.openBrowserAsync(`${CHEAPSHARK_REDIRECT_API}${dealID}`);
+	};
+
 	useEffect(() => {
 		Image.getSize(
 			gameDealItem.thumb,
@@ -50,7 +55,8 @@ const GameDealCard = ({
 	return (
 		<Card style={{ backgroundColor: Colors.charcoal, aspectRatio: 1 }}>
 			<Pressable
-				onPress={() => handleGameDealPress(gameDealItem.dealID)}
+				onPress={() => handleGameDealPress(gameDealItem)}
+				onLongPress={() => openBrowserAsync(gameDealItem.dealID)}
 				style={({ pressed }) =>
 					pressed
 						? [styles.pressed, styles.pressableContainer]
