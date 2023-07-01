@@ -68,7 +68,7 @@ const GamesScreen = () => {
 						onSearchHandler={onSearchHandler}
 						onClearHandler={onClearHandler}
 						onChangeText={handleQueryUpdate}
-						placeholderTextColor={'black'}
+						placeholderTextColor={'grey'}
 						backgroundColor='#fff'
 						buttonColor='white'
 					/>
