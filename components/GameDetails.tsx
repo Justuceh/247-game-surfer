@@ -19,6 +19,7 @@ import { useQuery } from '@tanstack/react-query';
 import ActivityIndicatorComponent from './ActivityIndicator';
 import { findClosestString, removeEditionWords } from '../utils/stringUtils';
 import YouTubePlayer from './YouTubePlayer';
+import Fonts from '../constants/fonts';
 
 interface GameDetailsProps {
 	gameDealItem: GameDealItem | undefined;
@@ -164,13 +165,12 @@ const GameDetails = ({
 
 	const renderVideos = ({ item }: { item: IgdbVideo }) => {
 		return (
-			<View style={{ flex: 1 }}>
+			<View style={styles.youTubeContainer}>
 				<YouTubePlayer
 					height={180}
 					webViewStyle={{
 						flex: 1,
-						justifyContent: 'center',
-						borderRadius: 10,
+						margin: 7,
 					}}
 					videoId={item.video_id}
 				/>
@@ -187,35 +187,38 @@ const GameDetails = ({
 					(isVideosLoading && videos !== undefined && videos > 0) ? (
 						<ActivityIndicatorComponent color='white' size='large' />
 					) : (
-						<View style={{ flex: 1, alignItems: 'center' }}>
-							<Image
-								source={{
-									uri: `https://images.igdb.com/igdb/image/upload/t_cover_big/${cover?.[0]?.image_id}.jpg`,
-								}}
-								style={{ flex: 1, width: 300 }}
-								resizeMode='contain'
-							/>
-							<Text
-								style={{ color: 'white', flex: 1, justifyContent: 'center' }}>
-								{filteredGame?.name}
-							</Text>
-							{videos !== undefined ? (
-								<View
-									style={{
-										flex: 1,
-										justifyContent: 'center',
-										alignItems: 'center',
-									}}>
-									<FlatList
-										data={videos}
-										keyExtractor={(item) => `${item.id}`}
-										renderItem={renderVideos}
-									/>
+						<>
+							<View style={styles.coverContainer}>
+								<Image
+									source={{
+										uri: `https://images.igdb.com/igdb/image/upload/t_cover_big/${cover?.[0]?.image_id}.jpg`,
+									}}
+									style={styles.coverImage}
+									resizeMode='contain'
+								/>
+								<View style={styles.labelTextContainer}>
+									<Text style={styles.labelText}>{filteredGame?.name}</Text>
+									<View style={styles.summaryContainerText}>
+										<Text style={styles.summaryText}>
+											{filteredGame?.summary}
+										</Text>
+									</View>
 								</View>
-							) : (
-								<></>
-							)}
+							</View>
+						</>
+					)}
+
+					{videos !== undefined ? (
+						<View style={styles.videosContainer}>
+							<FlatList
+								data={videos}
+								keyExtractor={(item) => `${item.id}`}
+								renderItem={renderVideos}
+								horizontal={true}
+							/>
 						</View>
+					) : (
+						<></>
 					)}
 				</View>
 			) : (
@@ -238,6 +241,50 @@ const styles = StyleSheet.create({
 		flex: 1,
 		justifyContent: 'center',
 		alignItems: 'center',
-		backgroundColor: Colors.charcoalLight,
+		backgroundColor: Colors.charcoalDark,
 	},
+	coverContainer: {
+		flex: 2,
+		justifyContent: 'center',
+		alignItems: 'center',
+		backgroundColor: Colors.charcoalDark,
+	},
+	coverImage: {
+		flex: 2,
+		width: 200,
+	},
+	labelTextContainer: {
+		flex: 1,
+		justifyContent: 'center',
+		alignItems: 'center',
+		margin: 20,
+	},
+	labelText: {
+		color: 'white',
+		fontSize: 25,
+		fontWeight: 'bold',
+		fontFamily: Fonts.gameTitleFont,
+		flex: 1,
+		justifyContent: 'center',
+		alignItems: 'center',
+	},
+	summaryContainerText: {
+		flex: 1,
+		justifyContent: 'center',
+		alignItems: 'center',
+	},
+	summaryText: {
+		flex: 1,
+		color: 'white',
+		fontSize: 15,
+		fontWeight: 'bold',
+		fontFamily: Fonts.gameTitleFont,
+	},
+	videosContainer: {
+		flex: 1,
+		borderTopWidth: 2,
+		borderColor: Colors.offWhite,
+		marginBottom: 30,
+	},
+	youTubeContainer: { flex: 1, alignItems: 'center' },
 });
