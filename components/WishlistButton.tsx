@@ -29,8 +29,8 @@ const WishlistButton = ({ gameDealItem }: WishlistButtonProps) => {
 			style={({ pressed }) => [pressed ? styles.pressed : null]}>
 			<Ionicons
 				onPress={changeWishlistStatusHandler}
-				name='star'
-				size={18}
+				name='ios-star'
+				size={20}
 				color={!isWishlisted ? '#a3a3a3' : '#02f402'}
 			/>
 		</Pressable>

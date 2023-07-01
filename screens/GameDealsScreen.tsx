@@ -142,8 +142,8 @@ const GameDealsScreen = ({ route }: GameDealsScreenProps) => {
 		navigation.setOptions({
 			title: `${storeTitle} Deals`,
 			headerStyle: { backgroundColor: 'black' },
-			headerTitleStyle: { fontFamily: Fonts.storeNameFont, fontSize: 20 },
-			headerTintColor: 'white',
+			headerTitleStyle: { fontFamily: Fonts.gameTitleFont, fontSize: 20 },
+			headerTintColor: Colors.offWhite,
 		});
 	}, [
 		navigation,
@@ -170,7 +170,7 @@ const GameDealsScreen = ({ route }: GameDealsScreenProps) => {
 				under20DollarDealsIsLoading ||
 				fiveToTenDollarDealsIsLoading ? (
 					<View style={styles.activityIndicatorContainer}>
-						<ActivityIndicatorComponent size='large' color='black' />
+						<ActivityIndicatorComponent size='large' color='white' />
 					</View>
 				) : (
 					<ScrollView style={styles.scrollContainer}>

@@ -82,7 +82,7 @@ const GamesScreen = () => {
 					]}>
 					{isLoading ? (
 						<View style={styles.activityIndicatorContainer}>
-							<ActivityIndicatorComponent color='black' size='large' />
+							<ActivityIndicatorComponent color='white' size='large' />
 						</View>
 					) : dataError ? (
 						<View style={styles.displayMessagesContainer}>

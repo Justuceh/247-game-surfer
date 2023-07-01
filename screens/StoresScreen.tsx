@@ -1,10 +1,12 @@
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import {
 	View,
 	StyleSheet,
 	ImageBackground,
 	Pressable,
 	FlatList,
+	Image,
+	Text,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useQuery } from '@tanstack/react-query';
@@ -18,6 +20,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { RootNavigatorParamList } from '../App';
 import { LinearGradient } from 'expo-linear-gradient';
 import Colors from '../constants/colors';
+import Fonts from '../constants/fonts';
 
 export interface GameStoreInterface {
 	storeID: string;
@@ -45,6 +48,7 @@ type StoresScreenNavigationProp = StackNavigationProp<
 >;
 
 const StoresScreen = () => {
+	const [bannerText, setBannerText] = useState('Select a store to surf deals');
 	const navigation = useNavigation<StoresScreenNavigationProp>();
 	const {
 		data: gameStores,
@@ -73,6 +77,11 @@ const StoresScreen = () => {
 			storeID: storeID,
 			title: storeName,
 		});
+		if (bannerText !== 'Surf Deals by Store') {
+			setTimeout(() => {
+				setBannerText('Surf Deals by Store');
+			}, 500);
+		}
 	};
 
 	const renderCards = ({ item }: { item: GameStoreInterface }) => {
@@ -85,7 +94,7 @@ const StoresScreen = () => {
 					onPress={() => handleGameStorePress(item.storeID, item.storeName)}
 					style={({ pressed }) => [pressed ? styles.pressed : null]}>
 					<ImageBackground
-						style={styles.image}
+						style={styles.cardImage}
 						source={{ uri: `${CHEAPSHARK_BASE_URL}${item.images.logo}` }}
 					/>
 				</Pressable>
@@ -104,15 +113,31 @@ const StoresScreen = () => {
 				]}>
 				<View style={styles.rootContainer}>
 					{isLoading ? (
-						<ActivityIndicatorComponent size='large' color='blue' />
+						<ActivityIndicatorComponent size='large' color='white' />
 					) : (
-						<FlatList
-							data={filteredGames}
-							renderItem={renderCards}
-							numColumns={2}
-							contentContainerStyle={{ padding: 5 }}
-							keyExtractor={(item) => `${item.storeID}`}
-						/>
+						<>
+							<View style={styles.bannerContainer}>
+								<View style={styles.bannerTextContainer}>
+									<Text style={styles.bannerText}>{bannerText}</Text>
+								</View>
+								<View style={styles.bannerImageContainer}>
+									<Image
+										source={require('../assets/247-gs-high-resolution-color-icon.png')}
+										style={styles.bannerImage}
+										resizeMode='contain'
+									/>
+								</View>
+							</View>
+							<View style={styles.listContainer}>
+								<FlatList
+									data={filteredGames}
+									renderItem={renderCards}
+									numColumns={2}
+									contentContainerStyle={{ padding: 5 }}
+									keyExtractor={(item) => `${item.storeID}`}
+								/>
+							</View>
+						</>
 					)}
 				</View>
 			</LinearGradient>
@@ -130,7 +155,33 @@ const styles = StyleSheet.create({
 		flex: 1,
 		justifyContent: 'center',
 	},
-	image: {
+	bannerContainer: {
+		flex: 1,
+		flexDirection: 'row',
+		backgroundColor: 'black',
+	},
+	bannerImageContainer: {
+		flex: 1,
+		alignItems: 'center',
+		justifyContent: 'center',
+	},
+	bannerImage: {
+		flex: 1,
+	},
+	bannerTextContainer: {
+		flex: 4,
+		alignItems: 'center',
+		justifyContent: 'center',
+	},
+	bannerText: {
+		fontFamily: Fonts.gameTitleFont,
+		fontSize: 23,
+		color: Colors.offWhite,
+	},
+	listContainer: {
+		flex: 10,
+	},
+	cardImage: {
 		flex: 1,
 		backgroundColor: '#e4e4e4',
 		borderRadius: 40,

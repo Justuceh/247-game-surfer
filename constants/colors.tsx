@@ -3,6 +3,7 @@ const Colors = {
 	charcoal: '#151515',
 	charcoalLight: '#222121',
 	charcoalLighter: '#2f2e2e',
+	offWhite: '#cdcdcd',
 	linearGradient: {
 		topColor: '#2f2e2e',
 		middleColor: '#222121',

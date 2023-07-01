@@ -18,7 +18,6 @@ import GamesScreen from './screens/GamesScreen';
 import GameDealsScreen from './screens/GameDealsScreen';
 import { WishlistContextProvider } from './store/context/wishlist/wishlist-context';
 import { GameStoreContextProvider } from './store/context/game_deals/game-stores-context';
-import Fonts from './constants/fonts';
 import Colors from './constants/colors';
 import { AuthProvider } from './store/context/auth/auth-context';
 
@@ -54,8 +53,6 @@ export default function App() {
 	}
 	const Tab = createBottomTabNavigator();
 	const Stack = createStackNavigator<RootNavigatorParamList>();
-	//TODO add logic for loading fonts behind the splash screen once I add a splash screen
-	//TODO add splash screen
 
 	const StoresScreenTab = () => {
 		return (
@@ -101,7 +98,11 @@ export default function App() {
 											component={StoresScreenTab}
 											options={{
 												tabBarIcon: ({ color, size }) => (
-													<Ionicons name='ios-grid' color={color} size={size} />
+													<Ionicons
+														name='home-sharp'
+														color={color}
+														size={size}
+													/>
 												),
 												tabBarIconStyle: { marginTop: 10 },
 											}}
@@ -110,7 +111,11 @@ export default function App() {
 											name='GamesScreen'
 											options={{
 												tabBarIcon: ({ color, size }) => (
-													<Ionicons name='search' color={color} size={size} />
+													<Ionicons
+														name='search-sharp'
+														color={color}
+														size={size}
+													/>
 												),
 											}}
 											component={GamesScreen}
@@ -119,7 +124,7 @@ export default function App() {
 											name='WishListScreen'
 											options={{
 												tabBarIcon: ({ color, size }) => (
-													<Ionicons name='star' color={color} size={size} />
+													<Ionicons name='ios-star' color={color} size={size} />
 												),
 											}}
 											component={WishListScreen}
@@ -138,9 +143,5 @@ export default function App() {
 const styles = StyleSheet.create({
 	rootContainer: {
 		flex: 1,
-	},
-	tabBarText: {
-		fontFamily: Fonts.tabBarFont,
-		fontSize: 15,
 	},
 });
