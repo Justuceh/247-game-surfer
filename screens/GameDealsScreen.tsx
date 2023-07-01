@@ -14,6 +14,7 @@ import GameDealCategoryList from '../components/GameDealCategoryList';
 import Colors from '../constants/colors';
 import Fonts from '../constants/fonts';
 import GameDetails from '../components/GameDetails';
+import Button from '../components/Button';
 
 export interface GameDealItem {
 	gameID: string;
@@ -27,6 +28,14 @@ export interface GameDealItem {
 	dealRating: string;
 	dealID: string;
 }
+
+const filterLabels = {
+	topDeals: 'Top Deals',
+	highlyRatedBySteam: 'Highly Rated By Steam',
+	highlyRatedByMeta: 'Highly Rated By Metacritic',
+	fifteenToTwenty: '$15 - $20',
+	fiveToTen: '$5 - $10',
+};
 type GameDealsScreenRouteProp = RouteProp<
 	RootNavigatorParamList,
 	'GameDealsScreen'
@@ -42,6 +51,12 @@ type GameDealsScreenProps = {
 
 const GameDealsScreen = ({ route }: GameDealsScreenProps) => {
 	const [showGameDetails, setShowGameDetails] = useState(false);
+	const [showTopDealGames, setShowTopDealGames] = useState(true);
+	const [showTopSteamGames, setShowTopSteamGames] = useState(false);
+	const [showTopMetaGames, setShowTopMetaGames] = useState(false);
+	const [showTopFifteenGames, setShowTopFifteenGames] = useState(false);
+	const [showTopFiveGames, setShowTopFiveGames] = useState(false);
+
 	const [modalDealItem, setModalDealItem] = useState<GameDealItem>();
 	const navigation = useNavigation<GameDealsScreenNavigationProp>();
 	const { storeID, title: storeTitle } = route.params;
@@ -61,6 +76,7 @@ const GameDealsScreen = ({ route }: GameDealsScreenProps) => {
 	async function fetchGameStoreDeals(filterParams: any) {
 		const globalParams = {
 			storeID: storeID,
+			pageNumber: 1,
 		};
 		const params = { ...globalParams, ...filterParams };
 		return await axios
@@ -133,6 +149,46 @@ const GameDealsScreen = ({ route }: GameDealsScreenProps) => {
 		);
 	};
 
+	function handleFilterButtonPress(label: string) {
+		switch (label) {
+			case filterLabels.topDeals:
+				setShowTopDealGames(true);
+				setShowTopSteamGames(false);
+				setShowTopMetaGames(false);
+				setShowTopFifteenGames(false);
+				setShowTopFiveGames(false);
+				break;
+			case filterLabels.highlyRatedBySteam:
+				setShowTopDealGames(false);
+				setShowTopSteamGames(true);
+				setShowTopMetaGames(false);
+				setShowTopFifteenGames(false);
+				setShowTopFiveGames(false);
+				break;
+			case filterLabels.highlyRatedByMeta:
+				setShowTopDealGames(false);
+				setShowTopSteamGames(false);
+				setShowTopMetaGames(true);
+				setShowTopFifteenGames(false);
+				setShowTopFiveGames(false);
+				break;
+			case filterLabels.fifteenToTwenty:
+				setShowTopDealGames(false);
+				setShowTopSteamGames(false);
+				setShowTopMetaGames(false);
+				setShowTopFifteenGames(true);
+				setShowTopFiveGames(false);
+				break;
+			case filterLabels.fiveToTen:
+				setShowTopDealGames(false);
+				setShowTopSteamGames(false);
+				setShowTopMetaGames(false);
+				setShowTopFifteenGames(false);
+				setShowTopFiveGames(true);
+				break;
+		}
+	}
+
 	useLayoutEffect(() => {
 		refetchTopDeals();
 		refetchHighlyRatedBySteam();
@@ -173,68 +229,99 @@ const GameDealsScreen = ({ route }: GameDealsScreenProps) => {
 						<ActivityIndicatorComponent size='large' color='white' />
 					</View>
 				) : (
-					<ScrollView style={styles.scrollContainer}>
-						<View style={styles.listItemContainer}>
-							<>
-								{showGameDetails && (
-									<GameDetails
-										showDetails={showGameDetails}
-										onClose={closeGameDetailsModal}
-										gameDealItem={modalDealItem}
-									/>
-								)}
-								{topDeals?.length ? (
-									<GameDealCategoryList
-										data={topDeals}
-										categoryText='Top Deals'
-										renderItem={renderItem}
-									/>
-								) : (
-									<View></View>
-								)}
-
-								{highlyRatedBySteam?.length ? (
-									<GameDealCategoryList
-										data={highlyRatedBySteam}
-										categoryText='Highly Rated By Steam'
-										renderItem={renderItem}
-									/>
-								) : (
-									<View></View>
-								)}
-
-								{highlyRatedByMetacritic?.length ? (
-									<GameDealCategoryList
-										data={highlyRatedByMetacritic}
-										categoryText='Highly Rated By Metacritic'
-										renderItem={renderItem}
-									/>
-								) : (
-									<View></View>
-								)}
-
-								{under20DollarDeals?.length ? (
-									<GameDealCategoryList
-										data={under20DollarDeals}
-										categoryText='$15 - $20'
-										renderItem={renderItem}
-									/>
-								) : (
-									<View></View>
-								)}
-
-								{fiveToTenDollarDeals?.length ? (
-									<GameDealCategoryList
-										data={fiveToTenDollarDeals}
-										categoryText='$5 - $10'
-										renderItem={renderItem}
-									/>
-								) : (
-									<View></View>
-								)}
-							</>
+					<View style={styles.rootContainer}>
+						<View style={styles.filterContainer}>
+							<ScrollView style={{ height: 10 }} horizontal={true}>
+								<Button
+									onPress={handleFilterButtonPress}
+									selected={showTopDealGames}
+									label={filterLabels.topDeals}
+								/>
+								<Button
+									onPress={handleFilterButtonPress}
+									selected={showTopSteamGames}
+									label={filterLabels.highlyRatedBySteam}
+								/>
+								<Button
+									onPress={handleFilterButtonPress}
+									selected={showTopMetaGames}
+									label={filterLabels.highlyRatedByMeta}
+								/>
+								<Button
+									onPress={handleFilterButtonPress}
+									selected={showTopFifteenGames}
+									label={filterLabels.fifteenToTwenty}
+								/>
+								<Button
+									onPress={handleFilterButtonPress}
+									selected={showTopFiveGames}
+									label={filterLabels.fiveToTen}
+								/>
+							</ScrollView>
 						</View>
-					</ScrollView>
+						<View style={styles.scrollContainer}>
+							<View style={styles.listItemContainer}>
+								<>
+									{showGameDetails && (
+										<GameDetails
+											showDetails={showGameDetails}
+											onClose={closeGameDetailsModal}
+											gameDealItem={modalDealItem}
+										/>
+									)}
+									{topDeals?.length && showTopDealGames ? (
+										<GameDealCategoryList
+											data={topDeals}
+											categoryText={filterLabels.topDeals}
+											renderItem={renderItem}
+										/>
+									) : (
+										<View></View>
+									)}
+
+									{highlyRatedBySteam?.length && showTopSteamGames ? (
+										<GameDealCategoryList
+											data={highlyRatedBySteam}
+											categoryText={filterLabels.highlyRatedBySteam}
+											renderItem={renderItem}
+										/>
+									) : (
+										<View></View>
+									)}
+
+									{highlyRatedByMetacritic?.length && showTopMetaGames ? (
+										<GameDealCategoryList
+											data={highlyRatedByMetacritic}
+											categoryText={filterLabels.highlyRatedByMeta}
+											renderItem={renderItem}
+										/>
+									) : (
+										<View></View>
+									)}
+
+									{under20DollarDeals?.length && showTopFifteenGames ? (
+										<GameDealCategoryList
+											data={under20DollarDeals}
+											categoryText={filterLabels.fifteenToTwenty}
+											renderItem={renderItem}
+										/>
+									) : (
+										<View></View>
+									)}
+
+									{fiveToTenDollarDeals?.length && showTopFiveGames ? (
+										<GameDealCategoryList
+											data={fiveToTenDollarDeals}
+											categoryText={filterLabels.fiveToTen}
+											renderItem={renderItem}
+										/>
+									) : (
+										<View></View>
+									)}
+								</>
+							</View>
+						</View>
+					</View>
 				)}
 			</LinearGradient>
 		</>
@@ -247,9 +334,18 @@ const styles = StyleSheet.create({
 	linearGradient: {
 		flex: 1,
 	},
-	scrollContainer: {
+	rootContainer: {
 		flex: 1,
-		marginTop: '4%',
+		justifyContent: 'center',
+	},
+	filterContainer: {
+		flex: 1,
+		justifyContent: 'center',
+		alignItems: 'center',
+		backgroundColor: Colors.charcoalLight,
+	},
+	scrollContainer: {
+		flex: 11,
 	},
 	activityIndicatorContainer: {
 		flex: 1,
@@ -257,6 +353,7 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 	},
 	listItemContainer: {
+		flex: 1,
 		elevation: 4,
 		shadowColor: 'black',
 		shadowOffset: { width: 0, height: 2 },
