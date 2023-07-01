@@ -2,21 +2,15 @@ import { useCallback } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { StyleSheet } from 'react-native';
-import {
-	NavigationContainer,
-	getFocusedRouteNameFromRoute,
-} from '@react-navigation/native';
-import {
-	MaterialTopTabBar,
-	MaterialTopTabBarProps,
-	createMaterialTopTabNavigator,
-} from '@react-navigation/material-top-tabs';
+import { NavigationContainer } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { createStackNavigator } from '@react-navigation/stack';
 import { useFonts, Itim_400Regular } from '@expo-google-fonts/itim';
 import { YatraOne_400Regular } from '@expo-google-fonts/yatra-one';
 import { Righteous_400Regular } from '@expo-google-fonts/righteous';
 import * as SplashScreen from 'expo-splash-screen';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import StoresScreen from './screens/StoresScreen';
 import WishListScreen from './screens/WishListScreen';
@@ -24,7 +18,6 @@ import GamesScreen from './screens/GamesScreen';
 import GameDealsScreen from './screens/GameDealsScreen';
 import { WishlistContextProvider } from './store/context/wishlist/wishlist-context';
 import { GameStoreContextProvider } from './store/context/game_deals/game-stores-context';
-import Fonts from './constants/fonts';
 import Colors from './constants/colors';
 import { AuthProvider } from './store/context/auth/auth-context';
 
@@ -58,10 +51,8 @@ export default function App() {
 	if (!fontsLoaded) {
 		return null;
 	}
-	const Tab = createMaterialTopTabNavigator();
+	const Tab = createBottomTabNavigator();
 	const Stack = createStackNavigator<RootNavigatorParamList>();
-	//TODO add logic for loading fonts behind the splash screen once I add a splash screen
-	//TODO add splash screen
 
 	const StoresScreenTab = () => {
 		return (
@@ -90,47 +81,51 @@ export default function App() {
 							<WishlistContextProvider>
 								<NavigationContainer<RootNavigatorParamList>>
 									<Tab.Navigator
-										tabBar={(props: MaterialTopTabBarProps) => {
-											const { state } = props;
-											const currentRoute = state.routes[state.index];
-											const focusedRouteName =
-												getFocusedRouteNameFromRoute(currentRoute);
-											if (focusedRouteName === 'GameDealsScreen') {
-												return null; // Hide the tab bar for specific screens with tabBarVisible set to false
-											}
-
-											return (
-												<MaterialTopTabBar {...props} /> // Render the default tab bar otherwise
-											);
-										}}
 										screenOptions={{
-											tabBarStyle: { backgroundColor: Colors.charcoal },
-											tabBarLabelStyle: styles.tabBarText,
-											tabBarActiveTintColor: 'white',
-											tabBarInactiveTintColor: '#a9a6a6',
-											tabBarIndicatorStyle: {
-												backgroundColor: 'white',
-												opacity: 0.7,
+											tabBarShowLabel: false,
+											headerShown: false,
+											tabBarStyle: {
+												backgroundColor: Colors.charcoalLight,
+												height: 50,
+												paddingBottom: 10,
 											},
+											tabBarIconStyle: { marginTop: 10 },
+											tabBarActiveTintColor: 'white',
+											tabBarInactiveTintColor: '#918e8e',
 										}}>
 										<Tab.Screen
 											name='StoresScreenMain'
 											component={StoresScreenTab}
 											options={{
-												title: 'Store Deals',
+												tabBarIcon: ({ color, size }) => (
+													<Ionicons
+														name='home-sharp'
+														color={color}
+														size={size}
+													/>
+												),
+												tabBarIconStyle: { marginTop: 10 },
 											}}
 										/>
 										<Tab.Screen
 											name='GamesScreen'
 											options={{
-												title: 'Game Search',
+												tabBarIcon: ({ color, size }) => (
+													<Ionicons
+														name='search-sharp'
+														color={color}
+														size={size}
+													/>
+												),
 											}}
 											component={GamesScreen}
 										/>
 										<Tab.Screen
 											name='WishListScreen'
 											options={{
-												title: 'Wish List',
+												tabBarIcon: ({ color, size }) => (
+													<Ionicons name='ios-star' color={color} size={size} />
+												),
 											}}
 											component={WishListScreen}
 										/>
@@ -148,9 +143,5 @@ export default function App() {
 const styles = StyleSheet.create({
 	rootContainer: {
 		flex: 1,
-	},
-	tabBarText: {
-		fontFamily: Fonts.tabBarFont,
-		fontSize: 15,
 	},
 });

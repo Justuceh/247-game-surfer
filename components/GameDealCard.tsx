@@ -53,7 +53,7 @@ const GameDealCard = ({
 	const calculatedWidth = gameImageWidth > 165 ? 165 : gameImageWidth + 50;
 	const calculatedHeight = gameImageHeight > 190 ? 120 : gameImageHeight + 60;
 	return (
-		<Card style={{ backgroundColor: Colors.charcoal, aspectRatio: 1 }}>
+		<Card style={{ backgroundColor: Colors.charcoalDark, aspectRatio: 1 }}>
 			<Pressable
 				onPress={() => handleGameDealPress(gameDealItem)}
 				onLongPress={() => openBrowserAsync(gameDealItem.dealID)}

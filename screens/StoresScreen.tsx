@@ -1,10 +1,13 @@
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import {
 	View,
 	StyleSheet,
 	ImageBackground,
 	Pressable,
 	FlatList,
+	Text,
+	Animated,
+	LayoutAnimation,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useQuery } from '@tanstack/react-query';
@@ -18,6 +21,8 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { RootNavigatorParamList } from '../App';
 import { LinearGradient } from 'expo-linear-gradient';
 import Colors from '../constants/colors';
+import Fonts from '../constants/fonts';
+import Banner from '../components/Banner';
 
 export interface GameStoreInterface {
 	storeID: string;
@@ -45,6 +50,8 @@ type StoresScreenNavigationProp = StackNavigationProp<
 >;
 
 const StoresScreen = () => {
+	const [bannerText, setBannerText] = useState('Select a store to surf deals');
+	const [bannerVisible, setBannerVisible] = useState(true);
 	const navigation = useNavigation<StoresScreenNavigationProp>();
 	const {
 		data: gameStores,
@@ -73,6 +80,11 @@ const StoresScreen = () => {
 			storeID: storeID,
 			title: storeName,
 		});
+		if (bannerText !== 'Surf Deals by Store') {
+			setTimeout(() => {
+				setBannerText('Surf Deals by Store');
+			}, 500);
+		}
 	};
 
 	const renderCards = ({ item }: { item: GameStoreInterface }) => {
@@ -85,12 +97,35 @@ const StoresScreen = () => {
 					onPress={() => handleGameStorePress(item.storeID, item.storeName)}
 					style={({ pressed }) => [pressed ? styles.pressed : null]}>
 					<ImageBackground
-						style={styles.image}
+						style={styles.cardImage}
 						source={{ uri: `${CHEAPSHARK_BASE_URL}${item.images.logo}` }}
 					/>
 				</Pressable>
 			</Card>
 		);
+	};
+	const bannerOpacity = useRef(new Animated.Value(1)).current;
+	useEffect(() => {
+		LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+	}, [bannerVisible]);
+
+	useEffect(() => {
+		Animated.timing(bannerOpacity, {
+			toValue: bannerVisible ? 1 : 0,
+			duration: 1000, // Adjust the animation duration as needed
+			useNativeDriver: true,
+		}).start();
+	}, [bannerVisible]);
+	const flatListRef = useRef<FlatList<GameStoreInterface>>(null);
+	const scrollThreshold = 200; // Adjust the scroll threshold as needed
+
+	const handleScroll = (event: any) => {
+		const offsetY = event.nativeEvent.contentOffset.y;
+		if (offsetY >= scrollThreshold && bannerVisible) {
+			setBannerVisible(false);
+		} else if (offsetY < scrollThreshold && !bannerVisible) {
+			setBannerVisible(true);
+		}
 	};
 
 	return (
@@ -104,15 +139,37 @@ const StoresScreen = () => {
 				]}>
 				<View style={styles.rootContainer}>
 					{isLoading ? (
-						<ActivityIndicatorComponent size='large' color='blue' />
+						<ActivityIndicatorComponent size='large' color='white' />
 					) : (
-						<FlatList
-							data={filteredGames}
-							renderItem={renderCards}
-							numColumns={2}
-							contentContainerStyle={{ padding: 5 }}
-							keyExtractor={(item) => `${item.storeID}`}
-						/>
+						<>
+							{bannerVisible && (
+								<Animated.View
+									style={[styles.bannerContainer, { opacity: bannerOpacity }]}>
+									<Banner>
+										<View style={styles.bannerTextContainer}>
+											<Text style={styles.bannerText}>{bannerText}</Text>
+										</View>
+									</Banner>
+								</Animated.View>
+							)}
+							<View
+								style={
+									bannerVisible
+										? styles.listContainer
+										: [styles.listContainer, styles.noBanner]
+								}>
+								<FlatList
+									ref={flatListRef}
+									data={filteredGames}
+									renderItem={renderCards}
+									numColumns={2}
+									contentContainerStyle={{ padding: 5 }}
+									keyExtractor={(item) => `${item.storeID}`}
+									onScroll={handleScroll}
+									scrollEventThrottle={16}
+								/>
+							</View>
+						</>
 					)}
 				</View>
 			</LinearGradient>
@@ -130,7 +187,30 @@ const styles = StyleSheet.create({
 		flex: 1,
 		justifyContent: 'center',
 	},
-	image: {
+	bannerContainer: {
+		flex: 1,
+		flexDirection: 'row',
+		backgroundColor: 'black',
+	},
+
+	bannerTextContainer: {
+		flex: 4,
+		alignItems: 'center',
+		justifyContent: 'center',
+	},
+	bannerText: {
+		fontFamily: Fonts.gameTitleFont,
+		fontSize: 23,
+		color: Colors.offWhite,
+	},
+	noBanner: {
+		paddingTop: 10,
+		backgroundColor: Colors.charcoalLight,
+	},
+	listContainer: {
+		flex: 10,
+	},
+	cardImage: {
 		flex: 1,
 		backgroundColor: '#e4e4e4',
 		borderRadius: 40,

@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 import { Pressable, StyleSheet } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import { WishlistContext } from '../store/context/wishlist/wishlist-context';
 import { GameDealItem } from '../screens/GameDealsScreen';
@@ -27,10 +27,10 @@ const WishlistButton = ({ gameDealItem }: WishlistButtonProps) => {
 		<Pressable
 			onPress={changeWishlistStatusHandler}
 			style={({ pressed }) => [pressed ? styles.pressed : null]}>
-			<Icon
+			<Ionicons
 				onPress={changeWishlistStatusHandler}
-				name={!isWishlisted ? 'playlist-add' : 'playlist-add-check'}
-				size={30}
+				name='ios-star'
+				size={20}
 				color={!isWishlisted ? '#a3a3a3' : '#02f402'}
 			/>
 		</Pressable>

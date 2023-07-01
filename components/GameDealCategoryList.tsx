@@ -39,10 +39,9 @@ const styles = StyleSheet.create({
 	},
 	categoryText: {
 		fontSize: 23,
-		fontFamily: Fonts.gameTitleFont,
 		fontWeight: 'bold',
 		textAlign: 'center',
-		color: '#ffffff',
+		color: '#ebdfdf',
 		padding: 5,
 	},
 	listContainer: {
