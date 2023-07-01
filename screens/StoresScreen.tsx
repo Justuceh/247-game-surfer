@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import {
 	View,
 	StyleSheet,
@@ -7,6 +7,8 @@ import {
 	FlatList,
 	Image,
 	Text,
+	Animated,
+	LayoutAnimation,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useQuery } from '@tanstack/react-query';
@@ -49,6 +51,7 @@ type StoresScreenNavigationProp = StackNavigationProp<
 
 const StoresScreen = () => {
 	const [bannerText, setBannerText] = useState('Select a store to surf deals');
+	const [bannerVisible, setBannerVisible] = useState(true);
 	const navigation = useNavigation<StoresScreenNavigationProp>();
 	const {
 		data: gameStores,
@@ -101,6 +104,29 @@ const StoresScreen = () => {
 			</Card>
 		);
 	};
+	const bannerOpacity = useRef(new Animated.Value(1)).current;
+	useEffect(() => {
+		LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+	}, [bannerVisible]);
+
+	useEffect(() => {
+		Animated.timing(bannerOpacity, {
+			toValue: bannerVisible ? 1 : 0,
+			duration: 300, // Adjust the animation duration as needed
+			useNativeDriver: true,
+		}).start();
+	}, [bannerVisible]);
+	const flatListRef = useRef<FlatList<GameStoreInterface>>(null);
+	const scrollThreshold = 100; // Adjust the scroll threshold as needed
+
+	const handleScroll = (event: any) => {
+		const offsetY = event.nativeEvent.contentOffset.y;
+		if (offsetY >= scrollThreshold && bannerVisible) {
+			setBannerVisible(false);
+		} else if (offsetY < scrollThreshold && !bannerVisible) {
+			setBannerVisible(true);
+		}
+	};
 
 	return (
 		<>
@@ -116,25 +142,33 @@ const StoresScreen = () => {
 						<ActivityIndicatorComponent size='large' color='white' />
 					) : (
 						<>
-							<View style={styles.bannerContainer}>
-								<View style={styles.bannerTextContainer}>
-									<Text style={styles.bannerText}>{bannerText}</Text>
-								</View>
-								<View style={styles.bannerImageContainer}>
-									<Image
-										source={require('../assets/247-gs-high-resolution-color-icon.png')}
-										style={styles.bannerImage}
-										resizeMode='contain'
-									/>
-								</View>
-							</View>
+							{bannerVisible && (
+								<Animated.View
+									style={[styles.bannerContainer, { opacity: bannerOpacity }]}>
+									<View style={styles.bannerContainer}>
+										<View style={styles.bannerTextContainer}>
+											<Text style={styles.bannerText}>{bannerText}</Text>
+										</View>
+										<View style={styles.bannerImageContainer}>
+											<Image
+												source={require('../assets/247-gs-high-resolution-color-icon.png')}
+												style={styles.bannerImage}
+												resizeMode='contain'
+											/>
+										</View>
+									</View>
+								</Animated.View>
+							)}
 							<View style={styles.listContainer}>
 								<FlatList
+									ref={flatListRef}
 									data={filteredGames}
 									renderItem={renderCards}
 									numColumns={2}
 									contentContainerStyle={{ padding: 5 }}
 									keyExtractor={(item) => `${item.storeID}`}
+									onScroll={handleScroll}
+									scrollEventThrottle={16}
 								/>
 							</View>
 						</>
