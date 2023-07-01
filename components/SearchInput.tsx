@@ -40,7 +40,7 @@ const SearchInput = ({
 					onChangeText(text);
 				}}
 				onSubmitEditing={onPressHandler}
-				placeholder='type game name...'
+				placeholder='  type game name...'
 				placeholderTextColor={placeholderTextColor}
 			/>
 			{searchQuery !== '' && (

@@ -184,7 +184,7 @@ const GameDetails = ({
 
 	const renderVideos = (video: IgdbVideo) => {
 		return (
-			<View style={styles.youTubeContainer}>
+			<View key={video.id} style={styles.youTubeContainer}>
 				<YouTubePlayer
 					height={180}
 					webViewStyle={{
