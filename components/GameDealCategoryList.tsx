@@ -22,8 +22,8 @@ const GameDealCategoryList = ({
 			<FlatList
 				data={data}
 				keyExtractor={(item) => item.dealID}
+				numColumns={2}
 				renderItem={renderItem}
-				horizontal={true}
 			/>
 		</View>
 	);
@@ -31,7 +31,6 @@ const GameDealCategoryList = ({
 
 export default GameDealCategoryList;
 
-const { height } = Dimensions.get('window');
 const styles = StyleSheet.create({
 	categoryContainer: {
 		borderBottomWidth: 1,
@@ -45,6 +44,6 @@ const styles = StyleSheet.create({
 		padding: 5,
 	},
 	listContainer: {
-		height: height / 3.2,
+		flex: 1,
 	},
 });

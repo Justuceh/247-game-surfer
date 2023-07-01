@@ -257,7 +257,6 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 	},
 	listItemContainer: {
-		flex: 1,
 		elevation: 4,
 		shadowColor: 'black',
 		shadowOffset: { width: 0, height: 2 },
