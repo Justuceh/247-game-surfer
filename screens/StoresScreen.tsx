@@ -117,7 +117,7 @@ const StoresScreen = () => {
 		}).start();
 	}, [bannerVisible]);
 	const flatListRef = useRef<FlatList<GameStoreInterface>>(null);
-	const scrollThreshold = 100; // Adjust the scroll threshold as needed
+	const scrollThreshold = 200; // Adjust the scroll threshold as needed
 
 	const handleScroll = (event: any) => {
 		const offsetY = event.nativeEvent.contentOffset.y;
