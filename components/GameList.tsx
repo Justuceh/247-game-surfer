@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { View, StyleSheet, FlatList, Dimensions } from 'react-native';
 
 import { LinearGradient } from 'expo-linear-gradient';
@@ -10,11 +10,14 @@ import GameDetails from './GameDetails';
 
 interface GameListProps {
 	games: GameDealItem[] | undefined;
+	handleScroll?: (event: any) => void | undefined;
+	scrollThreshold?: number | undefined;
 }
 
-const GameList = ({ games }: GameListProps) => {
+const GameList = ({ games, handleScroll, scrollThreshold }: GameListProps) => {
 	const [showGameDetails, setShowGameDetails] = useState(false);
 	const [modalDealItem, setModalDealItem] = useState<GameDealItem>();
+	const flatListRef = useRef<FlatList<GameDealItem>>(null);
 
 	function closeGameDetailsModal() {
 		setShowGameDetails(false);
@@ -54,6 +57,9 @@ const GameList = ({ games }: GameListProps) => {
 						/>
 					)}
 					<FlatList
+						ref={flatListRef}
+						onScroll={handleScroll}
+						scrollEventThrottle={scrollThreshold}
 						data={games}
 						renderItem={renderCards}
 						contentContainerStyle={{ padding: 5 }}

@@ -5,7 +5,6 @@ import {
 	ImageBackground,
 	Pressable,
 	FlatList,
-	Image,
 	Text,
 	Animated,
 	LayoutAnimation,
@@ -23,6 +22,7 @@ import { RootNavigatorParamList } from '../App';
 import { LinearGradient } from 'expo-linear-gradient';
 import Colors from '../constants/colors';
 import Fonts from '../constants/fonts';
+import Banner from '../components/Banner';
 
 export interface GameStoreInterface {
 	storeID: string;
@@ -112,7 +112,7 @@ const StoresScreen = () => {
 	useEffect(() => {
 		Animated.timing(bannerOpacity, {
 			toValue: bannerVisible ? 1 : 0,
-			duration: 300, // Adjust the animation duration as needed
+			duration: 1000, // Adjust the animation duration as needed
 			useNativeDriver: true,
 		}).start();
 	}, [bannerVisible]);
@@ -145,21 +145,19 @@ const StoresScreen = () => {
 							{bannerVisible && (
 								<Animated.View
 									style={[styles.bannerContainer, { opacity: bannerOpacity }]}>
-									<View style={styles.bannerContainer}>
+									<Banner>
 										<View style={styles.bannerTextContainer}>
 											<Text style={styles.bannerText}>{bannerText}</Text>
 										</View>
-										<View style={styles.bannerImageContainer}>
-											<Image
-												source={require('../assets/247-gs-high-resolution-color-icon.png')}
-												style={styles.bannerImage}
-												resizeMode='contain'
-											/>
-										</View>
-									</View>
+									</Banner>
 								</Animated.View>
 							)}
-							<View style={styles.listContainer}>
+							<View
+								style={
+									bannerVisible
+										? styles.listContainer
+										: [styles.listContainer, styles.noBanner]
+								}>
 								<FlatList
 									ref={flatListRef}
 									data={filteredGames}
@@ -194,14 +192,7 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		backgroundColor: 'black',
 	},
-	bannerImageContainer: {
-		flex: 1,
-		alignItems: 'center',
-		justifyContent: 'center',
-	},
-	bannerImage: {
-		flex: 1,
-	},
+
 	bannerTextContainer: {
 		flex: 4,
 		alignItems: 'center',
@@ -211,6 +202,10 @@ const styles = StyleSheet.create({
 		fontFamily: Fonts.gameTitleFont,
 		fontSize: 23,
 		color: Colors.offWhite,
+	},
+	noBanner: {
+		paddingTop: 10,
+		backgroundColor: Colors.charcoalLight,
 	},
 	listContainer: {
 		flex: 10,
