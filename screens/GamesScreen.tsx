@@ -23,9 +23,10 @@ const GamesScreen = () => {
 
 	async function fetchGames() {
 		const params = {
-			pageSize: 20,
+			...(apiSearchQuery === '' ? { pageNumber: 2 } : {}),
 			title: apiSearchQuery,
 		};
+
 		return await axios
 			.get(`${CHEAPSHARK_API_URL}/deals`, { params })
 			.then((response) => {
@@ -114,10 +115,10 @@ const styles = StyleSheet.create({
 	},
 	searchContainer: {
 		flex: 1,
-		backgroundColor: Colors.charcoalDark,
+		backgroundColor: Colors.charcoalLight,
 	},
 	linearGradient: {
-		flex: 13,
+		flex: 10,
 		alignItems: 'center',
 	},
 	activityIndicatorContainer: {

@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		marginHorizontal: '10%',
 		margin: 5,
-		backgroundColor: Colors.charcoalDark,
+		backgroundColor: Colors.charcoalLight,
 	},
 	searchInput: {
 		flex: 3,
