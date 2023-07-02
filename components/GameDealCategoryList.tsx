@@ -1,29 +1,32 @@
-import { View, Text, StyleSheet, FlatList, Dimensions } from 'react-native';
+import { useRef } from 'react';
+import { View, StyleSheet, FlatList } from 'react-native';
 
 import { GameDealItem } from '../screens/GameDealsScreen';
-import Fonts from '../constants/fonts';
 
 interface GameDealCategoryListProps {
-	categoryText: string;
 	data: GameDealItem[] | undefined;
 	renderItem: ({ item }: any) => any;
+	handleScroll?: (event: any) => void | undefined;
+	scrollThreshold?: number | undefined;
 }
 
 const GameDealCategoryList = ({
-	categoryText,
 	data,
 	renderItem,
+	handleScroll,
+	scrollThreshold,
 }: GameDealCategoryListProps) => {
+	const flatListRef = useRef<FlatList<GameDealItem>>(null);
 	return (
 		<View style={styles.listContainer}>
-			<View style={styles.categoryContainer}>
-				<Text style={styles.categoryText}>{categoryText}</Text>
-			</View>
 			<FlatList
 				data={data}
 				keyExtractor={(item) => item.dealID}
+				numColumns={2}
 				renderItem={renderItem}
-				horizontal={true}
+				ref={flatListRef}
+				onScroll={handleScroll}
+				scrollEventThrottle={scrollThreshold}
 			/>
 		</View>
 	);
@@ -31,7 +34,6 @@ const GameDealCategoryList = ({
 
 export default GameDealCategoryList;
 
-const { height } = Dimensions.get('window');
 const styles = StyleSheet.create({
 	categoryContainer: {
 		borderBottomWidth: 1,
@@ -45,6 +47,6 @@ const styles = StyleSheet.create({
 		padding: 5,
 	},
 	listContainer: {
-		height: height / 3.2,
+		flex: 1,
 	},
 });

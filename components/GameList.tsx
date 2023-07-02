@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import { View, StyleSheet, FlatList, Dimensions } from 'react-native';
 
 import { LinearGradient } from 'expo-linear-gradient';
@@ -7,6 +7,7 @@ import GameDealCard from '../components/GameDealCard';
 import { GameDealItem } from '../screens/GameDealsScreen';
 import Colors from '../constants/colors';
 import GameDetails from './GameDetails';
+import GameDealCategoryList from './GameDealCategoryList';
 
 interface GameListProps {
 	games: GameDealItem[] | undefined;
@@ -17,7 +18,6 @@ interface GameListProps {
 const GameList = ({ games, handleScroll, scrollThreshold }: GameListProps) => {
 	const [showGameDetails, setShowGameDetails] = useState(false);
 	const [modalDealItem, setModalDealItem] = useState<GameDealItem>();
-	const flatListRef = useRef<FlatList<GameDealItem>>(null);
 
 	function closeGameDetailsModal() {
 		setShowGameDetails(false);
@@ -29,18 +29,15 @@ const GameList = ({ games, handleScroll, scrollThreshold }: GameListProps) => {
 	}
 	const renderCards = ({ item }: { item: GameDealItem }) => {
 		return (
-			<View style={styles.gameDealItemContainer}>
-				<GameDealCard
-					gameDealItem={item}
-					handleGameDealPress={openGameDetailsModal}
-					style={{ height: 100 }}
-				/>
-			</View>
+			<GameDealCard
+				gameDealItem={item}
+				handleGameDealPress={openGameDetailsModal}
+			/>
 		);
 	};
 
 	return (
-		<View style={styles.linearGradient}>
+		<>
 			<LinearGradient
 				style={styles.linearGradient}
 				colors={[
@@ -48,53 +45,62 @@ const GameList = ({ games, handleScroll, scrollThreshold }: GameListProps) => {
 					Colors.linearGradient.middleColor,
 					Colors.linearGradient.bottomColor,
 				]}>
-				<View style={styles.listContainer}>
-					{showGameDetails && (
-						<GameDetails
-							showDetails={showGameDetails}
-							onClose={closeGameDetailsModal}
-							gameDealItem={modalDealItem}
-						/>
-					)}
-					<FlatList
-						ref={flatListRef}
-						onScroll={handleScroll}
-						scrollEventThrottle={scrollThreshold}
-						data={games}
-						renderItem={renderCards}
-						contentContainerStyle={{ padding: 5 }}
-						numColumns={2}
-						keyExtractor={(item) => `${item.dealID}`}
-					/>
+				<View style={styles.rootContainer}>
+					<View style={styles.scrollContainer}>
+						<View style={styles.listItemContainer}>
+							<>
+								{showGameDetails && (
+									<GameDetails
+										showDetails={showGameDetails}
+										onClose={closeGameDetailsModal}
+										gameDealItem={modalDealItem}
+									/>
+								)}
+								<GameDealCategoryList
+									handleScroll={handleScroll}
+									scrollThreshold={scrollThreshold}
+									data={games}
+									renderItem={renderCards}
+								/>
+							</>
+						</View>
+					</View>
 				</View>
 			</LinearGradient>
-		</View>
+		</>
 	);
 };
 
 export default GameList;
 const { width } = Dimensions.get('window');
 const styles = StyleSheet.create({
-	rootContainer: {
-		flex: 1,
-		alignItems: 'center',
-		justifyContent: 'center',
-		backgroundColor: '#282828',
-	},
 	linearGradient: {
 		flex: 1,
 	},
-	listContainer: {
+	rootContainer: {
 		flex: 1,
-		alignItems: 'center',
 		justifyContent: 'center',
+	},
+	filterContainer: {
+		flex: 1.2,
+		justifyContent: 'center',
+		alignItems: 'center',
+		backgroundColor: Colors.charcoalLight,
+	},
+	scrollContainer: {
+		flex: 11,
+	},
+	activityIndicatorContainer: {
+		flex: 1,
+		justifyContent: 'center',
+		alignItems: 'center',
+	},
+	listItemContainer: {
+		flex: 1,
 		elevation: 4,
-		shadowColor: 'black',
-		shadowOffset: { width: 4, height: 2 },
+		shadowColor: '#c7c7c7',
+		shadowOffset: { width: 1, height: 1 },
 		shadowRadius: 4,
 		shadowOpacity: 0.5,
-	},
-	gameDealItemContainer: {
-		width: width / 2,
 	},
 });

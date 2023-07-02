@@ -8,7 +8,6 @@ import {
 } from 'react-native';
 import { CHEAPSHARK_API_URL } from '@env';
 import axios from 'axios';
-import { LinearGradient } from 'expo-linear-gradient';
 import { useQuery } from '@tanstack/react-query';
 
 import ActivityIndicatorComponent from '../components/ActivityIndicator';
@@ -68,18 +67,12 @@ const GamesScreen = () => {
 						onSearchHandler={onSearchHandler}
 						onClearHandler={onClearHandler}
 						onChangeText={handleQueryUpdate}
-						placeholderTextColor={'black'}
+						placeholderTextColor={'grey'}
 						backgroundColor='#fff'
 						buttonColor='white'
 					/>
 				</View>
-				<LinearGradient
-					style={styles.linearGradient}
-					colors={[
-						Colors.linearGradient.topColor,
-						Colors.linearGradient.middleColor,
-						Colors.linearGradient.bottomColor,
-					]}>
+				<View style={styles.gameListContainer}>
 					{isLoading ? (
 						<View style={styles.activityIndicatorContainer}>
 							<ActivityIndicatorComponent color='white' size='large' />
@@ -99,7 +92,7 @@ const GamesScreen = () => {
 							</Text>
 						</View>
 					)}
-				</LinearGradient>
+				</View>
 			</View>
 		</KeyboardAvoidingView>
 	);
@@ -117,9 +110,9 @@ const styles = StyleSheet.create({
 		flex: 1,
 		backgroundColor: Colors.charcoalLight,
 	},
-	linearGradient: {
+	gameListContainer: {
 		flex: 10,
-		alignItems: 'center',
+		backgroundColor: Colors.charcoalLight,
 	},
 	activityIndicatorContainer: {
 		flex: 1,

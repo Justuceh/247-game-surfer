@@ -1,5 +1,4 @@
 import React, { createContext, useState, ReactNode, useEffect } from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import qs from 'qs';
@@ -56,33 +55,9 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
 		fetchToken,
 		{
 			enabled: enableQuery,
+			staleTime: 1000 * 60 * 60 * 24, // Cache the token for one day
 		}
 	);
-
-	useEffect(() => {
-		async function loadStoredData() {
-			const token = await AsyncStorage.getItem('authToken');
-			const tokenType = await AsyncStorage.getItem('tokenType');
-			if (token) {
-				setData({ token: token, tokenType: tokenType });
-			} else if (freshAuthToken === undefined) {
-				setEnableQuery(true);
-			}
-		}
-
-		loadStoredData();
-	}, []);
-
-	useEffect(() => {
-		if (freshAuthToken !== undefined) {
-			setData({
-				token: freshAuthToken.access_token,
-				tokenType: freshAuthToken.token_type,
-			});
-			AsyncStorage.setItem('authToken', freshAuthToken.access_token);
-			AsyncStorage.setItem('tokenType', freshAuthToken.token_type);
-		}
-	}, [freshAuthToken]);
 
 	const refreshToken = async () => {
 		// After refreshing, store the new token in AsyncStorage and in state:
@@ -91,7 +66,6 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
 		if (queryResult?.data !== undefined) {
 			const newToken = queryResult.data.access_token;
 			const newTokenType = queryResult.data.token_type;
-			AsyncStorage.setItem('authToken', newToken);
 			setData({ token: newToken, tokenType: newTokenType });
 		}
 	};
@@ -103,6 +77,10 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
 			Accept: 'application/json',
 		};
 	};
+
+	useEffect(() => {
+		refreshToken(); // Fetch a fresh token when the app is opened
+	}, []);
 
 	return (
 		<AuthContext.Provider

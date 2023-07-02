@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Text, View, StyleSheet, TextInput, Pressable } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Colors from '../constants/colors';
+import Fonts from '../constants/fonts';
 
 interface SearchInputProps {
 	onSearchHandler: (data: any) => any;
@@ -39,7 +40,7 @@ const SearchInput = ({
 					onChangeText(text);
 				}}
 				onSubmitEditing={onPressHandler}
-				placeholder='Search...'
+				placeholder='  type game name...'
 				placeholderTextColor={placeholderTextColor}
 			/>
 			{searchQuery !== '' && (
@@ -104,8 +105,9 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 	},
 	searchText: {
+		fontFamily: Fonts.gameTitleFont,
 		textAlign: 'center',
-		fontSize: 12,
+		fontSize: 15,
 		fontWeight: '400',
 	},
 	buttonPressed: {
