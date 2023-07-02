@@ -70,7 +70,7 @@ const GameDetails = ({
 	const cacheTime = Infinity;
 	const plainGameTitle = removeEditionWords(gameDealItem?.title);
 	const gameQuery = `
-    fields *; 
+    fields id, cover, name, screenshots, summary, videos; 
     search "${plainGameTitle}"; 
     limit 20; 
   `;
@@ -185,28 +185,23 @@ const GameDetails = ({
 	const renderVideos = (video: IgdbVideo) => {
 		return (
 			<View key={video.id} style={styles.youTubeContainer}>
-				<YouTubePlayer
-					height={180}
-					webViewStyle={{
-						flex: 1,
-						margin: 7,
-					}}
-					videoId={video.video_id}
-				/>
+				<YouTubePlayer height={190} videoId={video.video_id} />
 			</View>
 		);
 	};
 
 	return (
 		<ModalComponent onClose={onClose} visible={showDetails}>
-			<ScrollView>
-				{gameList !== null && gameList?.length ? (
-					<View style={styles.rootContainer}>
-						{isGameLoading ||
-						isCoverLoading ||
-						(isVideosLoading && videos !== undefined && videos > 0) ? (
-							<ActivityIndicatorComponent color='white' size='large' />
-						) : (
+			{isGameLoading ||
+			isCoverLoading ||
+			(isVideosLoading && videos !== undefined && videos > 0) ? (
+				<View style={styles.activityIndicator}>
+					<ActivityIndicatorComponent color='white' size='large' />
+				</View>
+			) : (
+				<ScrollView>
+					{gameList !== null && gameList?.length ? (
+						<View style={styles.rootContainer}>
 							<>
 								<ScrollView>
 									<View style={styles.coverContainer}>
@@ -228,56 +223,66 @@ const GameDetails = ({
 									</View>
 								</ScrollView>
 								{screenShots !== undefined ? (
-									<ScrollView horizontal={true}>
-										<View style={styles.picturesContainer}>
-											{screenShots.map((screenShot) => {
-												return (
-													<View
-														style={styles.screenShotsContainer}
-														key={screenShot.id}>
-														<Image
-															source={{
-																uri: `https://images.igdb.com/igdb/image/upload/t_cover_big/${screenShot.image_id}.jpg`,
-															}}
-															style={styles.screenShot}
-															resizeMode='contain'
-														/>
-													</View>
-												);
-											})}
-										</View>
-									</ScrollView>
+									<>
+										<Text style={styles.containerText}>Screenshots</Text>
+										<ScrollView horizontal={true}>
+											<View style={styles.picturesContainer}>
+												{screenShots.map((screenShot) => {
+													return (
+														<View
+															style={styles.screenShotsContainer}
+															key={screenShot.id}>
+															<Image
+																source={{
+																	uri: `https://images.igdb.com/igdb/image/upload/t_cover_big/${screenShot.image_id}.jpg`,
+																}}
+																style={styles.screenShot}
+																resizeMode='contain'
+															/>
+														</View>
+													);
+												})}
+											</View>
+										</ScrollView>
+									</>
 								) : (
 									<View>
-										<Text>No Videos Available</Text>
+										<Text>No Screenshots Available</Text>
 									</View>
 								)}
 							</>
-						)}
 
-						{videos !== undefined ? (
-							<ScrollView>
-								<View style={styles.videosContainer}>
-									{videos.map((video) => {
-										return renderVideos(video);
-									})}
+							{videos !== undefined ? (
+								<>
+									<Text style={styles.containerText}>Videos</Text>
+									<ScrollView>
+										<View style={styles.videosContainer}>
+											{videos.map((video) => {
+												return renderVideos(video);
+											})}
+										</View>
+									</ScrollView>
+								</>
+							) : (
+								<View>
+									<Text>No Videos Available</Text>
 								</View>
-							</ScrollView>
-						) : (
-							<View>
-								<Text>No Videos Available</Text>
-							</View>
-						)}
-					</View>
-				) : (
-					<View
-						style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-						<Text style={{ color: 'white' }}>
-							No game data available for {gameDealItem?.title}
-						</Text>
-					</View>
-				)}
-			</ScrollView>
+							)}
+						</View>
+					) : (
+						<View
+							style={{
+								flex: 1,
+								alignItems: 'center',
+								justifyContent: 'center',
+							}}>
+							<Text style={{ color: 'white' }}>
+								No game data available for {gameDealItem?.title}
+							</Text>
+						</View>
+					)}
+				</ScrollView>
+			)}
 		</ModalComponent>
 	);
 };
@@ -291,6 +296,11 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 		alignItems: 'center',
 		backgroundColor: Colors.charcoalDark,
+	},
+	activityIndicator: {
+		flex: 1,
+		justifyContent: 'center',
+		alignItems: 'center',
 	},
 	coverContainer: {
 		flex: 2,
@@ -335,11 +345,16 @@ const styles = StyleSheet.create({
 		flex: 1,
 		flexDirection: 'row',
 		borderTopWidth: 2,
-		borderColor: Colors.offWhite,
+		borderColor: 'red',
 		marginBottom: 30,
-		marginVertical: 20,
+		marginVertical: 5,
 	},
 	screenShotsContainer: { flex: 1, alignItems: 'center' },
+	containerText: {
+		color: Colors.offWhite,
+		fontSize: 20,
+		fontFamily: Fonts.gameTitleFont,
+	},
 	screenShot: {
 		marginHorizontal: 3,
 		height: 200,
@@ -348,9 +363,9 @@ const styles = StyleSheet.create({
 	videosContainer: {
 		flex: 1,
 		borderTopWidth: 2,
-		borderColor: Colors.offWhite,
+		borderColor: 'red',
 		marginBottom: 30,
-		marginVertical: 10,
+		marginVertical: 5,
 	},
 	youTubeContainer: { flex: 1, alignItems: 'center' },
 });
