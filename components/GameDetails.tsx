@@ -60,6 +60,13 @@ interface IgdbScreenshots {
 	url: string;
 }
 
+//TODO implement this icon logic to display the icon in this component
+//const storesContext = useContext(GameStoreContext);
+// const storeIcon = storesContext.stores.find(
+// 	(store) => store.storeID === gameDealItem.storeID
+// )?.images.icon;
+// const storeIconUri = `${CHEAPSHARK_BASE_URL}${storeIcon}`;
+
 const GameDetails = ({
 	gameDealItem,
 	showDetails,
@@ -69,6 +76,7 @@ const GameDetails = ({
 	const headers = authContext.getRequestHeaders();
 	const cacheTime = Infinity;
 	const plainGameTitle = removeEditionWords(gameDealItem?.title);
+
 	const gameQuery = `
     fields id, cover, name, screenshots, summary, videos; 
     search "${plainGameTitle}"; 

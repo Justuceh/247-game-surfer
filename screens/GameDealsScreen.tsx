@@ -27,6 +27,7 @@ export interface GameDealItem {
 	isOnSale: '1' | '0';
 	dealRating: string;
 	dealID: string;
+	savings: string;
 }
 
 const filterLabels = {

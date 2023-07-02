@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import { View, StyleSheet, FlatList, Dimensions } from 'react-native';
 
 import { LinearGradient } from 'expo-linear-gradient';
@@ -18,7 +18,6 @@ interface GameListProps {
 const GameList = ({ games, handleScroll, scrollThreshold }: GameListProps) => {
 	const [showGameDetails, setShowGameDetails] = useState(false);
 	const [modalDealItem, setModalDealItem] = useState<GameDealItem>();
-	const flatListRef = useRef<FlatList<GameDealItem>>(null);
 
 	function closeGameDetailsModal() {
 		setShowGameDetails(false);
