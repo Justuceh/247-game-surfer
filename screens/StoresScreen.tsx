@@ -14,7 +14,6 @@ import { useQuery } from '@tanstack/react-query';
 import { CHEAPSHARK_BASE_URL, CHEAPSHARK_API_URL } from '@env';
 import axios from 'axios';
 
-import Card from '../components/Card';
 import ActivityIndicatorComponent from '../components/ActivityIndicator';
 import { GameStoreContext } from '../store/context/game_deals/game-stores-context';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -89,19 +88,18 @@ const StoresScreen = () => {
 
 	const renderCards = ({ item }: { item: GameStoreInterface }) => {
 		return (
-			<Card
-				style={{
-					aspectRatio: 1,
-				}}>
-				<Pressable
-					onPress={() => handleGameStorePress(item.storeID, item.storeName)}
-					style={({ pressed }) => [pressed ? styles.pressed : null]}>
-					<ImageBackground
-						style={styles.cardImage}
-						source={{ uri: `${CHEAPSHARK_BASE_URL}${item.images.logo}` }}
-					/>
-				</Pressable>
-			</Card>
+			<Pressable
+				onPress={() => handleGameStorePress(item.storeID, item.storeName)}
+				style={({ pressed }) => [
+					styles.cardContainer,
+					pressed ? styles.pressed : null,
+				]}>
+				<ImageBackground
+					style={styles.cardImage}
+					source={{ uri: `${CHEAPSHARK_BASE_URL}${item.images.logo}` }}
+					resizeMode='contain'
+				/>
+			</Pressable>
 		);
 	};
 	const bannerOpacity = useRef(new Animated.Value(1)).current;
@@ -210,10 +208,13 @@ const styles = StyleSheet.create({
 	listContainer: {
 		flex: 10,
 	},
+	cardContainer: {
+		flex: 1,
+		padding: 5,
+	},
+
 	cardImage: {
 		flex: 1,
-		backgroundColor: '#e4e4e4',
-		borderRadius: 40,
 		aspectRatio: 1,
 		elevation: 4,
 		shadowColor: 'black',

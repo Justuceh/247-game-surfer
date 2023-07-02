@@ -5,7 +5,7 @@ import {
 	StyleSheet,
 	Dimensions,
 	Image,
-	FlatList,
+	ScrollView,
 } from 'react-native';
 import * as WebBrowser from 'expo-web-browser';
 import { CHEAPSHARK_REDIRECT_API, IGDB_BASE_URL } from '@env';
@@ -19,6 +19,7 @@ import { useQuery } from '@tanstack/react-query';
 import ActivityIndicatorComponent from './ActivityIndicator';
 import { findClosestString, removeEditionWords } from '../utils/stringUtils';
 import YouTubePlayer from './YouTubePlayer';
+import Fonts from '../constants/fonts';
 
 interface GameDetailsProps {
 	gameDealItem: GameDealItem | undefined;
@@ -59,6 +60,13 @@ interface IgdbScreenshots {
 	url: string;
 }
 
+//TODO implement this icon logic to display the icon in this component
+//const storesContext = useContext(GameStoreContext);
+// const storeIcon = storesContext.stores.find(
+// 	(store) => store.storeID === gameDealItem.storeID
+// )?.images.icon;
+// const storeIconUri = `${CHEAPSHARK_BASE_URL}${storeIcon}`;
+
 const GameDetails = ({
 	gameDealItem,
 	showDetails,
@@ -68,8 +76,9 @@ const GameDetails = ({
 	const headers = authContext.getRequestHeaders();
 	const cacheTime = Infinity;
 	const plainGameTitle = removeEditionWords(gameDealItem?.title);
+
 	const gameQuery = `
-    fields *; 
+    fields id, cover, name, screenshots, summary, videos; 
     search "${plainGameTitle}"; 
     limit 20; 
   `;
@@ -103,6 +112,9 @@ const GameDetails = ({
 	);
 	const [coverId, setCoverId] = useState<number | undefined>(undefined);
 	const [videoIds, setVideoIds] = useState<number[] | undefined>(undefined);
+	const [screenShotIds, setScreenShotIds] = useState<number[] | undefined>(
+		undefined
+	);
 
 	useEffect(() => {
 		if (gameList) {
@@ -113,9 +125,14 @@ const GameDetails = ({
 			const game = gameList?.find((game) => game.name == closestGameName);
 			if (game) {
 				setFilteredGame(game);
-				setCoverId(game.cover);
+				if (game.cover) {
+					setCoverId(game.cover);
+				}
 				if (game.videos) {
 					setVideoIds(game.videos);
+				}
+				if (game.screenshots) {
+					setScreenShotIds(game.screenshots);
 				}
 			}
 		}
@@ -147,6 +164,19 @@ const GameDetails = ({
 		}
 	);
 
+	// Fourth Query
+	const { data: screenShots, isLoading: isScreenShotsLoading } = useQuery<
+		IgdbScreenshots[],
+		unknown
+	>(
+		[`screenShotsId-${videoIds?.[0]}`],
+		() => fetchGameData(queryByIds(screenShotIds || []), 'screenshots'),
+		{
+			cacheTime: cacheTime,
+			enabled: screenShotIds !== undefined,
+		}
+	);
+
 	async function fetchGameData(query: string, endpoint: string) {
 		try {
 			const response = await axios.post(`${IGDB_BASE_URL}${endpoint}`, query, {
@@ -162,69 +192,112 @@ const GameDetails = ({
 		await WebBrowser.openBrowserAsync(`${CHEAPSHARK_REDIRECT_API}${dealID}`);
 	};
 
-	const renderVideos = ({ item }: { item: IgdbVideo }) => {
+	const renderVideos = (video: IgdbVideo) => {
 		return (
-			<View style={{ flex: 1 }}>
-				<YouTubePlayer
-					height={180}
-					webViewStyle={{
-						flex: 1,
-						justifyContent: 'center',
-						borderRadius: 10,
-					}}
-					videoId={item.video_id}
-				/>
+			<View key={video.id} style={styles.youTubeContainer}>
+				<YouTubePlayer height={190} videoId={video.video_id} />
 			</View>
 		);
 	};
-
+	const isGameListEmpty = gameList === null || gameList?.length === 0;
 	return (
 		<ModalComponent onClose={onClose} visible={showDetails}>
-			{gameList !== null && gameList?.length ? (
-				<View style={styles.rootContainer}>
-					{isGameLoading ||
-					isCoverLoading ||
-					(isVideosLoading && videos !== undefined && videos > 0) ? (
-						<ActivityIndicatorComponent color='white' size='large' />
-					) : (
-						<View style={{ flex: 1, alignItems: 'center' }}>
-							<Image
-								source={{
-									uri: `https://images.igdb.com/igdb/image/upload/t_cover_big/${cover?.[0]?.image_id}.jpg`,
-								}}
-								style={{ flex: 1, width: 300 }}
-								resizeMode='contain'
-							/>
-							<Text
-								style={{ color: 'white', flex: 1, justifyContent: 'center' }}>
-								{filteredGame?.name}
-							</Text>
-							{videos !== undefined ? (
-								<View
-									style={{
-										flex: 1,
-										justifyContent: 'center',
-										alignItems: 'center',
-									}}>
-									<FlatList
-										data={videos}
-										keyExtractor={(item) => `${item.id}`}
-										renderItem={renderVideos}
-									/>
-								</View>
-							) : (
-								<></>
-							)}
-						</View>
-					)}
+			{!isGameListEmpty &&
+			(isGameLoading ||
+				isCoverLoading ||
+				(isVideosLoading && videos !== undefined && videos > 0)) ? (
+				<View style={styles.activityIndicator}>
+					<ActivityIndicatorComponent color='white' size='large' />
 				</View>
 			) : (
-				<View
-					style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-					<Text style={{ color: 'white' }}>
-						No game data available for {gameDealItem?.title}
-					</Text>
-				</View>
+				<ScrollView>
+					{gameList !== null && gameList?.length ? (
+						<View style={styles.rootContainer}>
+							<>
+								<ScrollView>
+									<View style={styles.coverContainer}>
+										<Image
+											source={{
+												uri: `https://images.igdb.com/igdb/image/upload/t_cover_big/${cover?.[0]?.image_id}.jpg`,
+											}}
+											style={[styles.coverImage, { width: 300, height: 300 }]}
+											resizeMode='contain'
+										/>
+										<View style={styles.labelTextContainer}>
+											<Text style={styles.labelText}>{filteredGame?.name}</Text>
+											<View style={styles.summaryContainerText}>
+												<Text style={styles.summaryText}>
+													{filteredGame?.summary}
+												</Text>
+											</View>
+										</View>
+									</View>
+								</ScrollView>
+								{screenShots !== undefined ? (
+									<>
+										<Text style={styles.containerText}>Screenshots</Text>
+										<ScrollView horizontal={true}>
+											<View style={styles.picturesContainer}>
+												{screenShots.map((screenShot) => {
+													return (
+														<View
+															style={styles.screenShotsContainer}
+															key={screenShot.id}>
+															<Image
+																source={{
+																	uri: `https://images.igdb.com/igdb/image/upload/t_cover_big/${screenShot.image_id}.jpg`,
+																}}
+																style={styles.screenShot}
+																resizeMode='contain'
+															/>
+														</View>
+													);
+												})}
+											</View>
+										</ScrollView>
+									</>
+								) : (
+									<View>
+										<Text>No Screenshots Available</Text>
+									</View>
+								)}
+							</>
+
+							{videos !== undefined ? (
+								<>
+									<Text style={styles.containerText}>Videos</Text>
+									<ScrollView>
+										<View style={styles.videosContainer}>
+											{videos.map((video) => {
+												return renderVideos(video);
+											})}
+										</View>
+									</ScrollView>
+								</>
+							) : (
+								<View>
+									<Text>No Videos Available</Text>
+								</View>
+							)}
+						</View>
+					) : (
+						<View
+							style={{
+								flex: 1,
+								alignItems: 'center',
+								marginTop: 300,
+							}}>
+							<Text
+								style={{
+									color: Colors.offWhite,
+									fontSize: 23,
+									fontFamily: Fonts.gameTitleFont,
+								}}>
+								No game details available for {gameDealItem?.title}
+							</Text>
+						</View>
+					)}
+				</ScrollView>
 			)}
 		</ModalComponent>
 	);
@@ -238,6 +311,91 @@ const styles = StyleSheet.create({
 		flex: 1,
 		justifyContent: 'center',
 		alignItems: 'center',
-		backgroundColor: Colors.charcoalLight,
+		backgroundColor: Colors.charcoalDark,
+	},
+	activityIndicator: {
+		flex: 1,
+		justifyContent: 'center',
+		alignItems: 'center',
+	},
+	coverContainer: {
+		flex: 2,
+		justifyContent: 'center',
+		alignItems: 'center',
+		backgroundColor: Colors.charcoalDark,
+		marginTop: 5,
+	},
+	coverImage: {
+		flex: 2,
+		width: 200,
+	},
+	labelTextContainer: {
+		flex: 1,
+		justifyContent: 'center',
+		alignItems: 'center',
+		margin: 20,
+	},
+	labelText: {
+		color: 'white',
+		fontSize: 25,
+		fontWeight: 'bold',
+		fontFamily: Fonts.gameTitleFont,
+		flex: 1,
+		justifyContent: 'center',
+		marginTop: 15,
+		alignItems: 'center',
+	},
+	summaryContainerText: {
+		flex: 1,
+		justifyContent: 'center',
+		alignItems: 'center',
+	},
+	summaryText: {
+		flex: 1,
+		color: 'white',
+		fontSize: 15,
+		fontWeight: 'bold',
+		marginTop: 15,
+		fontFamily: Fonts.gameTitleFont,
+	},
+	picturesContainer: {
+		flex: 1,
+		flexDirection: 'row',
+		borderTopWidth: 0.5,
+		borderColor: 'red',
+		marginBottom: 10,
+		marginVertical: 5,
+	},
+	screenShotsContainer: { flex: 1, alignItems: 'center' },
+	containerText: {
+		color: Colors.offWhite,
+		fontSize: 20,
+		fontFamily: Fonts.gameTitleFont,
+	},
+	screenShot: {
+		marginHorizontal: 3,
+		height: 200,
+		width: 250,
+	},
+	videosContainer: {
+		flex: 1,
+		borderTopWidth: 0.5,
+		borderColor: 'red',
+		marginBottom: 30,
+		marginVertical: 5,
+		paddingTop: 5,
+	},
+	youTubeContainer: {
+		flex: 1,
+		alignItems: 'center',
+		backgroundColor: Colors.charcoalDark,
+		borderRadius: 10,
+		padding: 10,
+		margin: 5,
+		elevation: 4,
+		shadowColor: '#c7c7c7',
+		shadowOffset: { width: 1, height: 1 },
+		shadowRadius: 4,
+		shadowOpacity: 0.5,
 	},
 });

@@ -48,7 +48,7 @@ const WishListScreen = () => {
 					style={[styles.bannerContainer, { opacity: bannerOpacity }]}>
 					<Banner>
 						<View style={styles.bannerTextContainer}>
-							<Text style={styles.bannerText}>SURF Your Wishlist!</Text>
+							<Text style={styles.bannerText}>SURF Your Favorite Games!</Text>
 						</View>
 					</Banner>
 				</Animated.View>
