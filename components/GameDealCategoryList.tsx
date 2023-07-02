@@ -1,17 +1,22 @@
+import { useRef } from 'react';
 import { View, StyleSheet, FlatList } from 'react-native';
 
 import { GameDealItem } from '../screens/GameDealsScreen';
-import Fonts from '../constants/fonts';
 
 interface GameDealCategoryListProps {
 	data: GameDealItem[] | undefined;
 	renderItem: ({ item }: any) => any;
+	handleScroll?: (event: any) => void | undefined;
+	scrollThreshold?: number | undefined;
 }
 
 const GameDealCategoryList = ({
 	data,
 	renderItem,
+	handleScroll,
+	scrollThreshold,
 }: GameDealCategoryListProps) => {
+	const flatListRef = useRef<FlatList<GameDealItem>>(null);
 	return (
 		<View style={styles.listContainer}>
 			<FlatList
@@ -19,6 +24,9 @@ const GameDealCategoryList = ({
 				keyExtractor={(item) => item.dealID}
 				numColumns={2}
 				renderItem={renderItem}
+				ref={flatListRef}
+				onScroll={handleScroll}
+				scrollEventThrottle={scrollThreshold}
 			/>
 		</View>
 	);
