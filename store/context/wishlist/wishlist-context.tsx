@@ -71,9 +71,7 @@ const WishlistContextProvider = ({
 
 	const getGamesFromStorage = async (): Promise<GameDealItem[]> => {
 		try {
-			const gameKeys = (await AsyncStorage.getAllKeys()).filter(
-				(key) => !key.includes('authToken') && !key.includes('tokenType')
-			);
+			const gameKeys = await AsyncStorage.getAllKeys();
 			const gamesInStorage = await AsyncStorage.multiGet(gameKeys);
 			if (gamesInStorage !== null) {
 				return gamesInStorage
