@@ -28,6 +28,9 @@ export interface GameDealItem {
 	dealRating: string;
 	dealID: string;
 	savings: string;
+	steamRatingPercent: string;
+	steamRatingCount: string;
+	metacriticScore: string;
 }
 
 const filterLabels = {

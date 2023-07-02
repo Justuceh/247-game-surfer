@@ -20,6 +20,7 @@ import { findClosestString, removeEditionWords } from '../utils/stringUtils';
 import YouTubePlayer from './YouTubePlayer';
 import Fonts from '../constants/fonts';
 import PriceLabel from './PriceLabel';
+import GameReviewScore from './GameReviewScore';
 
 interface GameDetailsProps {
 	gameDealItem: GameDealItem | undefined;
@@ -220,6 +221,7 @@ const GameDetails = ({
 											resizeMode='contain'
 										/>
 										<PriceLabel game={gameDealItem} />
+										<GameReviewScore game={gameDealItem} />
 										<View style={styles.labelTextContainer}>
 											<Text style={styles.labelText}>{filteredGame?.name}</Text>
 											<View style={styles.summaryContainerText}>

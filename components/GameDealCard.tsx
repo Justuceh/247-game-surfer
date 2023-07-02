@@ -162,5 +162,6 @@ const styles = StyleSheet.create({
 		fontFamily: Fonts.saletextFont,
 		fontSize: 15,
 		backgroundColor: Colors.neonGreen,
+		padding: 3,
 	},
 });
