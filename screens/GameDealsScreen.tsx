@@ -106,7 +106,7 @@ const GameDealsScreen = ({ route }: GameDealsScreenProps) => {
 		refetch: refetchHighlyRatedBySteam,
 	} = useQuery<GameDealItem[], unknown>(
 		[`highlyRatedBySteam-${storeID}`],
-		() => fetchGameStoreDeals({ steamRating: 90 }),
+		() => fetchGameStoreDeals({ steamRating: 80 }),
 		cacheTime
 	);
 
@@ -116,7 +116,7 @@ const GameDealsScreen = ({ route }: GameDealsScreenProps) => {
 		refetch: refetchhighlyRatedByMetacritic,
 	} = useQuery<GameDealItem[], unknown>(
 		[`highlyRatedByMetacritic-${storeID}`],
-		() => fetchGameStoreDeals({ metacritic: 90 }),
+		() => fetchGameStoreDeals({ metacritic: 70 }),
 		cacheTime
 	);
 
