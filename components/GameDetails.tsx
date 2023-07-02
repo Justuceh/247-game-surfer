@@ -7,8 +7,7 @@ import {
 	Image,
 	ScrollView,
 } from 'react-native';
-import * as WebBrowser from 'expo-web-browser';
-import { CHEAPSHARK_REDIRECT_API, IGDB_BASE_URL } from '@env';
+import { IGDB_BASE_URL } from '@env';
 
 import ModalComponent from './ModalComponent';
 import Colors from '../constants/colors';
@@ -20,6 +19,7 @@ import ActivityIndicatorComponent from './ActivityIndicator';
 import { findClosestString, removeEditionWords } from '../utils/stringUtils';
 import YouTubePlayer from './YouTubePlayer';
 import Fonts from '../constants/fonts';
+import PriceLabel from './PriceLabel';
 
 interface GameDetailsProps {
 	gameDealItem: GameDealItem | undefined;
@@ -188,10 +188,6 @@ const GameDetails = ({
 		}
 	}
 
-	const openBrowserAsync = async (dealID: string) => {
-		await WebBrowser.openBrowserAsync(`${CHEAPSHARK_REDIRECT_API}${dealID}`);
-	};
-
 	const renderVideos = (video: IgdbVideo) => {
 		return (
 			<View key={video.id} style={styles.youTubeContainer}>
@@ -223,6 +219,7 @@ const GameDetails = ({
 											style={[styles.coverImage, { width: 300, height: 300 }]}
 											resizeMode='contain'
 										/>
+										<PriceLabel game={gameDealItem} />
 										<View style={styles.labelTextContainer}>
 											<Text style={styles.labelText}>{filteredGame?.name}</Text>
 											<View style={styles.summaryContainerText}>
