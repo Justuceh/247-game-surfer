@@ -12,14 +12,14 @@ const GameReviewScore = ({ game }: GameReviewScoreProps) => {
 		<View style={styles.rootContainer}>
 			<View style={styles.reviewsContainer}>
 				<Text style={styles.reviewLabel}>
-					Steam:{' '}
-					<Text
-						style={
-							styles.review
-						}>{`${game?.steamRatingPercent}% out of ${game?.steamRatingCount} Reviews`}</Text>
+					Steam-{' '}
+					<Text style={styles.review}>
+						{`(${game?.steamRatingPercent}% of ${game?.steamRatingCount}) ALL TIME`}
+					</Text>
 				</Text>
+
 				<Text style={styles.reviewLabel}>
-					Metacritic Score:{' '}
+					Metacritic -{' '}
 					<Text style={styles.review}>{game?.metacriticScore}</Text>
 				</Text>
 			</View>
@@ -38,14 +38,15 @@ const styles = StyleSheet.create({
 		flex: 1,
 	},
 	reviewLabel: {
-		padding: 5,
 		color: Colors.offWhite,
-		fontSize: 20,
-		fontWeight: 'bold',
-		fontFamily: Fonts.gameTitleFont,
+		padding: 5,
+		fontSize: 18,
+		fontWeight: '400',
 	},
 	review: {
-		color: Colors.offWhite,
+		color: '#f7b4a6',
 		fontSize: 18,
+		fontWeight: '200',
+		fontFamily: Fonts.gameTitleFont,
 	},
 });

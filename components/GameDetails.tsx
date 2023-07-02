@@ -341,7 +341,6 @@ const styles = StyleSheet.create({
 		fontFamily: Fonts.gameTitleFont,
 		flex: 1,
 		justifyContent: 'center',
-		marginTop: 15,
 		alignItems: 'center',
 	},
 	summaryContainerText: {
