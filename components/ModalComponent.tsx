@@ -70,9 +70,10 @@ const styles = StyleSheet.create({
 	},
 	modalSliderContainer: {
 		alignItems: 'flex-end',
-		borderBottomColor: 'white',
+		borderBottomColor: 'red',
 		marginBottom: 5,
-		borderBottomWidth: 0.2,
+		borderBottomWidth: 0.5,
+		paddingBottom: 3,
 	},
 });
 

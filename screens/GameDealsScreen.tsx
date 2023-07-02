@@ -272,7 +272,6 @@ const GameDealsScreen = ({ route }: GameDealsScreenProps) => {
 									{topDeals?.length && showTopDealGames ? (
 										<GameDealCategoryList
 											data={topDeals}
-											categoryText={filterLabels.topDeals}
 											renderItem={renderItem}
 										/>
 									) : (
@@ -282,7 +281,6 @@ const GameDealsScreen = ({ route }: GameDealsScreenProps) => {
 									{highlyRatedBySteam?.length && showTopSteamGames ? (
 										<GameDealCategoryList
 											data={highlyRatedBySteam}
-											categoryText={filterLabels.highlyRatedBySteam}
 											renderItem={renderItem}
 										/>
 									) : (
@@ -292,7 +290,6 @@ const GameDealsScreen = ({ route }: GameDealsScreenProps) => {
 									{highlyRatedByMetacritic?.length && showTopMetaGames ? (
 										<GameDealCategoryList
 											data={highlyRatedByMetacritic}
-											categoryText={filterLabels.highlyRatedByMeta}
 											renderItem={renderItem}
 										/>
 									) : (
@@ -302,7 +299,6 @@ const GameDealsScreen = ({ route }: GameDealsScreenProps) => {
 									{under20DollarDeals?.length && showTopFifteenGames ? (
 										<GameDealCategoryList
 											data={under20DollarDeals}
-											categoryText={filterLabels.fifteenToTwenty}
 											renderItem={renderItem}
 										/>
 									) : (
@@ -312,7 +308,6 @@ const GameDealsScreen = ({ route }: GameDealsScreenProps) => {
 									{fiveToTenDollarDeals?.length && showTopFiveGames ? (
 										<GameDealCategoryList
 											data={fiveToTenDollarDeals}
-											categoryText={filterLabels.fiveToTen}
 											renderItem={renderItem}
 										/>
 									) : (
@@ -339,7 +334,7 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 	},
 	filterContainer: {
-		flex: 1,
+		flex: 1.2,
 		justifyContent: 'center',
 		alignItems: 'center',
 		backgroundColor: Colors.charcoalLight,

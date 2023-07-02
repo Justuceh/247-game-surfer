@@ -117,7 +117,9 @@ const GameDetails = ({
 			const game = gameList?.find((game) => game.name == closestGameName);
 			if (game) {
 				setFilteredGame(game);
-				setCoverId(game.cover);
+				if (game.cover) {
+					setCoverId(game.cover);
+				}
 				if (game.videos) {
 					setVideoIds(game.videos);
 				}
@@ -189,12 +191,13 @@ const GameDetails = ({
 			</View>
 		);
 	};
-
+	const isGameListEmpty = gameList === null || gameList?.length === 0;
 	return (
 		<ModalComponent onClose={onClose} visible={showDetails}>
-			{isGameLoading ||
-			isCoverLoading ||
-			(isVideosLoading && videos !== undefined && videos > 0) ? (
+			{!isGameListEmpty &&
+			(isGameLoading ||
+				isCoverLoading ||
+				(isVideosLoading && videos !== undefined && videos > 0)) ? (
 				<View style={styles.activityIndicator}>
 					<ActivityIndicatorComponent color='white' size='large' />
 				</View>
@@ -274,10 +277,15 @@ const GameDetails = ({
 							style={{
 								flex: 1,
 								alignItems: 'center',
-								justifyContent: 'center',
+								marginTop: 300,
 							}}>
-							<Text style={{ color: 'white' }}>
-								No game data available for {gameDealItem?.title}
+							<Text
+								style={{
+									color: Colors.offWhite,
+									fontSize: 23,
+									fontFamily: Fonts.gameTitleFont,
+								}}>
+								No game details available for {gameDealItem?.title}
 							</Text>
 						</View>
 					)}
@@ -307,6 +315,7 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 		alignItems: 'center',
 		backgroundColor: Colors.charcoalDark,
+		marginTop: 5,
 	},
 	coverImage: {
 		flex: 2,
@@ -344,9 +353,9 @@ const styles = StyleSheet.create({
 	picturesContainer: {
 		flex: 1,
 		flexDirection: 'row',
-		borderTopWidth: 2,
+		borderTopWidth: 0.5,
 		borderColor: 'red',
-		marginBottom: 30,
+		marginBottom: 10,
 		marginVertical: 5,
 	},
 	screenShotsContainer: { flex: 1, alignItems: 'center' },
@@ -362,10 +371,23 @@ const styles = StyleSheet.create({
 	},
 	videosContainer: {
 		flex: 1,
-		borderTopWidth: 2,
+		borderTopWidth: 0.5,
 		borderColor: 'red',
 		marginBottom: 30,
 		marginVertical: 5,
+		paddingTop: 5,
 	},
-	youTubeContainer: { flex: 1, alignItems: 'center' },
+	youTubeContainer: {
+		flex: 1,
+		alignItems: 'center',
+		backgroundColor: Colors.charcoalDark,
+		borderRadius: 10,
+		padding: 10,
+		margin: 5,
+		elevation: 4,
+		shadowColor: '#c7c7c7',
+		shadowOffset: { width: 1, height: 1 },
+		shadowRadius: 4,
+		shadowOpacity: 0.5,
+	},
 });

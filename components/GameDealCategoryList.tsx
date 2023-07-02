@@ -1,24 +1,19 @@
-import { View, Text, StyleSheet, FlatList, Dimensions } from 'react-native';
+import { View, StyleSheet, FlatList } from 'react-native';
 
 import { GameDealItem } from '../screens/GameDealsScreen';
 import Fonts from '../constants/fonts';
 
 interface GameDealCategoryListProps {
-	categoryText: string;
 	data: GameDealItem[] | undefined;
 	renderItem: ({ item }: any) => any;
 }
 
 const GameDealCategoryList = ({
-	categoryText,
 	data,
 	renderItem,
 }: GameDealCategoryListProps) => {
 	return (
 		<View style={styles.listContainer}>
-			<View style={styles.categoryContainer}>
-				<Text style={styles.categoryText}>{categoryText}</Text>
-			</View>
 			<FlatList
 				data={data}
 				keyExtractor={(item) => item.dealID}
