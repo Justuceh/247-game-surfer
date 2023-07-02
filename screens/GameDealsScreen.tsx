@@ -350,8 +350,8 @@ const styles = StyleSheet.create({
 	listItemContainer: {
 		flex: 1,
 		elevation: 4,
-		shadowColor: 'black',
-		shadowOffset: { width: 0, height: 2 },
+		shadowColor: '#c7c7c7',
+		shadowOffset: { width: 1, height: 1 },
 		shadowRadius: 4,
 		shadowOpacity: 0.5,
 	},
