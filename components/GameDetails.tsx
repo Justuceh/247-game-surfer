@@ -1,12 +1,5 @@
 import { useContext, useEffect, useState } from 'react';
-import {
-	Text,
-	View,
-	StyleSheet,
-	Dimensions,
-	Image,
-	ScrollView,
-} from 'react-native';
+import { Text, View, StyleSheet, Image, ScrollView } from 'react-native';
 import { IGDB_BASE_URL } from '@env';
 
 import ModalComponent from './ModalComponent';
@@ -307,7 +300,6 @@ const GameDetails = ({
 
 export default GameDetails;
 
-const { height, width } = Dimensions.get('window');
 const styles = StyleSheet.create({
 	rootContainer: {
 		flex: 1,
@@ -354,7 +346,7 @@ const styles = StyleSheet.create({
 	summaryText: {
 		flex: 1,
 		color: 'white',
-		fontSize: 15,
+		fontSize: 18,
 		fontWeight: 'bold',
 		marginTop: 15,
 		fontFamily: Fonts.gameTitleFont,
