@@ -35,6 +35,7 @@ interface IgdbGame {
 	screenshots: number[];
 	summary: string;
 	videos: number[];
+	first_release_date: string;
 }
 
 interface IgdbCover {
@@ -72,7 +73,7 @@ const GameDetails = ({
 	const plainGameTitle = removeEditionWords(gameDealItem?.title);
 
 	const gameQuery = `
-    fields id, cover, name, screenshots, summary, videos; 
+    fields id, cover, name, screenshots, summary, videos, first_release_date; 
     search "${plainGameTitle}"; 
     limit 20; 
   `;
@@ -190,6 +191,12 @@ const GameDetails = ({
 		);
 	};
 	const isGameListEmpty = gameList === null || gameList?.length === 0;
+	// Create a new Date object with the Unix timestamp in milliseconds
+	const date = new Date(
+		parseInt(filteredGame?.first_release_date || '', 10) * 1000
+	);
+	// Convert the date to a readable string
+	const readableDate = date.toLocaleDateString();
 	return (
 		<ModalComponent onClose={onClose} visible={showDetails}>
 			{!isGameListEmpty &&
@@ -214,7 +221,10 @@ const GameDetails = ({
 											resizeMode='contain'
 										/>
 										<PriceLabel game={gameDealItem} />
-										<GameReviewScore game={gameDealItem} />
+										<GameReviewScore
+											game={gameDealItem}
+											releaseDate={readableDate}
+										/>
 										<View style={styles.labelTextContainer}>
 											<Text style={styles.labelText}>{filteredGame?.name}</Text>
 											<View style={styles.summaryContainerText}>

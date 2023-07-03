@@ -9,9 +9,10 @@ import { GameStoreContext } from '../store/context/game_deals/game-stores-contex
 
 interface GameReviewScoreProps {
 	game: GameDealItem | undefined;
+	releaseDate: string;
 }
 
-const GameReviewScore = ({ game }: GameReviewScoreProps) => {
+const GameReviewScore = ({ game, releaseDate }: GameReviewScoreProps) => {
 	const storesContext = useContext(GameStoreContext);
 	const storeIcon = storesContext.stores.find(
 		(store) => store.storeID === game?.storeID
@@ -31,6 +32,9 @@ const GameReviewScore = ({ game }: GameReviewScoreProps) => {
 				<Text style={styles.reviewLabel}>
 					Metacritic -{' '}
 					<Text style={styles.review}>{game?.metacriticScore}</Text>
+				</Text>
+				<Text style={styles.reviewLabel}>
+					Release Date - <Text style={styles.review}>{releaseDate}</Text>
 				</Text>
 			</View>
 			<View style={styles.iconContainer}>
