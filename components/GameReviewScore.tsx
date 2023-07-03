@@ -1,13 +1,23 @@
-import { Text, View, StyleSheet } from 'react-native';
+import { useContext } from 'react';
+import { Text, View, StyleSheet, Image } from 'react-native';
+import { CHEAPSHARK_BASE_URL } from '@env';
+
 import Colors from '../constants/colors';
 import Fonts from '../constants/fonts';
 import { GameDealItem } from '../screens/GameDealsScreen';
+import { GameStoreContext } from '../store/context/game_deals/game-stores-context';
 
 interface GameReviewScoreProps {
 	game: GameDealItem | undefined;
 }
 
 const GameReviewScore = ({ game }: GameReviewScoreProps) => {
+	const storesContext = useContext(GameStoreContext);
+	const storeIcon = storesContext.stores.find(
+		(store) => store.storeID === game?.storeID
+	)?.images.logo;
+	const storeIconUri = `${CHEAPSHARK_BASE_URL}${storeIcon}`;
+
 	return (
 		<View style={styles.rootContainer}>
 			<View style={styles.reviewsContainer}>
@@ -23,6 +33,13 @@ const GameReviewScore = ({ game }: GameReviewScoreProps) => {
 					<Text style={styles.review}>{game?.metacriticScore}</Text>
 				</Text>
 			</View>
+			<View style={styles.iconContainer}>
+				<Image
+					style={styles.iconImage}
+					source={{ uri: storeIconUri }}
+					resizeMode='contain'
+				/>
+			</View>
 		</View>
 	);
 };
@@ -32,10 +49,12 @@ export default GameReviewScore;
 const styles = StyleSheet.create({
 	rootContainer: {
 		flex: 1,
-		width: '100%',
+		flexDirection: 'row',
+		alignItems: 'center',
+		marginTop: 20,
 	},
 	reviewsContainer: {
-		flex: 1,
+		flex: 4,
 	},
 	reviewLabel: {
 		color: Colors.offWhite,
@@ -48,5 +67,11 @@ const styles = StyleSheet.create({
 		fontSize: 18,
 		fontWeight: '200',
 		fontFamily: Fonts.gameTitleFont,
+	},
+	iconContainer: {
+		flex: 1,
+	},
+	iconImage: {
+		aspectRatio: 1,
 	},
 });

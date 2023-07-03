@@ -1,11 +1,10 @@
-import { Text, View, StyleSheet, Pressable } from 'react-native';
+import { Text, View, StyleSheet, Pressable, Image } from 'react-native';
 import * as WebBrowser from 'expo-web-browser';
 import { CHEAPSHARK_REDIRECT_API } from '@env';
 
 import Colors from '../constants/colors';
 import Fonts from '../constants/fonts';
 import { GameDealItem } from '../screens/GameDealsScreen';
-import Button from './Button';
 
 interface PriceLabelProps {
 	game: GameDealItem | undefined;
@@ -13,6 +12,7 @@ interface PriceLabelProps {
 
 const PriceLabel = ({ game }: PriceLabelProps) => {
 	const savingsPercent = `${game?.savings.split('.')[0]}%`;
+
 	const openBrowserAsync = async (dealID: string | undefined) => {
 		await WebBrowser.openBrowserAsync(`${CHEAPSHARK_REDIRECT_API}${dealID}`);
 	};
@@ -75,7 +75,6 @@ const styles = StyleSheet.create({
 	},
 	saleText: {
 		flex: 1,
-		flexBasis: 0,
 		color: 'yellow',
 		fontSize: 20,
 		fontFamily: Fonts.gameTitleFont,
@@ -88,7 +87,6 @@ const styles = StyleSheet.create({
 		color: Colors.offWhite,
 		textDecorationLine: 'line-through',
 	},
-
 	dealButton: {
 		backgroundColor: '#56ff7b',
 		borderWidth: 1,
