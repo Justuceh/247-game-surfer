@@ -4,7 +4,7 @@ import { CHEAPSHARK_REDIRECT_API } from '@env';
 
 import Colors from '../constants/colors';
 import Fonts from '../constants/fonts';
-import { GameDealItem } from '../screens/GameDealsScreen';
+import GameDealItem from '../models/GameDealItem';
 
 interface PriceLabelProps {
 	game: GameDealItem | undefined;

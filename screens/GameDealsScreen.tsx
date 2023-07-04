@@ -8,7 +8,7 @@ import { RootNavigatorParamList } from '../App';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { LinearGradient } from 'expo-linear-gradient';
 
-import { GameDealItem } from '../models/GameDealItem';
+import GameDealItem from '../models/GameDealItem';
 import ActivityIndicatorComponent from '../components/ActivityIndicator';
 import GameDealCard from '../components/GameDealCard';
 import GameDealCategoryList from '../components/GameDealCategoryList';

@@ -4,7 +4,7 @@ import { CHEAPSHARK_BASE_URL } from '@env';
 
 import Colors from '../constants/colors';
 import Fonts from '../constants/fonts';
-import { GameDealItem } from '../screens/GameDealsScreen';
+import GameDealItem from '../models/GameDealItem';
 import { GameStoreContext } from '../store/context/game_deals/game-stores-context';
 
 interface GameReviewScoreProps {

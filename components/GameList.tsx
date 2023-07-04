@@ -1,10 +1,10 @@
 import { useState } from 'react';
-import { View, StyleSheet, FlatList, Dimensions } from 'react-native';
+import { View, StyleSheet, Dimensions } from 'react-native';
 
 import { LinearGradient } from 'expo-linear-gradient';
 
 import GameDealCard from '../components/GameDealCard';
-import { GameDealItem } from '../models/GameDealItem';
+import GameDealItem from '../models/GameDealItem';
 import Colors from '../constants/colors';
 import GameDetails from './GameDetails';
 import GameDealCategoryList from './GameDealCategoryList';

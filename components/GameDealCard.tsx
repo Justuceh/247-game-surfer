@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Text, View, StyleSheet, Pressable, Image } from 'react-native';
 import * as WebBrowser from 'expo-web-browser';
 
-import { GameDealItem } from '../screens/GameDealsScreen';
+import GameDealItem from '../models/GameDealItem';
 import Card from './Card';
 import WishlistButton from './WishlistButton';
 import { CHEAPSHARK_REDIRECT_API } from '@env';

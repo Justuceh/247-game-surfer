@@ -1,5 +1,5 @@
 /** Model used to track the game deal data that comes from Cheap Shark API */
-export interface GameDealItem {
+export default interface GameDealItem {
 	gameID: string;
 	storeID: string;
 	title: string;

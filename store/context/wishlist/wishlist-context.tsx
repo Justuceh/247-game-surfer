@@ -1,7 +1,7 @@
 import { createContext, useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import { GameDealItem } from '../../../screens/GameDealsScreen';
+import GameDealItem from '../../../models/GameDealItem';
 
 interface WishlistContextValue {
 	games: GameDealItem[];

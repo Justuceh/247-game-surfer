@@ -4,7 +4,7 @@ import { IGDB_BASE_URL } from '@env';
 
 import ModalComponent from './ModalComponent';
 import Colors from '../constants/colors';
-import { GameDealItem } from '../screens/GameDealsScreen';
+import GameDealItem from '../models/GameDealItem';
 import { AuthContext } from '../store/context/auth/auth-context';
 import axios from 'axios';
 import { useQuery } from '@tanstack/react-query';
