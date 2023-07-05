@@ -35,7 +35,6 @@ const TutorialContextProvider = ({
 	}
 
 	useEffect(() => {
-		//AsyncStorage.clear();
 		setStatusOfInitialState();
 	}, []);
 
