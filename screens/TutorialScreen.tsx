@@ -27,7 +27,7 @@ const TutorialScreen = ({ showTutorial }: TutorialScreenProps) => {
 						<View style={styles.bodyTextContainer}>
 							<Octicons name='dot-fill' color={'white'} />
 							<Text style={styles.bodyText}>
-								Select any store and begin surfing deals for that store
+								Select any store and begin surfing deals for that store.
 							</Text>
 						</View>
 						<View style={styles.bodyTextContainer}>
