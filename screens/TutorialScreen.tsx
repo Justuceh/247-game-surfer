@@ -22,7 +22,7 @@ const TutorialScreen = ({ showTutorial }: TutorialScreenProps) => {
 				<View style={styles.modalContainer}>
 					<View style={styles.modalContent}>
 						<Text style={styles.labelText}>
-							Thanks for choosing Game Surfer!!
+							Thanks for choosing 24/7 Game Surfer!!
 						</Text>
 						<View style={styles.bodyTextContainer}>
 							<Octicons name='dot-fill' color={'white'} />
