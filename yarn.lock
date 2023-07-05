@@ -1867,7 +1867,7 @@
 
 "@react-navigation/bottom-tabs@^6.5.8":
   version "6.5.8"
-  resolved "https://registry.yarnpkg.com/@react-navigation/bottom-tabs/-/bottom-tabs-6.5.8.tgz#9536c6e45154abc183c363d07c94991e10b14856"
+  resolved "https://registry.npmjs.org/@react-navigation/bottom-tabs/-/bottom-tabs-6.5.8.tgz"
   integrity sha512-0aa/jXea+LyBgR5NoRNWGKw0aFhjHwCkusigMRXIrCA4kINauDcAO0w0iFbZeKfaTCVAix5kK5UxDJJ2aJpevg==
   dependencies:
     "@react-navigation/elements" "^1.3.18"
@@ -1886,14 +1886,9 @@
     react-is "^16.13.0"
     use-latest-callback "^0.1.5"
 
-"@react-navigation/elements@^1.3.17":
-  version "1.3.17"
-  resolved "https://registry.npmjs.org/@react-navigation/elements/-/elements-1.3.17.tgz"
-  integrity sha512-sui8AzHm6TxeEvWT/NEXlz3egYvCUog4tlXA4Xlb2Vxvy3purVXDq/XsM56lJl344U5Aj/jDzkVanOTMWyk4UA==
-
-"@react-navigation/elements@^1.3.18":
+"@react-navigation/elements@^1.3.17", "@react-navigation/elements@^1.3.18":
   version "1.3.18"
-  resolved "https://registry.yarnpkg.com/@react-navigation/elements/-/elements-1.3.18.tgz#d8364b40276f3efb9c229c39da3b8b465f18f0a2"
+  resolved "https://registry.npmjs.org/@react-navigation/elements/-/elements-1.3.18.tgz"
   integrity sha512-/0hwnJkrr415yP0Hf4PjUKgGyfshrvNUKFXN85Mrt1gY49hy9IwxZgrrxlh0THXkPeq8q4VWw44eHDfAcQf20Q==
 
 "@react-navigation/material-top-tabs@^6.6.2":
@@ -2031,7 +2026,7 @@
 
 "@types/qs@^6.9.7":
   version "6.9.7"
-  resolved "https://registry.yarnpkg.com/@types/qs/-/qs-6.9.7.tgz#63bb7d067db107cc1e457c303bc25d511febf6cb"
+  resolved "https://registry.npmjs.org/@types/qs/-/qs-6.9.7.tgz"
   integrity sha512-FGa1F62FT09qcrueBA6qYTrJPVDzah9a+493+o2PCXsesWHIn27G98TsSMs3WPNbZIEj4+VJf6saSFpvD+3Zsw==
 
 "@types/react-native-dotenv@^0.2.0":
@@ -3311,7 +3306,7 @@ event-target-shim@^5.0.0, event-target-shim@^5.0.1:
 
 events@^3.2.0:
   version "3.3.0"
-  resolved "https://registry.yarnpkg.com/events/-/events-3.3.0.tgz#31a95ad0a924e2d2c419a813aeb2c4e878ea7400"
+  resolved "https://registry.npmjs.org/events/-/events-3.3.0.tgz"
   integrity sha512-mQw+2fkQbALzQ7V0MY0IqdnXNOeTtP4r0lN9z7AAawCXgqea7bDii20AYrIBrFd/Hx0M2Ocz6S111CaFkUcb0Q==
 
 exec-async@^2.2.0:
@@ -3508,10 +3503,10 @@ fast-glob@^3.2.5, fast-glob@^3.2.9:
     merge2 "^1.3.0"
     micromatch "^4.0.4"
 
-fast-xml-parser@^4.0.12, fast-xml-parser@^4.2.4:
-  version "4.2.4"
-  resolved "https://registry.npmjs.org/fast-xml-parser/-/fast-xml-parser-4.2.4.tgz"
-  integrity sha512-fbfMDvgBNIdDJLdLOwacjFAPYt67tr31H9ZhWSm45CDAxvd0I6WTlSOUo7K2P/K5sA5JgMKG64PI3DMcaFdWpQ==
+fast-xml-parser@^4.0.12, fast-xml-parser@^4.2.5:
+  version "4.2.5"
+  resolved "https://registry.yarnpkg.com/fast-xml-parser/-/fast-xml-parser-4.2.5.tgz#a6747a09296a6cb34f2ae634019bf1738f3b421f"
+  integrity sha512-B9/wizE4WngqQftFPmdaMYlXoJlJOYxGQOanC77fq9k8+Z0v5dDSVh+3glErdIROP//s/jgb7ZuxKfB8nVyo0g==
   dependencies:
     strnum "^1.0.5"
 
@@ -5874,16 +5869,16 @@ react-native-vector-icons@^9.2.0:
 
 react-native-webview@11.26.0:
   version "11.26.0"
-  resolved "https://registry.yarnpkg.com/react-native-webview/-/react-native-webview-11.26.0.tgz#e524992876fe4a79e69905f0fab8949b470e9f16"
+  resolved "https://registry.npmjs.org/react-native-webview/-/react-native-webview-11.26.0.tgz"
   integrity sha512-4T4CKRm8xlaQDz9h/bCMPGAvtkesrhkRWqCX9FDJEzBToaVUIsV0ZOqtC4w/JSnCtFKKYiaC1ReJtCGv+4mFeQ==
   dependencies:
     escape-string-regexp "2.0.0"
     invariant "2.2.4"
 
 react-native-youtube-iframe@^2.2.2:
-  version "2.2.2"
-  resolved "https://registry.yarnpkg.com/react-native-youtube-iframe/-/react-native-youtube-iframe-2.2.2.tgz#ade1a2e4ead3d539fbb80463f45b59ff1b510b55"
-  integrity sha512-og2KW21kCwAHKcnWoyWWBYC6J2Xtqjjwpghhoy9G6zfwZkr8Ej27BbQIAKM/TheJJUZ5/YUrqsgqAdnFYDx5TQ==
+  version "2.3.0"
+  resolved "https://registry.npmjs.org/react-native-youtube-iframe/-/react-native-youtube-iframe-2.3.0.tgz"
+  integrity sha512-M+z63xwXVtS4dX3k8PbtHUUcWN+gRZt6J1EtPE7Y60BMOB979KjpkdrHqeR96or9pNR2W8K5tQhIkMXW2jwo7Q==
   dependencies:
     events "^3.2.0"
 
