@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Text, View, StyleSheet, Pressable, Image } from 'react-native';
 import * as WebBrowser from 'expo-web-browser';
 
-import { GameDealItem } from '../screens/GameDealsScreen';
+import GameDealItem from '../models/GameDealItem';
 import Card from './Card';
 import WishlistButton from './WishlistButton';
 import { CHEAPSHARK_REDIRECT_API } from '@env';
@@ -68,14 +68,13 @@ const GameDealCard = ({
 						resizeMode='contain'
 					/>
 				</View>
-
+				<View style={styles.titleContainer}>
+					<Text style={styles.title}>{gameDealItem.title}</Text>
+				</View>
+				<View style={styles.savingsPercentContainer}>
+					<Text style={styles.savingsPercent}>-{savingsPercent}</Text>
+				</View>
 				<View style={styles.descriptionContainer}>
-					<View style={styles.titleContainer}>
-						<Text style={styles.title}>{gameDealItem.title}</Text>
-					</View>
-					<View style={styles.savingsPercentContainer}>
-						<Text style={styles.savingsPercent}>{savingsPercent}</Text>
-					</View>
 					<View style={styles.saleInfoContainer}>
 						<Text style={styles.saleText}>{gameDealItem.salePrice}</Text>
 						<Text style={[styles.strikethroughText, styles.strikeThrough]}>
@@ -112,8 +111,8 @@ const styles = StyleSheet.create({
 	},
 	titleContainer: {
 		flex: 1,
-		flexDirection: 'row',
 		justifyContent: 'center',
+		alignItems: 'center',
 		overflow: 'hidden',
 	},
 	title: {
@@ -130,7 +129,7 @@ const styles = StyleSheet.create({
 		paddingHorizontal: 9,
 	},
 	saleText: {
-		flex: 1.5,
+		flex: 1,
 		fontWeight: '400',
 		justifyContent: 'center',
 		color: 'yellow',
@@ -151,16 +150,18 @@ const styles = StyleSheet.create({
 	},
 	savingsPercentContainer: {
 		flex: 1,
-		alignItems: 'center',
+		alignItems: 'flex-start',
+		justifyContent: 'center',
+		margin: 4,
+		marginTop: 9,
+		marginLeft: 10,
 	},
 	savingsPercent: {
-		flex: 1,
 		fontWeight: '400',
-		justifyContent: 'center',
-		color: 'yellow',
+		color: Colors.charcoalDark,
 		fontFamily: Fonts.saletextFont,
-		fontSize: 20,
-		padding: 5,
-		marginTop: 5,
+		fontSize: 15,
+		backgroundColor: Colors.neonGreen,
+		padding: 3,
 	},
 });

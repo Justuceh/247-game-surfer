@@ -8,6 +8,7 @@ import { RootNavigatorParamList } from '../App';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { LinearGradient } from 'expo-linear-gradient';
 
+import GameDealItem from '../models/GameDealItem';
 import ActivityIndicatorComponent from '../components/ActivityIndicator';
 import GameDealCard from '../components/GameDealCard';
 import GameDealCategoryList from '../components/GameDealCategoryList';
@@ -15,20 +16,6 @@ import Colors from '../constants/colors';
 import Fonts from '../constants/fonts';
 import GameDetails from '../components/GameDetails';
 import Button from '../components/Button';
-
-export interface GameDealItem {
-	gameID: string;
-	storeID: string;
-	title: string;
-	internalname: string;
-	normalPrice: string;
-	salePrice: 'string';
-	thumb: string;
-	isOnSale: '1' | '0';
-	dealRating: string;
-	dealID: string;
-	savings: string;
-}
 
 const filterLabels = {
 	topDeals: 'Top Deals',
