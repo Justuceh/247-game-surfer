@@ -1,28 +1,32 @@
 {
-	"expo": {
-		"name": "247GameSurfer",
-		"slug": "247GameSurfer",
-		"version": "1.0.0",
-		"orientation": "portrait",
-		"icon": "./assets/247-gs-app-icon.png",
-		"userInterfaceStyle": "light",
-		"splash": {
-			"image": "./assets/247-gs-high-resolution-color-logo-splash.png",
-			"resizeMode": "contain",
-			"backgroundColor": "#000000"
-		},
-		"assetBundlePatterns": ["**/*"],
-		"ios": {
-			"supportsTablet": true
-		},
-		"android": {
-			"adaptiveIcon": {
-				"foregroundImage": "./assets/adaptive-icon.png",
-				"backgroundColor": "#ffffff"
-			}
-		},
-		"web": {
-			"favicon": "./assets/favicon.png"
-		}
-	}
+  "expo": {
+    "name": "247GameSurfer",
+    "slug": "247GameSurfer",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/247-gs-app-icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/247-gs-high-resolution-color-logo-splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#000000"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "gameSurfer.ios"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "package": "gameSurfer.android"
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    }
+  }
 }
