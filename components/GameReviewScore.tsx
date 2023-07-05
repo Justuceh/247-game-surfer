@@ -74,6 +74,7 @@ const styles = StyleSheet.create({
 	},
 	iconContainer: {
 		flex: 1,
+		marginRight: 20,
 	},
 	iconImage: {
 		aspectRatio: 1,
