@@ -11,7 +11,7 @@ It's not ready for release but you can have a sneek peek by watching the private
 App Demo: https://youtu.be/nSBDfR8XcRU
 <div align="center">
   <h3 style="text-align: center;">Home Screen</h3>
-  <img src="https://github.com/Justuceh/247-game-surfer/assets/21269564/67189f06-f74d-4b85-8b86-4ebe6243c0a0" width=30% height=30%>
+  <img src="https://github.com/Justuceh/247-game-surfer/assets/21269564/67189f06-f74d-4b85-8b86-4ebe6243c0a0" width=20% height=30%>
 <h3>Searching deals inside of a game store (Steam in this case)</h3>
   <h3>Pressed the Guardians of the Galaxy deal</h3>
 <img src="https://github.com/Justuceh/247-game-surfer/assets/21269564/2205fba9-7fdb-4aec-80d7-c7c2a7aed409" width=20% height=20%>
