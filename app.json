@@ -4,7 +4,7 @@
 		"slug": "247GameSurfer",
 		"version": "1.0.0",
 		"orientation": "portrait",
-		"icon": "./assets/icon.png",
+		"icon": "./assets/247-gs-app-icon.png",
 		"userInterfaceStyle": "light",
 		"splash": {
 			"image": "./assets/247-gs-high-resolution-color-logo-splash.png",
