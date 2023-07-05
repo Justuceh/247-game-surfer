@@ -4,6 +4,7 @@ const Colors = {
 	charcoalLight: '#222121',
 	charcoalLighter: '#2f2e2e',
 	offWhite: '#cdcdcd',
+	neonGreen: '#61ed1b',
 	linearGradient: {
 		topColor: '#2f2e2e',
 		middleColor: '#222121',

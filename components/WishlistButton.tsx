@@ -3,7 +3,7 @@ import { Pressable, StyleSheet } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import { WishlistContext } from '../store/context/wishlist/wishlist-context';
-import { GameDealItem } from '../screens/GameDealsScreen';
+import GameDealItem from '../models/GameDealItem';
 
 interface WishlistButtonProps {
 	gameDealItem: GameDealItem;

@@ -1,18 +1,10 @@
 import { useContext, useEffect, useState } from 'react';
-import {
-	Text,
-	View,
-	StyleSheet,
-	Dimensions,
-	Image,
-	ScrollView,
-} from 'react-native';
-import * as WebBrowser from 'expo-web-browser';
-import { CHEAPSHARK_REDIRECT_API, IGDB_BASE_URL } from '@env';
+import { Text, View, StyleSheet, Image, ScrollView } from 'react-native';
+import { IGDB_BASE_URL } from '@env';
 
 import ModalComponent from './ModalComponent';
 import Colors from '../constants/colors';
-import { GameDealItem } from '../screens/GameDealsScreen';
+import GameDealItem from '../models/GameDealItem';
 import { AuthContext } from '../store/context/auth/auth-context';
 import axios from 'axios';
 import { useQuery } from '@tanstack/react-query';
@@ -20,6 +12,8 @@ import ActivityIndicatorComponent from './ActivityIndicator';
 import { findClosestString, removeEditionWords } from '../utils/stringUtils';
 import YouTubePlayer from './YouTubePlayer';
 import Fonts from '../constants/fonts';
+import PriceLabel from './PriceLabel';
+import GameReviewScore from './GameReviewScore';
 
 interface GameDetailsProps {
 	gameDealItem: GameDealItem | undefined;
@@ -34,6 +28,7 @@ interface IgdbGame {
 	screenshots: number[];
 	summary: string;
 	videos: number[];
+	first_release_date: string;
 }
 
 interface IgdbCover {
@@ -60,13 +55,6 @@ interface IgdbScreenshots {
 	url: string;
 }
 
-//TODO implement this icon logic to display the icon in this component
-//const storesContext = useContext(GameStoreContext);
-// const storeIcon = storesContext.stores.find(
-// 	(store) => store.storeID === gameDealItem.storeID
-// )?.images.icon;
-// const storeIconUri = `${CHEAPSHARK_BASE_URL}${storeIcon}`;
-
 const GameDetails = ({
 	gameDealItem,
 	showDetails,
@@ -78,7 +66,7 @@ const GameDetails = ({
 	const plainGameTitle = removeEditionWords(gameDealItem?.title);
 
 	const gameQuery = `
-    fields id, cover, name, screenshots, summary, videos; 
+    fields id, cover, name, screenshots, summary, videos, first_release_date; 
     search "${plainGameTitle}"; 
     limit 20; 
   `;
@@ -188,10 +176,6 @@ const GameDetails = ({
 		}
 	}
 
-	const openBrowserAsync = async (dealID: string) => {
-		await WebBrowser.openBrowserAsync(`${CHEAPSHARK_REDIRECT_API}${dealID}`);
-	};
-
 	const renderVideos = (video: IgdbVideo) => {
 		return (
 			<View key={video.id} style={styles.youTubeContainer}>
@@ -200,6 +184,12 @@ const GameDetails = ({
 		);
 	};
 	const isGameListEmpty = gameList === null || gameList?.length === 0;
+	// Create a new Date object with the Unix timestamp in milliseconds
+	const date = new Date(
+		parseInt(filteredGame?.first_release_date || '', 10) * 1000
+	);
+	// Convert the date to a readable string
+	const readableDate = date.toLocaleDateString();
 	return (
 		<ModalComponent onClose={onClose} visible={showDetails}>
 			{!isGameListEmpty &&
@@ -222,6 +212,11 @@ const GameDetails = ({
 											}}
 											style={[styles.coverImage, { width: 300, height: 300 }]}
 											resizeMode='contain'
+										/>
+										<PriceLabel game={gameDealItem} />
+										<GameReviewScore
+											game={gameDealItem}
+											releaseDate={readableDate}
 										/>
 										<View style={styles.labelTextContainer}>
 											<Text style={styles.labelText}>{filteredGame?.name}</Text>
@@ -305,7 +300,6 @@ const GameDetails = ({
 
 export default GameDetails;
 
-const { height, width } = Dimensions.get('window');
 const styles = StyleSheet.create({
 	rootContainer: {
 		flex: 1,
@@ -342,7 +336,6 @@ const styles = StyleSheet.create({
 		fontFamily: Fonts.gameTitleFont,
 		flex: 1,
 		justifyContent: 'center',
-		marginTop: 15,
 		alignItems: 'center',
 	},
 	summaryContainerText: {
@@ -353,7 +346,7 @@ const styles = StyleSheet.create({
 	summaryText: {
 		flex: 1,
 		color: 'white',
-		fontSize: 15,
+		fontSize: 18,
 		fontWeight: 'bold',
 		marginTop: 15,
 		fontFamily: Fonts.gameTitleFont,

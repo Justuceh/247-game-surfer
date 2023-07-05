@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 import { View, StyleSheet, FlatList } from 'react-native';
 
-import { GameDealItem } from '../screens/GameDealsScreen';
+import GameDealItem from '../models/GameDealItem';
 
 interface GameDealCategoryListProps {
 	data: GameDealItem[] | undefined;

@@ -12,7 +12,7 @@ import { useQuery } from '@tanstack/react-query';
 
 import ActivityIndicatorComponent from '../components/ActivityIndicator';
 import SearchInput from '../components/SearchInput';
-import { GameDealItem } from './GameDealsScreen';
+import GameDealItem from '../models/GameDealItem';
 import GameList from '../components/GameList';
 import Colors from '../constants/colors';
 
