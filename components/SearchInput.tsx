@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Text, View, StyleSheet, TextInput, Pressable } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Colors from '../constants/colors';
@@ -12,6 +12,7 @@ interface SearchInputProps {
 	buttonColor?: string;
 	buttonTextColor?: string;
 	placeholderTextColor?: string;
+	clearValue: boolean | undefined;
 }
 
 const SearchInput = ({
@@ -22,11 +23,19 @@ const SearchInput = ({
 	buttonTextColor,
 	backgroundColor,
 	buttonColor,
+	clearValue,
 }: SearchInputProps) => {
 	const [searchQuery, setSearchQuery] = useState('');
 	function onPressHandler() {
 		onSearchHandler(searchQuery);
 	}
+
+	useEffect(() => {
+		if (clearValue) {
+			setSearchQuery('');
+		}
+	}, [clearValue]);
+
 	return (
 		<View style={styles.rootContainer}>
 			<TextInput
