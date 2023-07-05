@@ -6,6 +6,8 @@ import {
 	Pressable,
 	Animated,
 	Dimensions,
+	StatusBar,
+	Platform,
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
@@ -54,6 +56,7 @@ const ModalComponent = ({
 	);
 };
 const { height, width } = Dimensions.get('window');
+const statusBarHeight = StatusBar.currentHeight || 50;
 const styles = StyleSheet.create({
 	overlay: {
 		flex: 10,
@@ -63,7 +66,7 @@ const styles = StyleSheet.create({
 	modalContainer: {
 		flex: 1,
 		padding: 5,
-		marginTop: 50,
+		marginTop: Platform.OS === 'ios' ? statusBarHeight : 0,
 		height: height,
 		width: width,
 		backgroundColor: Colors.charcoalDark,

@@ -22,6 +22,8 @@ import { LinearGradient } from 'expo-linear-gradient';
 import Colors from '../constants/colors';
 import Fonts from '../constants/fonts';
 import Banner from '../components/Banner';
+import { TutorialContext } from '../store/context/tutorial/tutorial-context';
+import TutorialScreen from './TutorialScreen';
 
 export interface GameStoreInterface {
 	storeID: string;
@@ -52,6 +54,8 @@ const StoresScreen = () => {
 	const [bannerText, setBannerText] = useState('Select a store to surf deals');
 	const [bannerVisible, setBannerVisible] = useState(true);
 	const navigation = useNavigation<StoresScreenNavigationProp>();
+	const tutorialContext = useContext(TutorialContext);
+
 	const {
 		data: gameStores,
 		isLoading,
@@ -140,6 +144,11 @@ const StoresScreen = () => {
 						<ActivityIndicatorComponent size='large' color='white' />
 					) : (
 						<>
+							{tutorialContext.firstTimeUsingApp && (
+								<TutorialScreen
+									showTutorial={tutorialContext.firstTimeUsingApp}
+								/>
+							)}
 							{bannerVisible && (
 								<Animated.View
 									style={[styles.bannerContainer, { opacity: bannerOpacity }]}>

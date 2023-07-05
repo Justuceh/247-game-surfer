@@ -20,6 +20,7 @@ import { WishlistContextProvider } from './store/context/wishlist/wishlist-conte
 import { GameStoreContextProvider } from './store/context/game_deals/game-stores-context';
 import Colors from './constants/colors';
 import { AuthProvider } from './store/context/auth/auth-context';
+import { TutorialContextProvider } from './store/context/tutorial/tutorial-context';
 
 export type RootNavigatorParamList = {
 	StoresScreen: undefined;
@@ -79,58 +80,64 @@ export default function App() {
 					<AuthProvider>
 						<GameStoreContextProvider>
 							<WishlistContextProvider>
-								<NavigationContainer<RootNavigatorParamList>>
-									<Tab.Navigator
-										screenOptions={{
-											tabBarShowLabel: false,
-											headerShown: false,
-											tabBarStyle: {
-												backgroundColor: Colors.charcoalLight,
-												height: 50,
-												paddingBottom: 10,
-											},
-											tabBarIconStyle: { marginTop: 10 },
-											tabBarActiveTintColor: 'white',
-											tabBarInactiveTintColor: '#918e8e',
-										}}>
-										<Tab.Screen
-											name='StoresScreenMain'
-											component={StoresScreenTab}
-											options={{
-												tabBarIcon: ({ color, size }) => (
-													<Ionicons
-														name='home-sharp'
-														color={color}
-														size={size}
-													/>
-												),
+								<TutorialContextProvider>
+									<NavigationContainer<RootNavigatorParamList>>
+										<Tab.Navigator
+											screenOptions={{
+												tabBarShowLabel: false,
+												headerShown: false,
+												tabBarStyle: {
+													backgroundColor: Colors.charcoalLight,
+													height: 50,
+													paddingBottom: 10,
+												},
 												tabBarIconStyle: { marginTop: 10 },
-											}}
-										/>
-										<Tab.Screen
-											name='GamesScreen'
-											options={{
-												tabBarIcon: ({ color, size }) => (
-													<Ionicons
-														name='search-sharp'
-														color={color}
-														size={size}
-													/>
-												),
-											}}
-											component={GamesScreen}
-										/>
-										<Tab.Screen
-											name='WishListScreen'
-											options={{
-												tabBarIcon: ({ color, size }) => (
-													<Ionicons name='ios-star' color={color} size={size} />
-												),
-											}}
-											component={WishListScreen}
-										/>
-									</Tab.Navigator>
-								</NavigationContainer>
+												tabBarActiveTintColor: 'white',
+												tabBarInactiveTintColor: '#918e8e',
+											}}>
+											<Tab.Screen
+												name='StoresScreenMain'
+												component={StoresScreenTab}
+												options={{
+													tabBarIcon: ({ color, size }) => (
+														<Ionicons
+															name='home-sharp'
+															color={color}
+															size={size}
+														/>
+													),
+													tabBarIconStyle: { marginTop: 10 },
+												}}
+											/>
+											<Tab.Screen
+												name='GamesScreen'
+												options={{
+													tabBarIcon: ({ color, size }) => (
+														<Ionicons
+															name='search-sharp'
+															color={color}
+															size={size}
+														/>
+													),
+												}}
+												component={GamesScreen}
+											/>
+											<Tab.Screen
+												name='WishListScreen'
+												options={{
+													tabBarIcon: ({ color, size }) => (
+														<Ionicons
+															name='ios-star'
+															color={color}
+															size={size}
+														/>
+													),
+												}}
+												component={WishListScreen}
+											/>
+										</Tab.Navigator>
+									</NavigationContainer>
+								</TutorialContextProvider>
 							</WishlistContextProvider>
 						</GameStoreContextProvider>
 					</AuthProvider>
