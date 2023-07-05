@@ -16,14 +16,8 @@ import Colors from '../constants/colors';
 import Fonts from '../constants/fonts';
 import GameDetails from '../components/GameDetails';
 import ButtonList from '../components/ButtonList';
+import filterLabels from '../constants/string';
 
-const filterLabels = {
-	topDeals: 'Top Deals',
-	highlyRatedBySteam: 'Highly Rated By Steam',
-	highlyRatedByMetacritic: 'Highly Rated By Metacritic',
-	under20DollarDeals: '$15 - $20',
-	fiveToTenDollarDeals: '$5 - $10',
-};
 type GameDealsScreenRouteProp = RouteProp<
 	RootNavigatorParamList,
 	'GameDealsScreen'
