@@ -40,7 +40,7 @@ const TutorialScreen = ({ showTutorial }: TutorialScreenProps) => {
 						<View style={styles.bodyTextContainer}>
 							<Octicons name='dot-fill' color={'white'} />
 							<Text style={styles.bodyText}>
-								Long Press any game to be taken directly to the purhcase page.
+								Long Press any game to be taken directly to the purchase page.
 							</Text>
 						</View>
 						<View style={styles.bodyTextContainer}>
