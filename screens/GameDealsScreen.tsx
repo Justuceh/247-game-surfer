@@ -15,14 +15,14 @@ import GameDealCategoryList from '../components/GameDealCategoryList';
 import Colors from '../constants/colors';
 import Fonts from '../constants/fonts';
 import GameDetails from '../components/GameDetails';
-import Button from '../components/Button';
+import ButtonList from '../components/ButtonList';
 
 const filterLabels = {
 	topDeals: 'Top Deals',
 	highlyRatedBySteam: 'Highly Rated By Steam',
-	highlyRatedByMeta: 'Highly Rated By Metacritic',
-	fifteenToTwenty: '$15 - $20',
-	fiveToTen: '$5 - $10',
+	highlyRatedByMetacritic: 'Highly Rated By Metacritic',
+	under20DollarDeals: '$15 - $20',
+	fiveToTenDollarDeals: '$5 - $10',
 };
 type GameDealsScreenRouteProp = RouteProp<
 	RootNavigatorParamList,
@@ -39,14 +39,11 @@ type GameDealsScreenProps = {
 
 const GameDealsScreen = ({ route }: GameDealsScreenProps) => {
 	const [showGameDetails, setShowGameDetails] = useState(false);
-	const [showTopDealGames, setShowTopDealGames] = useState(true);
-	const [showTopSteamGames, setShowTopSteamGames] = useState(false);
-	const [showTopMetaGames, setShowTopMetaGames] = useState(false);
-	const [showTopFifteenGames, setShowTopFifteenGames] = useState(false);
-	const [showTopFiveGames, setShowTopFiveGames] = useState(false);
-
 	const [modalDealItem, setModalDealItem] = useState<GameDealItem>();
 	const navigation = useNavigation<GameDealsScreenNavigationProp>();
+	const [activeDataSet, setActiveDataSet] = useState<
+		GameDealItem[] | undefined
+	>([]);
 	const { storeID, title: storeTitle } = route.params;
 	const cacheTime = {
 		cacheTime: 1000 * 60 * 60, // Cache the store list for one hour before fetching again
@@ -137,46 +134,6 @@ const GameDealsScreen = ({ route }: GameDealsScreenProps) => {
 		);
 	};
 
-	function handleFilterButtonPress(label: string) {
-		switch (label) {
-			case filterLabels.topDeals:
-				setShowTopDealGames(true);
-				setShowTopSteamGames(false);
-				setShowTopMetaGames(false);
-				setShowTopFifteenGames(false);
-				setShowTopFiveGames(false);
-				break;
-			case filterLabels.highlyRatedBySteam:
-				setShowTopDealGames(false);
-				setShowTopSteamGames(true);
-				setShowTopMetaGames(false);
-				setShowTopFifteenGames(false);
-				setShowTopFiveGames(false);
-				break;
-			case filterLabels.highlyRatedByMeta:
-				setShowTopDealGames(false);
-				setShowTopSteamGames(false);
-				setShowTopMetaGames(true);
-				setShowTopFifteenGames(false);
-				setShowTopFiveGames(false);
-				break;
-			case filterLabels.fifteenToTwenty:
-				setShowTopDealGames(false);
-				setShowTopSteamGames(false);
-				setShowTopMetaGames(false);
-				setShowTopFifteenGames(true);
-				setShowTopFiveGames(false);
-				break;
-			case filterLabels.fiveToTen:
-				setShowTopDealGames(false);
-				setShowTopSteamGames(false);
-				setShowTopMetaGames(false);
-				setShowTopFifteenGames(false);
-				setShowTopFiveGames(true);
-				break;
-		}
-	}
-
 	useLayoutEffect(() => {
 		refetchTopDeals();
 		refetchHighlyRatedBySteam();
@@ -198,7 +155,33 @@ const GameDealsScreen = ({ route }: GameDealsScreenProps) => {
 		under20DollarDeals,
 		fiveToTenDollarDeals,
 	]);
+	const buttonLabels = Object.values(filterLabels);
 
+	function handleButtonPress(label: string) {
+		const dataSets = Object.entries(filterLabels).filter(
+			(key, value) => key[1] === label
+		);
+		switch (dataSets[0][0]) {
+			case 'topDeals':
+				setActiveDataSet(topDeals);
+				break;
+			case 'highlyRatedBySteam':
+				setActiveDataSet(highlyRatedBySteam);
+				break;
+			case 'highlyRatedByMetacritic':
+				setActiveDataSet(highlyRatedByMetacritic);
+				break;
+			case 'under20DollarDeals':
+				setActiveDataSet(under20DollarDeals);
+				break;
+			case 'fiveToTenDollarDeals':
+				setActiveDataSet(fiveToTenDollarDeals);
+				break;
+			default:
+				setActiveDataSet(topDeals);
+				break;
+		}
+	}
 	return (
 		<>
 			<LinearGradient
@@ -219,33 +202,7 @@ const GameDealsScreen = ({ route }: GameDealsScreenProps) => {
 				) : (
 					<View style={styles.rootContainer}>
 						<View style={styles.filterContainer}>
-							<ScrollView style={{ height: 10 }} horizontal={true}>
-								<Button
-									onPress={handleFilterButtonPress}
-									selected={showTopDealGames}
-									label={filterLabels.topDeals}
-								/>
-								<Button
-									onPress={handleFilterButtonPress}
-									selected={showTopSteamGames}
-									label={filterLabels.highlyRatedBySteam}
-								/>
-								<Button
-									onPress={handleFilterButtonPress}
-									selected={showTopMetaGames}
-									label={filterLabels.highlyRatedByMeta}
-								/>
-								<Button
-									onPress={handleFilterButtonPress}
-									selected={showTopFifteenGames}
-									label={filterLabels.fifteenToTwenty}
-								/>
-								<Button
-									onPress={handleFilterButtonPress}
-									selected={showTopFiveGames}
-									label={filterLabels.fiveToTen}
-								/>
-							</ScrollView>
+							<ButtonList onPress={handleButtonPress} labels={buttonLabels} />
 						</View>
 						<View style={styles.scrollContainer}>
 							<View style={styles.listItemContainer}>
@@ -257,49 +214,16 @@ const GameDealsScreen = ({ route }: GameDealsScreenProps) => {
 											gameDealItem={modalDealItem}
 										/>
 									)}
-									{topDeals?.length && showTopDealGames ? (
+									{activeDataSet?.length ? (
+										<GameDealCategoryList
+											data={activeDataSet}
+											renderItem={renderItem}
+										/>
+									) : (
 										<GameDealCategoryList
 											data={topDeals}
 											renderItem={renderItem}
 										/>
-									) : (
-										<View></View>
-									)}
-
-									{highlyRatedBySteam?.length && showTopSteamGames ? (
-										<GameDealCategoryList
-											data={highlyRatedBySteam}
-											renderItem={renderItem}
-										/>
-									) : (
-										<View></View>
-									)}
-
-									{highlyRatedByMetacritic?.length && showTopMetaGames ? (
-										<GameDealCategoryList
-											data={highlyRatedByMetacritic}
-											renderItem={renderItem}
-										/>
-									) : (
-										<View></View>
-									)}
-
-									{under20DollarDeals?.length && showTopFifteenGames ? (
-										<GameDealCategoryList
-											data={under20DollarDeals}
-											renderItem={renderItem}
-										/>
-									) : (
-										<View></View>
-									)}
-
-									{fiveToTenDollarDeals?.length && showTopFiveGames ? (
-										<GameDealCategoryList
-											data={fiveToTenDollarDeals}
-											renderItem={renderItem}
-										/>
-									) : (
-										<View></View>
 									)}
 								</>
 							</View>
