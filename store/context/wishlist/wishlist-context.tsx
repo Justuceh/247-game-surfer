@@ -72,7 +72,9 @@ const WishlistContextProvider = ({
 	useEffect(() => {
 		async function getGamesFromStorage(): Promise<GameDealItem[]> {
 			try {
-				const gameKeys = await AsyncStorage.getAllKeys();
+				const gameKeys = (await AsyncStorage.getAllKeys()).filter(
+					(key) => key !== 'initialState'
+				);
 				const gamesInStorage = await AsyncStorage.multiGet(gameKeys);
 				if (gamesInStorage !== null) {
 					const localStorageGames = gamesInStorage
