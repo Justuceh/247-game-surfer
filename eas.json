@@ -1,24 +1,12 @@
 {
-	"builds": {
-		"android": {
-			"release": {
-				"workflow": "managed"
-			},
-			"development": {
-				"workflow": "managed",
-				"buildType": "development-client",
-				"distribution": "internal"
-			}
+	"build": {
+		"development": {
+			"developmentClient": true,
+			"distribution": "internal"
 		},
-		"ios": {
-			"release": {
-				"workflow": "managed"
-			},
-			"development": {
-				"workflow": "managed",
-				"buildType": "development-client",
-				"distribution": "internal"
-			}
-		}
+		"preview": {
+			"distribution": "internal"
+		},
+		"production": {}
 	}
 }

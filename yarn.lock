@@ -3642,7 +3642,7 @@ dtrace-provider@~0.8:
   dependencies:
     nan "^2.14.0"
 
-eas-cli@^3.15.0:
+eas-cli@3.15.0:
   version "3.15.0"
   resolved "https://registry.npmjs.org/eas-cli/-/eas-cli-3.15.0.tgz"
   integrity sha512-Ju7INN1YY5Cu0zIDFEs5MkAi9HMWKyjdOWafrYL7eGhTpuEFd0UGNn394/o4MsHoG8lyFpzH0eeyR+j9UkVV1g==
