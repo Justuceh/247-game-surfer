@@ -76,7 +76,7 @@ const GameDealCard = ({
 				</View>
 				<View style={styles.descriptionContainer}>
 					<View style={styles.saleInfoContainer}>
-						<Text style={styles.saleText}>{gameDealItem.salePrice}</Text>
+						<Text style={styles.saleText}>${gameDealItem.salePrice}</Text>
 						<Text style={[styles.strikethroughText, styles.strikeThrough]}>
 							{gameDealItem.normalPrice}
 						</Text>
@@ -127,13 +127,14 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		alignItems: 'center',
 		paddingHorizontal: 9,
+		paddingVertical: 3,
 	},
 	saleText: {
-		flex: 1,
+		flex: 1.5,
 		fontWeight: '400',
 		justifyContent: 'center',
 		color: 'yellow',
-		fontFamily: Fonts.saletextFont,
+		fontFamily: Fonts.gameTitleFont,
 		fontSize: 18,
 	},
 	strikethroughText: {
@@ -141,7 +142,7 @@ const styles = StyleSheet.create({
 		fontWeight: '400',
 		justifyContent: 'center',
 		color: 'yellow',
-		fontFamily: Fonts.saletextFont,
+		fontFamily: Fonts.gameTitleFont,
 		fontSize: 15,
 	},
 	strikeThrough: {
@@ -159,7 +160,7 @@ const styles = StyleSheet.create({
 	savingsPercent: {
 		fontWeight: '400',
 		color: Colors.charcoalDark,
-		fontFamily: Fonts.saletextFont,
+		fontFamily: Fonts.gameTitleFont,
 		fontSize: 15,
 		backgroundColor: Colors.neonGreen,
 		padding: 3,
