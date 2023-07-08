@@ -24,6 +24,7 @@ const GamesScreen = () => {
 		boolean | undefined
 	>();
 	const [apiSearchQuery, setApiSearchQuery] = useState('');
+	const [forceSelectTopDealLabel, setForceSelectTopDealLabel] = useState('');
 	const [filterParams, setFilterParams] = useState<{
 		[key: string]: number;
 	} | null>(null);
@@ -63,6 +64,7 @@ const GamesScreen = () => {
 	const onClearHandler = () => {
 		setApiSearchQuery('');
 		setFilterParams(null);
+		setForceSelectTopDealLabel(filterLabels.topDeals);
 	};
 
 	function handleQueryUpdate(searchQuery: string) {
@@ -73,6 +75,10 @@ const GamesScreen = () => {
 			setClearSearchValue(filterParams !== null);
 		}
 	}, [filterParams]);
+
+	useEffect(() => {
+		if (forceSelectTopDealLabel !== '') setForceSelectTopDealLabel('');
+	}, [forceSelectTopDealLabel]);
 
 	function handleFilterButtonPress(label: string) {
 		setClearSearchValue(false);
@@ -110,7 +116,11 @@ const GamesScreen = () => {
 			keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}>
 			<View style={styles.rootContainer}>
 				<View style={styles.filterContainer}>
-					<ButtonList onPress={handleFilterButtonPress} labels={buttonLabels} />
+					<ButtonList
+						onPress={handleFilterButtonPress}
+						labels={buttonLabels}
+						forceSelectLabel={forceSelectTopDealLabel}
+					/>
 				</View>
 				<View style={styles.searchContainer}>
 					<SearchInput
