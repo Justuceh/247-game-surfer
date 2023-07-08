@@ -7,9 +7,10 @@ import filterLabels from '../constants/string';
 interface ButtonListProps {
 	labels: string[];
 	onPress: (label: string) => void;
+	forceSelectLabel?: string;
 }
 
-const ButtonList = ({ labels, onPress }: ButtonListProps) => {
+const ButtonList = ({ labels, onPress, forceSelectLabel }: ButtonListProps) => {
 	const [selectedButton, setSelectedButton] = useState('');
 	useEffect(() => {
 		const topDealsLabel = labels.find(
@@ -19,6 +20,14 @@ const ButtonList = ({ labels, onPress }: ButtonListProps) => {
 			setSelectedButton(topDealsLabel);
 		}
 	}, []);
+	useEffect(() => {
+		const forceSelectedLabel = labels.find(
+			(label) => label === forceSelectLabel
+		);
+		if (forceSelectedLabel) {
+			setSelectedButton(forceSelectedLabel);
+		}
+	}, [forceSelectLabel]);
 	return (
 		<ScrollView style={styles.scrollViewContainer} horizontal={true}>
 			{labels.map((label) => {
