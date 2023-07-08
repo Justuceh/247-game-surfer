@@ -2,7 +2,7 @@
 	"expo": {
 		"name": "247GameSurfer",
 		"slug": "247GameSurfer",
-		"version": "1.0.0",
+		"version": "1.0.2",
 		"orientation": "portrait",
 		"icon": "./assets/247-gs-app-icon.png",
 		"userInterfaceStyle": "light",
@@ -13,16 +13,23 @@
 		},
 		"assetBundlePatterns": ["**/*"],
 		"ios": {
-			"supportsTablet": true
+			"supportsTablet": true,
+			"bundleIdentifier": "gameSurfer.ios"
 		},
 		"android": {
 			"adaptiveIcon": {
 				"foregroundImage": "./assets/adaptive-icon.png",
 				"backgroundColor": "#ffffff"
-			}
+			},
+			"package": "gameSurfer.android"
 		},
 		"web": {
 			"favicon": "./assets/favicon.png"
+		},
+		"extra": {
+			"eas": {
+				"projectId": "131b6694-066c-4493-b5b1-de268869b9f6"
+			}
 		}
 	}
 }
