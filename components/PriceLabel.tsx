@@ -23,7 +23,7 @@ const PriceLabel = ({ game }: PriceLabelProps) => {
 			</View>
 			<View style={styles.pricesContainer}>
 				<View style={styles.saleInfoContainer}>
-					<Text style={styles.saleText}>{game?.salePrice}</Text>
+					<Text style={styles.saleText}>${game?.salePrice}</Text>
 					<Text style={styles.strikeThroughText}>{game?.normalPrice}</Text>
 					<Pressable
 						onPress={() => openBrowserAsync(game?.dealID)}
@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
 	savingsPercent: {
 		fontWeight: '400',
 		color: Colors.charcoalDark,
-		fontFamily: Fonts.saletextFont,
+		fontFamily: Fonts.gameTitleFont,
 		fontSize: 18,
 		backgroundColor: Colors.neonGreen,
 	},
