@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Text, View, StyleSheet, Pressable, ScrollView } from 'react-native';
 import Fonts from '../constants/fonts';
 import Colors from '../constants/colors';
+import filterLabels from '../constants/string';
 
 interface ButtonListProps {
 	labels: string[];
@@ -10,6 +11,14 @@ interface ButtonListProps {
 
 const ButtonList = ({ labels, onPress }: ButtonListProps) => {
 	const [selectedButton, setSelectedButton] = useState('');
+	useEffect(() => {
+		const topDealsLabel = labels.find(
+			(label) => label === filterLabels.topDeals
+		);
+		if (topDealsLabel) {
+			setSelectedButton(topDealsLabel);
+		}
+	}, []);
 	return (
 		<ScrollView style={styles.scrollViewContainer} horizontal={true}>
 			{labels.map((label) => {
