@@ -28,30 +28,26 @@ const FavoritesPriceLabel = ({ gameDeal }: FavoritesPriceLabelProps) => {
 	};
 	return (
 		<View style={styles.rootContainer}>
-			<View style={styles.pricesContainer}>
-				<View style={styles.saleInfoContainer}>
-					<View style={styles.iconContainer}>
-						<Image
-							style={styles.iconImage}
-							source={{ uri: storeIconUri }}
-							resizeMode='contain'
-						/>
-					</View>
+			<View style={styles.leftRow}>
+				<Image
+					style={styles.iconImage}
+					source={{ uri: storeIconUri }}
+					resizeMode='contain'
+				/>
+				<Text style={styles.savingsPercent}>-{savingsPercent}</Text>
+			</View>
 
-					<View style={styles.savingsPercentContainer}>
-						<Text style={styles.savingsPercent}>-{savingsPercent}</Text>
-					</View>
-					<Text style={styles.strikeThroughText}>{gameDeal?.retailPrice}</Text>
-					<Text style={styles.saleText}>${gameDeal?.price}</Text>
-					<Pressable
-						onPress={() => openBrowserAsync(gameDeal?.dealID)}
-						style={({ pressed }) => [
-							styles.dealButton,
-							{ opacity: pressed ? 0.2 : 0.9 },
-						]}>
-						<Text style={styles.dealButtonText}>Get Deal!</Text>
-					</Pressable>
-				</View>
+			<View style={styles.rightRow}>
+				<Text style={styles.strikeThroughText}>{gameDeal?.retailPrice}</Text>
+				<Text style={styles.saleText}>${gameDeal?.price}</Text>
+				<Pressable
+					onPress={() => openBrowserAsync(gameDeal?.dealID)}
+					style={({ pressed }) => [
+						styles.dealButton,
+						{ opacity: pressed ? 0.2 : 0.9 },
+					]}>
+					<Text style={styles.dealButtonText}>Get Deal!</Text>
+				</Pressable>
 			</View>
 		</View>
 	);
@@ -62,15 +58,27 @@ export default FavoritesPriceLabel;
 const styles = StyleSheet.create({
 	rootContainer: {
 		flex: 1,
+		flexDirection: 'row',
+		alignItems: 'center',
+		justifyContent: 'center',
 		padding: 10,
 		width: '100%',
 	},
-	savingsPercentContainer: {
-		flex: 1,
-		alignItems: 'flex-start',
+	rightRow: {
+		flex: 2,
+		flexDirection: 'row',
+		alignItems: 'center',
 		justifyContent: 'center',
 	},
+	leftRow: {
+		flex: 1,
+		flexDirection: 'row',
+		justifyContent: 'center',
+		alignItems: 'center',
+	},
 	savingsPercent: {
+		flex: 1,
+		textAlign: 'center',
 		fontWeight: '400',
 		color: Colors.charcoalDark,
 		fontFamily: Fonts.itimFont,
@@ -78,46 +86,46 @@ const styles = StyleSheet.create({
 		backgroundColor: Colors.neonGreen,
 	},
 	pricesContainer: {
-		flex: 1.5,
+		flex: 1,
 		alignItems: 'center',
 		justifyContent: 'center',
 	},
 	saleInfoContainer: {
-		flex: 1.5,
+		flex: 1,
 		flexDirection: 'row',
 		alignItems: 'center',
 		justifyContent: 'center',
 		paddingHorizontal: 9,
 	},
 	saleText: {
-		flex: 1,
+		flex: 2,
+		justifyContent: 'center',
 		color: 'yellow',
 		fontSize: 20,
 		fontFamily: Fonts.itimFont,
+		marginLeft: 10,
 	},
 	strikeThroughText: {
-		flex: 1,
-		justifyContent: 'flex-end',
+		flex: 2,
+		justifyContent: 'center',
+		textAlign: 'right',
 		fontSize: 20,
 		fontFamily: Fonts.itimFont,
 		color: Colors.offWhite,
 		textDecorationLine: 'line-through',
 	},
-	iconContainer: {
-		flex: 0.9,
-		justifyContent: 'center',
-		marginRight: 20,
-	},
+
 	iconImage: {
-		aspectRatio: 1,
+		flex: 2,
+		height: 50,
 	},
 	dealButton: {
+		flex: 1.5,
 		backgroundColor: '#56ff7b',
 		borderWidth: 1,
 		borderColor: '#bd1010',
 		borderRadius: 10,
 		opacity: 0.9,
-		flex: 1,
 		padding: 4,
 		justifyContent: 'center',
 	},

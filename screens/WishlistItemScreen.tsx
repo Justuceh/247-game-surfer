@@ -253,7 +253,6 @@ const WishlistItemScreen = ({ route }: WishlistItemScreenProps) => {
 													gameDeals?.map((deal) => {
 														return <FavoritesPriceLabel gameDeal={deal} />;
 													})}
-
 												<GameText
 													gameTitle={filteredGame?.name}
 													gameSummary={filteredGame?.summary}
@@ -303,8 +302,6 @@ const styles = StyleSheet.create({
 	},
 	rootContainer: {
 		flex: 1,
-		justifyContent: 'center',
-		alignItems: 'center',
 		marginBottom: 25,
 	},
 	activityIndicator: {
@@ -313,7 +310,7 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 	},
 	gameInfoContainer: {
-		flex: 2,
+		flex: 1,
 		justifyContent: 'center',
 		alignItems: 'center',
 		marginTop: 5,
