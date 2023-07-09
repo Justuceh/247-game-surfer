@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Text, View, StyleSheet, Image } from 'react-native';
+import { Text, View, StyleSheet, Image, Pressable } from 'react-native';
 import WishlistGame from '../models/WishlistGame';
 import Card from './Card';
 import Fonts from '../constants/fonts';
@@ -27,25 +27,35 @@ const WishlistGameCard = ({ wishlistGame }: WishlistCardProps) => {
 	}, [wishlistGame.thumb]);
 	const calculatedWidth = gameImageWidth > 130 ? 160 : gameImageWidth + 50;
 	const calculatedHeight = gameImageHeight > 190 ? 120 : gameImageHeight + 60;
+
+	function handleWishlistItemPress(item: WishlistGame) {}
 	return (
 		<Card style={{ backgroundColor: Colors.charcoalDark }}>
-			<View style={styles.rootContainer}>
-				<View style={styles.imageContainer}>
-					<Image
-						style={[
-							{
-								height: calculatedHeight,
-								width: calculatedWidth,
-							},
-						]}
-						source={{ uri: wishlistGame.thumb }}
-						resizeMode='contain'
-					/>
+			<Pressable
+				onPress={() => handleWishlistItemPress(wishlistGame)}
+				style={({ pressed }) =>
+					pressed
+						? [styles.pressed, styles.pressableContainer]
+						: styles.pressableContainer
+				}>
+				<View style={styles.rootContainer}>
+					<View style={styles.imageContainer}>
+						<Image
+							style={[
+								{
+									height: calculatedHeight,
+									width: calculatedWidth,
+								},
+							]}
+							source={{ uri: wishlistGame.thumb }}
+							resizeMode='contain'
+						/>
+					</View>
+					<View style={styles.titleContainer}>
+						<Text style={styles.title}>{wishlistGame.title}</Text>
+					</View>
 				</View>
-				<View style={styles.titleContainer}>
-					<Text style={styles.title}>{wishlistGame.title}</Text>
-				</View>
-			</View>
+			</Pressable>
 		</Card>
 	);
 };
@@ -57,6 +67,12 @@ const styles = StyleSheet.create({
 		flex: 1,
 		justifyContent: 'center',
 		alignItems: 'center',
+	},
+	pressableContainer: {
+		flex: 1,
+	},
+	pressed: {
+		opacity: 0.5,
 	},
 	imageContainer: {
 		flex: 1,
