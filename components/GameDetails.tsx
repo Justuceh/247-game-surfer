@@ -205,22 +205,12 @@ const GameDetails = ({
 										/>
 									</View>
 								</ScrollView>
-								{screenShots !== undefined && images !== undefined ? (
+								{screenShots !== undefined && images !== undefined && (
 									<ScreenShotViewer screenShots={screenShots} images={images} />
-								) : (
-									<View>
-										<Text>No Screenshots Available</Text>
-									</View>
 								)}
 							</>
 
-							{videos !== undefined ? (
-								<VideoViewer videos={videos} />
-							) : (
-								<View>
-									<Text>No Videos Available</Text>
-								</View>
-							)}
+							{videos !== undefined && <VideoViewer videos={videos} />}
 						</View>
 					) : (
 						<View
@@ -252,6 +242,7 @@ const styles = StyleSheet.create({
 		flex: 1,
 		justifyContent: 'center',
 		alignItems: 'center',
+		marginBottom: 100,
 	},
 	activityIndicator: {
 		flex: 1,

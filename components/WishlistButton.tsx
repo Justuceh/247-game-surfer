@@ -30,7 +30,7 @@ const WishlistButton = ({ wishlistItem }: WishlistButtonProps) => {
 			<Ionicons
 				onPress={changeWishlistStatusHandler}
 				name='ios-star'
-				size={20}
+				size={30}
 				color={!isWishlisted ? '#a3a3a3' : '#02f402'}
 			/>
 		</Pressable>

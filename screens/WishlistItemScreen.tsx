@@ -46,7 +46,6 @@ const WishlistItemScreen = ({ route }: WishlistItemScreenProps) => {
 
 	useEffect(() => {
 		navigation.setOptions({
-			title: `Game Details`,
 			headerStyle: { backgroundColor: 'black' },
 			headerTitleStyle: { fontFamily: Fonts.itimFont, fontSize: 20 },
 			headerTintColor: Colors.offWhite,
@@ -132,6 +131,9 @@ const WishlistItemScreen = ({ route }: WishlistItemScreenProps) => {
 			const game = gameList?.find((game) => game.name == closestGameName);
 			if (game) {
 				setFilteredGame(game);
+				navigation.setOptions({
+					title: `${game.name}`,
+				});
 				if (game.cover) {
 					setCoverId(game.cover);
 				}
@@ -247,13 +249,10 @@ const WishlistItemScreen = ({ route }: WishlistItemScreenProps) => {
 										<ScrollView>
 											<View style={styles.gameInfoContainer}>
 												<GameCover imageId={cover?.[0]?.image_id} />
-												{gameDeals !== undefined ? (
+												{gameDeals !== undefined &&
 													gameDeals?.map((deal) => {
 														return <FavoritesPriceLabel gameDeal={deal} />;
-													})
-												) : (
-													<View></View>
-												)}
+													})}
 
 												<GameText
 													gameTitle={filteredGame?.name}
@@ -261,25 +260,15 @@ const WishlistItemScreen = ({ route }: WishlistItemScreenProps) => {
 												/>
 											</View>
 										</ScrollView>
-										{screenShots !== undefined && images !== undefined ? (
+										{screenShots !== undefined && images !== undefined && (
 											<ScreenShotViewer
 												screenShots={screenShots}
 												images={images}
 											/>
-										) : (
-											<View>
-												<Text>No Screenshots Available</Text>
-											</View>
 										)}
 									</>
 
-									{videos !== undefined ? (
-										<VideoViewer videos={videos} />
-									) : (
-										<View>
-											<Text>No Videos Available</Text>
-										</View>
-									)}
+									{videos !== undefined && <VideoViewer videos={videos} />}
 								</View>
 							) : (
 								<View
@@ -316,6 +305,7 @@ const styles = StyleSheet.create({
 		flex: 1,
 		justifyContent: 'center',
 		alignItems: 'center',
+		marginBottom: 25,
 	},
 	activityIndicator: {
 		flex: 1,

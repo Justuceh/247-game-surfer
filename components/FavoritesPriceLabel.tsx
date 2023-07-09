@@ -37,11 +37,12 @@ const FavoritesPriceLabel = ({ gameDeal }: FavoritesPriceLabelProps) => {
 							resizeMode='contain'
 						/>
 					</View>
-					<Text style={styles.strikeThroughText}>{gameDeal?.retailPrice}</Text>
-					<Text style={styles.saleText}>${gameDeal?.price}</Text>
+
 					<View style={styles.savingsPercentContainer}>
 						<Text style={styles.savingsPercent}>-{savingsPercent}</Text>
 					</View>
+					<Text style={styles.strikeThroughText}>{gameDeal?.retailPrice}</Text>
+					<Text style={styles.saleText}>${gameDeal?.price}</Text>
 					<Pressable
 						onPress={() => openBrowserAsync(gameDeal?.dealID)}
 						style={({ pressed }) => [
@@ -68,8 +69,6 @@ const styles = StyleSheet.create({
 		flex: 1,
 		alignItems: 'flex-start',
 		justifyContent: 'center',
-		margin: 2,
-		marginLeft: 15,
 	},
 	savingsPercent: {
 		fontWeight: '400',
@@ -79,12 +78,12 @@ const styles = StyleSheet.create({
 		backgroundColor: Colors.neonGreen,
 	},
 	pricesContainer: {
-		flex: 1,
+		flex: 1.5,
 		alignItems: 'center',
 		justifyContent: 'center',
 	},
 	saleInfoContainer: {
-		flex: 1,
+		flex: 1.5,
 		flexDirection: 'row',
 		alignItems: 'center',
 		justifyContent: 'center',
@@ -98,7 +97,7 @@ const styles = StyleSheet.create({
 	},
 	strikeThroughText: {
 		flex: 1,
-		justifyContent: 'center',
+		justifyContent: 'flex-end',
 		fontSize: 20,
 		fontFamily: Fonts.itimFont,
 		color: Colors.offWhite,
@@ -106,7 +105,7 @@ const styles = StyleSheet.create({
 	},
 	iconContainer: {
 		flex: 0.9,
-		justifyContent: 'flex-start',
+		justifyContent: 'center',
 		marginRight: 20,
 	},
 	iconImage: {
