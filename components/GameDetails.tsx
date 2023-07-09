@@ -19,6 +19,7 @@ import IgdbCover from '../models/IgdbCover';
 import IgdbVideo from '../models/IgdbVideo';
 import IgdbScreenshots from '../models/IgdbScreenshot';
 import GameText from './GameText';
+import GameCover from './GameCover';
 
 interface GameDetailsProps {
 	gameDealItem: GameDealItem | undefined;
@@ -176,14 +177,8 @@ const GameDetails = ({
 						<View style={styles.rootContainer}>
 							<>
 								<ScrollView>
-									<View style={styles.coverContainer}>
-										<Image
-											source={{
-												uri: `https://images.igdb.com/igdb/image/upload/t_cover_big/${cover?.[0]?.image_id}.jpg`,
-											}}
-											style={[styles.coverImage, { width: 300, height: 300 }]}
-											resizeMode='contain'
-										/>
+									<View style={styles.gameInfoContainer}>
+										<GameCover imageId={cover?.[0]?.image_id} />
 										<PriceLabel game={gameDealItem} />
 										<GameReviewScore
 											game={gameDealItem}
@@ -278,17 +273,12 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 		alignItems: 'center',
 	},
-	coverContainer: {
+	gameInfoContainer: {
 		flex: 2,
 		justifyContent: 'center',
 		alignItems: 'center',
 		marginTop: 5,
 	},
-	coverImage: {
-		flex: 2,
-		width: 200,
-	},
-
 	picturesContainer: {
 		flex: 1,
 		flexDirection: 'row',
