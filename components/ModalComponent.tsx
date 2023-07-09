@@ -42,7 +42,7 @@ const ModalComponent = ({
 				<LinearGradient
 					style={styles.linearGradient}
 					colors={[
-						Colors.linearGradient.topColor,
+						Colors.charcoal,
 						Colors.linearGradient.middleColor,
 						Colors.linearGradient.bottomColor,
 					]}>
