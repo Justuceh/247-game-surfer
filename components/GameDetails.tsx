@@ -1,5 +1,14 @@
 import { useContext, useEffect, useState } from 'react';
-import { Text, View, StyleSheet, Image, ScrollView } from 'react-native';
+import {
+	Text,
+	View,
+	StyleSheet,
+	Image,
+	ScrollView,
+	Modal,
+	Pressable,
+} from 'react-native';
+import ImageViewer from 'react-native-image-zoom-viewer';
 import { IGDB_BASE_URL } from '@env';
 
 import ModalComponent from './ModalComponent';
@@ -75,6 +84,14 @@ const GameDetails = ({
 	const [screenShotIds, setScreenShotIds] = useState<number[] | undefined>(
 		undefined
 	);
+	const [images, setImages] = useState<
+		{ url: string; props: any }[] | undefined
+	>(undefined);
+	const [showScreenShotModal, setShowScreenShotModal] =
+		useState<boolean>(false);
+	const [selectedImageIndex, setSelectedImageIndex] = useState<
+		number | undefined
+	>(undefined);
 
 	useEffect(() => {
 		if (gameList) {
@@ -136,6 +153,21 @@ const GameDetails = ({
 			enabled: screenShotIds !== undefined,
 		}
 	);
+	useEffect(() => {
+		if (screenShots !== undefined) {
+			const screenShotImages = screenShots.map((screenShot) => {
+				return {
+					url: `https://images.igdb.com/igdb/image/upload/t_cover_big/${screenShot.image_id}.jpg`,
+					height: screenShot.height,
+					width: screenShot.width,
+					props: {
+						resizeMode: 'contain',
+					},
+				};
+			});
+			setImages(screenShotImages);
+		}
+	}, [screenShots]);
 
 	async function fetchGameData(query: string, endpoint: string) {
 		try {
@@ -162,6 +194,13 @@ const GameDetails = ({
 	);
 	// Convert the date to a readable string
 	const readableDate = date.toLocaleDateString();
+	function handleScreenShotPress(screenShotIndex: number) {
+		setSelectedImageIndex(screenShotIndex);
+		setShowScreenShotModal(true);
+	}
+	function closeModal() {
+		setShowScreenShotModal(false);
+	}
 	return (
 		<ModalComponent onClose={onClose} visible={showDetails}>
 			{!isGameListEmpty &&
@@ -190,16 +229,18 @@ const GameDetails = ({
 										/>
 									</View>
 								</ScrollView>
-								{screenShots !== undefined ? (
+								{screenShots !== undefined && images !== undefined ? (
 									<>
 										<Text style={styles.containerText}>Screenshots</Text>
 										<ScrollView horizontal={true}>
 											<View style={styles.picturesContainer}>
 												{screenShots.map((screenShot) => {
+													const index = screenShots.indexOf(screenShot);
 													return (
-														<View
+														<Pressable
 															style={styles.screenShotsContainer}
-															key={screenShot.id}>
+															key={screenShot.id}
+															onPress={() => handleScreenShotPress(index)}>
 															<Image
 																source={{
 																	uri: `https://images.igdb.com/igdb/image/upload/t_cover_big/${screenShot.image_id}.jpg`,
@@ -207,11 +248,25 @@ const GameDetails = ({
 																style={styles.screenShot}
 																resizeMode='contain'
 															/>
-														</View>
+														</Pressable>
 													);
 												})}
 											</View>
 										</ScrollView>
+										<Modal visible={showScreenShotModal} transparent>
+											<ImageViewer
+												enableSwipeDown={true}
+												onClick={closeModal}
+												onSwipeDown={closeModal}
+												swipeDownThreshold={100}
+												enableImageZoom={true}
+												index={selectedImageIndex}
+												imageUrls={images.map((image) => ({
+													url: image.url,
+													props: image.props,
+												}))}
+											/>
+										</Modal>
 									</>
 								) : (
 									<View>
