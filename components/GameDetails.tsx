@@ -21,6 +21,7 @@ import GameText from './GameText';
 import GameCover from './GameCover';
 import ScreenShotViewer from './ScreenShotViewer';
 import VideoViewer from './VideoViewer';
+import ViewerImage from '../models/ViewerImage';
 
 interface GameDetailsProps {
 	gameDealItem: GameDealItem | undefined;
@@ -76,9 +77,7 @@ const GameDetails = ({
 	const [screenShotIds, setScreenShotIds] = useState<number[] | undefined>(
 		undefined
 	);
-	const [images, setImages] = useState<{ url: string }[] | undefined>(
-		undefined
-	);
+	const [images, setImages] = useState<ViewerImage[] | undefined>(undefined);
 
 	useEffect(() => {
 		if (gameList) {
@@ -142,7 +141,7 @@ const GameDetails = ({
 	);
 	useEffect(() => {
 		if (screenShots !== undefined) {
-			const screenShotImages = screenShots.map((screenShot) => {
+			const screenShotImages: ViewerImage[] = screenShots.map((screenShot) => {
 				return {
 					url: `https://images.igdb.com/igdb/image/upload/t_cover_big/${screenShot.image_id}.jpg`,
 					height: screenShot.height,

@@ -13,10 +13,11 @@ import ImageViewer from 'react-native-image-zoom-viewer';
 import IgdbScreenshots from '../models/IgdbScreenshot';
 import Colors from '../constants/colors';
 import Fonts from '../constants/fonts';
+import ViewerImage from '../models/ViewerImage';
 
 interface ScreenShotViewerProps {
 	screenShots: IgdbScreenshots[];
-	images: { url: string }[];
+	images: ViewerImage[];
 }
 
 const ScreenShotViewer = ({ screenShots, images }: ScreenShotViewerProps) => {
@@ -41,12 +42,11 @@ const ScreenShotViewer = ({ screenShots, images }: ScreenShotViewerProps) => {
 						const index = screenShots.indexOf(screenShot);
 						return (
 							<Pressable
-								style={styles.screenShotsContainer}
 								key={screenShot.id}
 								onPress={() => handleScreenShotPress(index)}>
 								<Image
 									source={{
-										uri: `https://images.igdb.com/igdb/image/upload/t_cover_big/${screenShot.image_id}.jpg`,
+										uri: `https://images.igdb.com/igdb/image/upload/t_cover_big/${screenShot.image_id}.png`,
 									}}
 									style={styles.screenShot}
 									resizeMode='contain'
@@ -66,6 +66,8 @@ const ScreenShotViewer = ({ screenShots, images }: ScreenShotViewerProps) => {
 					index={selectedImageIndex}
 					imageUrls={images.map((image) => ({
 						url: image.url,
+						height: image.height,
+						width: image.width,
 					}))}
 				/>
 			</Modal>
@@ -77,22 +79,20 @@ export default ScreenShotViewer;
 
 const styles = StyleSheet.create({
 	picturesContainer: {
-		flex: 1,
 		flexDirection: 'row',
 		borderTopWidth: 0.5,
 		borderColor: 'red',
-		marginBottom: 10,
-		marginVertical: 5,
+		padding: 5,
 	},
-	screenShotsContainer: { flex: 1, alignItems: 'center' },
 	containerText: {
 		color: Colors.offWhite,
 		fontSize: 20,
 		fontFamily: Fonts.itimFont,
+		marginBottom: 4,
 	},
 	screenShot: {
-		marginHorizontal: 3,
-		height: 200,
+		marginHorizontal: 5,
+		height: 150,
 		width: 250,
 	},
 });
