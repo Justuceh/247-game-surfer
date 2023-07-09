@@ -8,6 +8,7 @@ import Fonts from '../constants/fonts';
 import Colors from '../constants/colors';
 import { RootNavigatorParamList } from '../App';
 import { useNavigation } from '@react-navigation/native';
+import WishlistButton from './WishlistButton';
 
 interface WishlistCardProps {
 	wishlistGame: WishlistGame;
@@ -68,6 +69,7 @@ const WishlistGameCard = ({ wishlistGame }: WishlistCardProps) => {
 					</View>
 					<View style={styles.titleContainer}>
 						<Text style={styles.title}>{wishlistGame.title}</Text>
+						<WishlistButton wishlistItem={wishlistGame} />
 					</View>
 				</View>
 			</Pressable>
@@ -97,6 +99,8 @@ const styles = StyleSheet.create({
 	},
 	titleContainer: {
 		flex: 1,
+		flexDirection: 'row',
+		padding: 5,
 		justifyContent: 'center',
 		alignItems: 'center',
 	},

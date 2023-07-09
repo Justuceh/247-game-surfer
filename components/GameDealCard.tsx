@@ -81,7 +81,13 @@ const GameDealCard = ({
 							{gameDealItem.normalPrice}
 						</Text>
 
-						<WishlistButton gameDealItem={gameDealItem} />
+						<WishlistButton
+							wishlistItem={{
+								id: gameDealItem.gameID,
+								title: gameDealItem.title,
+								thumb: gameDealItem.thumb,
+							}}
+						/>
 					</View>
 				</View>
 			</Pressable>

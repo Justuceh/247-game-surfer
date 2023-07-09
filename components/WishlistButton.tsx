@@ -3,28 +3,23 @@ import { Pressable, StyleSheet } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import { WishlistContext } from '../store/context/wishlist/wishlist-context';
-import GameDealItem from '../models/GameDealItem';
+import WishlistGame from '../models/WishlistGame';
 
 interface WishlistButtonProps {
-	gameDealItem: GameDealItem;
+	wishlistItem: WishlistGame; // Change this to WishlistItem
 }
 
-const WishlistButton = ({ gameDealItem }: WishlistButtonProps) => {
+const WishlistButton = ({ wishlistItem }: WishlistButtonProps) => {
 	const wishlistContext = useContext(WishlistContext);
 	const isWishlisted = wishlistContext.games.some(
-		(game) => game.id === gameDealItem.gameID
+		(game) => game.id === wishlistItem.id
 	);
 
 	const changeWishlistStatusHandler = () => {
 		if (isWishlisted) {
-			wishlistContext.removeGame(gameDealItem.gameID);
+			wishlistContext.removeGame(wishlistItem.id);
 		} else {
-			const wishlistGame = {
-				id: gameDealItem.gameID,
-				title: gameDealItem.title,
-				thumb: gameDealItem.thumb,
-			};
-			wishlistContext.addGame(wishlistGame);
+			wishlistContext.addGame(wishlistItem);
 		}
 	};
 
