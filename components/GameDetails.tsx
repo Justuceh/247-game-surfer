@@ -10,7 +10,6 @@ import axios from 'axios';
 import { useQuery } from '@tanstack/react-query';
 import ActivityIndicatorComponent from './ActivityIndicator';
 import { findClosestString, removeEditionWords } from '../utils/stringUtils';
-import YouTubePlayer from './YouTubePlayer';
 import Fonts from '../constants/fonts';
 import PriceLabel from './PriceLabel';
 import GameReviewScore from './GameReviewScore';
@@ -21,6 +20,7 @@ import IgdbScreenshots from '../models/IgdbScreenshot';
 import GameText from './GameText';
 import GameCover from './GameCover';
 import ScreenShotViewer from './ScreenShotViewer';
+import VideoViewer from './VideoViewer';
 
 interface GameDetailsProps {
 	gameDealItem: GameDealItem | undefined;
@@ -163,14 +163,6 @@ const GameDetails = ({
 			console.log(err);
 		}
 	}
-
-	const renderVideos = (video: IgdbVideo) => {
-		return (
-			<View key={video.id} style={styles.youTubeContainer}>
-				<YouTubePlayer height={190} videoId={video.video_id} />
-			</View>
-		);
-	};
 	const isGameListEmpty = gameList === null || gameList?.length === 0;
 	// Create a new Date object with the Unix timestamp in milliseconds
 	const date = new Date(
@@ -216,16 +208,7 @@ const GameDetails = ({
 							</>
 
 							{videos !== undefined ? (
-								<>
-									<Text style={styles.containerText}>Videos</Text>
-									<ScrollView>
-										<View style={styles.videosContainer}>
-											{videos.map((video) => {
-												return renderVideos(video);
-											})}
-										</View>
-									</ScrollView>
-								</>
+								<VideoViewer videos={videos} />
 							) : (
 								<View>
 									<Text>No Videos Available</Text>
@@ -273,31 +256,5 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 		alignItems: 'center',
 		marginTop: 5,
-	},
-	containerText: {
-		color: Colors.offWhite,
-		fontSize: 20,
-		fontFamily: Fonts.itimFont,
-	},
-	videosContainer: {
-		flex: 1,
-		borderTopWidth: 0.5,
-		borderColor: 'red',
-		marginBottom: 30,
-		marginVertical: 5,
-		paddingTop: 5,
-	},
-	youTubeContainer: {
-		flex: 1,
-		alignItems: 'center',
-		backgroundColor: Colors.charcoalDark,
-		borderRadius: 10,
-		padding: 10,
-		margin: 5,
-		elevation: 4,
-		shadowColor: '#c7c7c7',
-		shadowOffset: { width: 1, height: 1 },
-		shadowRadius: 4,
-		shadowOpacity: 0.5,
 	},
 });
