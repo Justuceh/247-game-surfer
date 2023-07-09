@@ -302,7 +302,7 @@ const styles = StyleSheet.create({
 	},
 	rootContainer: {
 		flex: 1,
-		marginBottom: 25,
+		marginBottom: 10,
 	},
 	activityIndicator: {
 		flex: 1,

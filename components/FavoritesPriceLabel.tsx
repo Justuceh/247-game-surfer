@@ -1,4 +1,11 @@
-import { Text, View, StyleSheet, Pressable, Image } from 'react-native';
+import {
+	Text,
+	View,
+	StyleSheet,
+	Pressable,
+	Image,
+	Dimensions,
+} from 'react-native';
 import * as WebBrowser from 'expo-web-browser';
 import { CHEAPSHARK_BASE_URL, CHEAPSHARK_REDIRECT_API } from '@env';
 
@@ -54,7 +61,7 @@ const FavoritesPriceLabel = ({ gameDeal }: FavoritesPriceLabelProps) => {
 };
 
 export default FavoritesPriceLabel;
-
+const { width } = Dimensions.get('window');
 const styles = StyleSheet.create({
 	rootContainer: {
 		flex: 1,
@@ -62,7 +69,7 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		justifyContent: 'center',
 		padding: 10,
-		width: '100%',
+		width: width,
 	},
 	rightRow: {
 		flex: 2,
@@ -77,12 +84,13 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 	},
 	savingsPercent: {
-		flex: 1,
+		flex: 0.5,
 		textAlign: 'center',
 		fontWeight: '400',
 		color: Colors.charcoalDark,
 		fontFamily: Fonts.itimFont,
 		fontSize: 18,
+		marginLeft: 20,
 		backgroundColor: Colors.neonGreen,
 	},
 	pricesContainer: {
@@ -98,7 +106,7 @@ const styles = StyleSheet.create({
 		paddingHorizontal: 9,
 	},
 	saleText: {
-		flex: 2,
+		flex: 1.5,
 		justifyContent: 'center',
 		color: 'yellow',
 		fontSize: 20,
@@ -106,7 +114,7 @@ const styles = StyleSheet.create({
 		marginLeft: 10,
 	},
 	strikeThroughText: {
-		flex: 2,
+		flex: 1.5,
 		justifyContent: 'center',
 		textAlign: 'right',
 		fontSize: 20,
@@ -116,8 +124,8 @@ const styles = StyleSheet.create({
 	},
 
 	iconImage: {
-		flex: 2,
-		height: 50,
+		flex: 0.5,
+		height: 60,
 	},
 	dealButton: {
 		flex: 1.5,
