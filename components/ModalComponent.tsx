@@ -9,6 +9,7 @@ import {
 	StatusBar,
 	Platform,
 } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import Colors from '../constants/colors';
@@ -38,19 +39,27 @@ const ModalComponent = ({
 	return (
 		<Modal animationType='slide' visible={showModal}>
 			<Animated.View style={styles.modalContainer}>
-				<View style={styles.modalSliderContainer}>
-					<Pressable
-						onPress={closeModal}
-						style={({ pressed }) => [
-							{
-								opacity: pressed ? 0.3 : 1,
-							},
-						]}>
-						<Ionicons name='close-circle-outline' size={35} color='#c1c1c1' />
-					</Pressable>
-				</View>
+				<LinearGradient
+					style={styles.linearGradient}
+					colors={[
+						Colors.linearGradient.topColor,
+						Colors.linearGradient.middleColor,
+						Colors.linearGradient.bottomColor,
+					]}>
+					<View style={styles.modalSliderContainer}>
+						<Pressable
+							onPress={closeModal}
+							style={({ pressed }) => [
+								{
+									opacity: pressed ? 0.3 : 1,
+								},
+							]}>
+							<Ionicons name='close-circle-outline' size={35} color='#c1c1c1' />
+						</Pressable>
+					</View>
 
-				{children}
+					{children}
+				</LinearGradient>
 			</Animated.View>
 		</Modal>
 	);
@@ -58,6 +67,9 @@ const ModalComponent = ({
 const { height, width } = Dimensions.get('window');
 const statusBarHeight = StatusBar.currentHeight || 50;
 const styles = StyleSheet.create({
+	linearGradient: {
+		flex: 1,
+	},
 	overlay: {
 		flex: 10,
 		justifyContent: 'flex-end',
@@ -65,11 +77,9 @@ const styles = StyleSheet.create({
 	},
 	modalContainer: {
 		flex: 1,
-		padding: 5,
 		marginTop: Platform.OS === 'ios' ? statusBarHeight : 0,
 		height: height,
 		width: width,
-		backgroundColor: Colors.charcoalDark,
 	},
 	modalSliderContainer: {
 		alignItems: 'flex-end',
