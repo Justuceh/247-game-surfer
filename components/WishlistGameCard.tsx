@@ -39,11 +39,10 @@ const WishlistGameCard = ({ wishlistGame }: WishlistCardProps) => {
 	const calculatedHeight = gameImageHeight > 190 ? 120 : gameImageHeight + 60;
 
 	function handleWishlistItemPress(item: WishlistGame) {
-		// navigation.navigate('GameDealsScreen', {
-		// 	storeID: storeID,
-		// 	title: storeName,
-		// });
-		navigation.navigate('WishlistItemScreen');
+		navigation.navigate('WishlistItemScreen', {
+			gameId: wishlistGame.id,
+			title: wishlistGame.title,
+		});
 	}
 	return (
 		<Card style={{ backgroundColor: Colors.charcoalDark }}>

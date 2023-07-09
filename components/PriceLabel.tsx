@@ -4,14 +4,17 @@ import { CHEAPSHARK_REDIRECT_API } from '@env';
 
 import Colors from '../constants/colors';
 import Fonts from '../constants/fonts';
-import GameDealItem from '../models/GameDealItem';
+import GameDeal from '../models/GameDeal';
 
 interface PriceLabelProps {
-	game: GameDealItem | undefined;
+	game: GameDeal | undefined;
 }
 
 const PriceLabel = ({ game }: PriceLabelProps) => {
-	const savingsPercent = `${game?.savings.split('.')[0]}%`;
+	let savingsPercent;
+	if (game?.savings) {
+		savingsPercent = `${game?.savings.split('.')[0]}%`;
+	}
 
 	const openBrowserAsync = async (dealID: string | undefined) => {
 		await WebBrowser.openBrowserAsync(`${CHEAPSHARK_REDIRECT_API}${dealID}`);
@@ -23,8 +26,8 @@ const PriceLabel = ({ game }: PriceLabelProps) => {
 			</View>
 			<View style={styles.pricesContainer}>
 				<View style={styles.saleInfoContainer}>
-					<Text style={styles.saleText}>${game?.salePrice}</Text>
-					<Text style={styles.strikeThroughText}>{game?.normalPrice}</Text>
+					<Text style={styles.saleText}>${game?.price}</Text>
+					<Text style={styles.strikeThroughText}>{game?.retailPrice}</Text>
 					<Pressable
 						onPress={() => openBrowserAsync(game?.dealID)}
 						style={({ pressed }) => [

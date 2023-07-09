@@ -24,7 +24,10 @@ import { TutorialContextProvider } from './store/context/tutorial/tutorial-conte
 export type RootNavigatorParamList = {
 	StoresScreen: undefined;
 	WishlistScreen: undefined;
-	WishlistItemScreen: undefined;
+	WishlistItemScreen: {
+		gameId: string;
+		title: string;
+	};
 	GamesScreen: undefined;
 	StoresScreenStack: undefined;
 	GameDealsScreen: { storeID: string; title: string };
