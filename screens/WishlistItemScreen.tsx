@@ -24,8 +24,8 @@ import ScreenShotViewer from '../components/ScreenShotViewer';
 import GameText from '../components/GameText';
 import GameCover from '../components/GameCover';
 import ActivityIndicatorComponent from '../components/ActivityIndicator';
-import PriceLabel from '../components/PriceLabel';
 import GameDeal from '../models/GameDeal';
+import FavoritesPriceLabel from '../components/FavoritesPriceLabel';
 
 type WishlistItemScreenRouteProp = RouteProp<
 	RootNavigatorParamList,
@@ -249,7 +249,7 @@ const WishlistItemScreen = ({ route }: WishlistItemScreenProps) => {
 												<GameCover imageId={cover?.[0]?.image_id} />
 												{gameDeals !== undefined ? (
 													gameDeals?.map((deal) => {
-														return <PriceLabel game={deal} />;
+														return <FavoritesPriceLabel gameDeal={deal} />;
 													})
 												) : (
 													<View></View>
