@@ -22,6 +22,7 @@ import GameCover from './GameCover';
 import ScreenShotViewer from './ScreenShotViewer';
 import VideoViewer from './VideoViewer';
 import ViewerImage from '../models/ViewerImage';
+import GameDeal from '../models/GameDeal';
 
 interface GameDetailsProps {
 	gameDealItem: GameDealItem | undefined;
@@ -169,6 +170,13 @@ const GameDetails = ({
 	);
 	// Convert the date to a readable string
 	const readableDate = date.toLocaleDateString();
+	const gameDeal: GameDeal = {
+		storeID: gameDealItem?.storeID,
+		dealID: gameDealItem?.dealID,
+		price: gameDealItem?.salePrice,
+		retailPrice: gameDealItem?.normalPrice,
+		savings: gameDealItem?.savings,
+	};
 	return (
 		<ModalComponent onClose={onClose} visible={showDetails}>
 			{!isGameListEmpty &&
@@ -186,7 +194,7 @@ const GameDetails = ({
 								<ScrollView>
 									<View style={styles.gameInfoContainer}>
 										<GameCover imageId={cover?.[0]?.image_id} />
-										<PriceLabel game={gameDealItem} />
+										<PriceLabel game={gameDeal} />
 										<GameReviewScore
 											game={gameDealItem}
 											releaseDate={readableDate}
