@@ -1,14 +1,5 @@
 import { useContext, useEffect, useState } from 'react';
-import {
-	Text,
-	View,
-	StyleSheet,
-	Image,
-	ScrollView,
-	Modal,
-	Pressable,
-} from 'react-native';
-import ImageViewer from 'react-native-image-zoom-viewer';
+import { Text, View, StyleSheet, ScrollView } from 'react-native';
 import { IGDB_BASE_URL } from '@env';
 
 import ModalComponent from './ModalComponent';
@@ -29,6 +20,7 @@ import IgdbVideo from '../models/IgdbVideo';
 import IgdbScreenshots from '../models/IgdbScreenshot';
 import GameText from './GameText';
 import GameCover from './GameCover';
+import ScreenShotViewer from './ScreenShotViewer';
 
 interface GameDetailsProps {
 	gameDealItem: GameDealItem | undefined;
@@ -87,11 +79,6 @@ const GameDetails = ({
 	const [images, setImages] = useState<{ url: string }[] | undefined>(
 		undefined
 	);
-	const [showScreenShotModal, setShowScreenShotModal] =
-		useState<boolean>(false);
-	const [selectedImageIndex, setSelectedImageIndex] = useState<
-		number | undefined
-	>(undefined);
 
 	useEffect(() => {
 		if (gameList) {
@@ -191,13 +178,6 @@ const GameDetails = ({
 	);
 	// Convert the date to a readable string
 	const readableDate = date.toLocaleDateString();
-	function handleScreenShotPress(screenShotIndex: number) {
-		setSelectedImageIndex(screenShotIndex);
-		setShowScreenShotModal(true);
-	}
-	function closeModal() {
-		setShowScreenShotModal(false);
-	}
 	return (
 		<ModalComponent onClose={onClose} visible={showDetails}>
 			{!isGameListEmpty &&
@@ -227,43 +207,7 @@ const GameDetails = ({
 									</View>
 								</ScrollView>
 								{screenShots !== undefined && images !== undefined ? (
-									<>
-										<Text style={styles.containerText}>Screenshots</Text>
-										<ScrollView horizontal={true}>
-											<View style={styles.picturesContainer}>
-												{screenShots.map((screenShot) => {
-													const index = screenShots.indexOf(screenShot);
-													return (
-														<Pressable
-															style={styles.screenShotsContainer}
-															key={screenShot.id}
-															onPress={() => handleScreenShotPress(index)}>
-															<Image
-																source={{
-																	uri: `https://images.igdb.com/igdb/image/upload/t_cover_big/${screenShot.image_id}.jpg`,
-																}}
-																style={styles.screenShot}
-																resizeMode='contain'
-															/>
-														</Pressable>
-													);
-												})}
-											</View>
-										</ScrollView>
-										<Modal visible={showScreenShotModal} transparent>
-											<ImageViewer
-												enableSwipeDown={true}
-												onClick={closeModal}
-												onSwipeDown={closeModal}
-												swipeDownThreshold={100}
-												enableImageZoom={true}
-												index={selectedImageIndex}
-												imageUrls={images.map((image) => ({
-													url: image.url,
-												}))}
-											/>
-										</Modal>
-									</>
+									<ScreenShotViewer screenShots={screenShots} images={images} />
 								) : (
 									<View>
 										<Text>No Screenshots Available</Text>
@@ -330,24 +274,10 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		marginTop: 5,
 	},
-	picturesContainer: {
-		flex: 1,
-		flexDirection: 'row',
-		borderTopWidth: 0.5,
-		borderColor: 'red',
-		marginBottom: 10,
-		marginVertical: 5,
-	},
-	screenShotsContainer: { flex: 1, alignItems: 'center' },
 	containerText: {
 		color: Colors.offWhite,
 		fontSize: 20,
 		fontFamily: Fonts.itimFont,
-	},
-	screenShot: {
-		marginHorizontal: 3,
-		height: 200,
-		width: 250,
 	},
 	videosContainer: {
 		flex: 1,
