@@ -12,14 +12,19 @@ interface WishlistButtonProps {
 const WishlistButton = ({ gameDealItem }: WishlistButtonProps) => {
 	const wishlistContext = useContext(WishlistContext);
 	const isWishlisted = wishlistContext.games.some(
-		(game) => game.dealID === gameDealItem.dealID
+		(game) => game.id === gameDealItem.gameID
 	);
 
 	const changeWishlistStatusHandler = () => {
 		if (isWishlisted) {
-			wishlistContext.removeGame(gameDealItem.dealID);
+			wishlistContext.removeGame(gameDealItem.gameID);
 		} else {
-			wishlistContext.addGame(gameDealItem);
+			const wishlistGame = {
+				id: gameDealItem.gameID,
+				title: gameDealItem.title,
+				thumb: gameDealItem.thumb,
+			};
+			wishlistContext.addGame(wishlistGame);
 		}
 	};
 
