@@ -1,17 +1,26 @@
 import { useEffect, useState } from 'react';
 import { Text, View, StyleSheet, Image, Pressable } from 'react-native';
+import { StackNavigationProp } from '@react-navigation/stack';
+
 import WishlistGame from '../models/WishlistGame';
 import Card from './Card';
 import Fonts from '../constants/fonts';
 import Colors from '../constants/colors';
+import { RootNavigatorParamList } from '../App';
+import { useNavigation } from '@react-navigation/native';
 
 interface WishlistCardProps {
 	wishlistGame: WishlistGame;
 }
+type StoresScreenNavigationProp = StackNavigationProp<
+	RootNavigatorParamList,
+	'GameDealsScreen'
+>;
 
 const WishlistGameCard = ({ wishlistGame }: WishlistCardProps) => {
 	const [gameImageHeight, setGameImageHeight] = useState<number>(0);
 	const [gameImageWidth, setGameImageWidth] = useState<number>(0);
+	const navigation = useNavigation<StoresScreenNavigationProp>();
 
 	useEffect(() => {
 		Image.getSize(
@@ -28,7 +37,13 @@ const WishlistGameCard = ({ wishlistGame }: WishlistCardProps) => {
 	const calculatedWidth = gameImageWidth > 130 ? 160 : gameImageWidth + 50;
 	const calculatedHeight = gameImageHeight > 190 ? 120 : gameImageHeight + 60;
 
-	function handleWishlistItemPress(item: WishlistGame) {}
+	function handleWishlistItemPress(item: WishlistGame) {
+		// navigation.navigate('GameDealsScreen', {
+		// 	storeID: storeID,
+		// 	title: storeName,
+		// });
+		navigation.navigate('WishlistItemScreen');
+	}
 	return (
 		<Card style={{ backgroundColor: Colors.charcoalDark }}>
 			<Pressable
@@ -87,7 +102,7 @@ const styles = StyleSheet.create({
 	},
 	title: {
 		textAlign: 'center',
-		fontFamily: Fonts.gameTitleFont,
+		fontFamily: Fonts.itimFont,
 		color: 'white',
 		fontSize: 18,
 		marginHorizontal: 8,

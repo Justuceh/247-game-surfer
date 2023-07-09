@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
 		color: '#f7b4a6',
 		fontSize: 18,
 		fontWeight: '200',
-		fontFamily: Fonts.gameTitleFont,
+		fontFamily: Fonts.itimFont,
 	},
 	iconContainer: {
 		flex: 1,

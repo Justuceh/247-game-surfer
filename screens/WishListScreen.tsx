@@ -16,7 +16,7 @@ import Colors from '../constants/colors';
 import WishlistGame from '../models/WishlistGame';
 import WishlistGameCard from '../components/WishlistGameCard';
 
-const WishListScreen = () => {
+const WishlistScreen = () => {
 	const wishListGames = useContext(WishlistContext);
 	const [bannerVisible, setBannerVisible] = useState(true);
 	const flatListRef = useRef<FlatList<WishlistGame>>(null);
@@ -93,7 +93,7 @@ const WishListScreen = () => {
 	);
 };
 
-export default WishListScreen;
+export default WishlistScreen;
 
 const styles = StyleSheet.create({
 	linearGradient: {
@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 	},
 	bannerText: {
-		fontFamily: Fonts.gameTitleFont,
+		fontFamily: Fonts.itimFont,
 		fontSize: 23,
 		color: Colors.offWhite,
 	},

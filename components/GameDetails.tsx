@@ -286,7 +286,7 @@ const GameDetails = ({
 								style={{
 									color: Colors.offWhite,
 									fontSize: 23,
-									fontFamily: Fonts.gameTitleFont,
+									fontFamily: Fonts.itimFont,
 								}}>
 								No game details available for {gameDealItem?.title}
 							</Text>
@@ -333,7 +333,7 @@ const styles = StyleSheet.create({
 		color: 'white',
 		fontSize: 25,
 		fontWeight: 'bold',
-		fontFamily: Fonts.gameTitleFont,
+		fontFamily: Fonts.itimFont,
 		flex: 1,
 		justifyContent: 'center',
 		alignItems: 'center',
@@ -349,7 +349,7 @@ const styles = StyleSheet.create({
 		fontSize: 18,
 		fontWeight: 'bold',
 		marginTop: 15,
-		fontFamily: Fonts.gameTitleFont,
+		fontFamily: Fonts.itimFont,
 	},
 	picturesContainer: {
 		flex: 1,
@@ -363,7 +363,7 @@ const styles = StyleSheet.create({
 	containerText: {
 		color: Colors.offWhite,
 		fontSize: 20,
-		fontFamily: Fonts.gameTitleFont,
+		fontFamily: Fonts.itimFont,
 	},
 	screenShot: {
 		marginHorizontal: 3,

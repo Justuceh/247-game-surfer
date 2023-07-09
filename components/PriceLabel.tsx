@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
 	savingsPercent: {
 		fontWeight: '400',
 		color: Colors.charcoalDark,
-		fontFamily: Fonts.gameTitleFont,
+		fontFamily: Fonts.itimFont,
 		fontSize: 18,
 		backgroundColor: Colors.neonGreen,
 	},
@@ -77,13 +77,13 @@ const styles = StyleSheet.create({
 		flex: 1,
 		color: 'yellow',
 		fontSize: 20,
-		fontFamily: Fonts.gameTitleFont,
+		fontFamily: Fonts.itimFont,
 	},
 	strikeThroughText: {
 		flex: 2.5,
 		justifyContent: 'center',
 		fontSize: 20,
-		fontFamily: Fonts.gameTitleFont,
+		fontFamily: Fonts.itimFont,
 		color: Colors.offWhite,
 		textDecorationLine: 'line-through',
 	},
@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
 	dealButtonText: {
 		textAlign: 'center',
 		color: Colors.charcoalDark,
-		fontFamily: Fonts.gameTitleFont,
+		fontFamily: Fonts.itimFont,
 		fontSize: 15,
 	},
 });

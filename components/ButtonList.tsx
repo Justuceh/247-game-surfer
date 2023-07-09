@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
 		backgroundColor: Colors.charcoalDark,
 	},
 	buttonText: {
-		fontFamily: Fonts.gameTitleFont,
+		fontFamily: Fonts.itimFont,
 		fontSize: 18,
 		color: 'white',
 		paddingHorizontal: 10,

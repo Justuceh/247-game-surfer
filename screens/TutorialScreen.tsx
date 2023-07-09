@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
 	labelText: {
 		fontSize: 20,
 		marginBottom: 10,
-		fontFamily: Fonts.gameTitleFont,
+		fontFamily: Fonts.itimFont,
 		color: 'white',
 	},
 	bodyTextContainer: {
@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 		alignItems: 'center',
 		fontSize: 19,
-		fontFamily: Fonts.gameTitleFont,
+		fontFamily: Fonts.itimFont,
 		color: 'white',
 		padding: 5,
 		margin: 5,
@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
 	dealButtonText: {
 		textAlign: 'center',
 		color: Colors.charcoalDark,
-		fontFamily: Fonts.gameTitleFont,
+		fontFamily: Fonts.itimFont,
 		fontSize: 15,
 	},
 });

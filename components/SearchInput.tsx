@@ -114,7 +114,7 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 	},
 	searchText: {
-		fontFamily: Fonts.gameTitleFont,
+		fontFamily: Fonts.itimFont,
 		textAlign: 'center',
 		fontSize: 15,
 		fontWeight: '400',

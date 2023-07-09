@@ -206,7 +206,7 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 	},
 	bannerText: {
-		fontFamily: Fonts.gameTitleFont,
+		fontFamily: Fonts.itimFont,
 		fontSize: 23,
 		color: Colors.offWhite,
 	},

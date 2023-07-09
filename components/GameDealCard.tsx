@@ -117,7 +117,7 @@ const styles = StyleSheet.create({
 	},
 	title: {
 		textAlign: 'center',
-		fontFamily: Fonts.gameTitleFont,
+		fontFamily: Fonts.itimFont,
 		color: 'white',
 		fontSize: 18,
 		marginHorizontal: 8,
@@ -134,7 +134,7 @@ const styles = StyleSheet.create({
 		fontWeight: '400',
 		justifyContent: 'center',
 		color: 'yellow',
-		fontFamily: Fonts.gameTitleFont,
+		fontFamily: Fonts.itimFont,
 		fontSize: 18,
 	},
 	strikethroughText: {
@@ -142,7 +142,7 @@ const styles = StyleSheet.create({
 		fontWeight: '400',
 		justifyContent: 'center',
 		color: 'yellow',
-		fontFamily: Fonts.gameTitleFont,
+		fontFamily: Fonts.itimFont,
 		fontSize: 15,
 	},
 	strikeThrough: {
@@ -160,7 +160,7 @@ const styles = StyleSheet.create({
 	savingsPercent: {
 		fontWeight: '400',
 		color: Colors.charcoalDark,
-		fontFamily: Fonts.gameTitleFont,
+		fontFamily: Fonts.itimFont,
 		fontSize: 15,
 		backgroundColor: Colors.neonGreen,
 		padding: 3,

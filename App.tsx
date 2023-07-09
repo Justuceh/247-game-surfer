@@ -7,15 +7,14 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { createStackNavigator } from '@react-navigation/stack';
 import { useFonts, Itim_400Regular } from '@expo-google-fonts/itim';
-import { YatraOne_400Regular } from '@expo-google-fonts/yatra-one';
-import { Righteous_400Regular } from '@expo-google-fonts/righteous';
 import * as SplashScreen from 'expo-splash-screen';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import StoresScreen from './screens/StoresScreen';
-import WishListScreen from './screens/WishListScreen';
 import GamesScreen from './screens/GamesScreen';
 import GameDealsScreen from './screens/GameDealsScreen';
+import WishlistScreen from './screens/WishlistScreen';
+import WishlistItemScreen from './screens/WishlistItemScreen';
 import { WishlistContextProvider } from './store/context/wishlist/wishlist-context';
 import { GameStoreContextProvider } from './store/context/game_deals/game-stores-context';
 import Colors from './constants/colors';
@@ -24,7 +23,8 @@ import { TutorialContextProvider } from './store/context/tutorial/tutorial-conte
 
 export type RootNavigatorParamList = {
 	StoresScreen: undefined;
-	WishListScreen: undefined;
+	WishlistScreen: undefined;
+	WishlistItemScreen: undefined;
 	GamesScreen: undefined;
 	StoresScreenStack: undefined;
 	GameDealsScreen: { storeID: string; title: string };
@@ -38,9 +38,7 @@ const queryClient = new QueryClient();
 
 export default function App() {
 	let [fontsLoaded] = useFonts({
-		YatraOne_400Regular,
 		Itim_400Regular,
-		Righteous_400Regular,
 	});
 
 	const onLayoutRootView = useCallback(async () => {
@@ -67,6 +65,23 @@ export default function App() {
 					options={{ headerStatusBarHeight: 2, headerBackTitle: 'Stores' }}
 					name='GameDealsScreen'
 					component={GameDealsScreen}
+				/>
+			</Stack.Navigator>
+		);
+	};
+
+	const WishlistScreenTab = () => {
+		return (
+			<Stack.Navigator>
+				<Stack.Screen
+					options={{ headerShown: false }}
+					name='WishlistScreen'
+					component={WishlistScreen}
+				/>
+				<Stack.Screen
+					options={{ headerStatusBarHeight: 2, headerBackTitle: 'Favorites' }}
+					name='WishlistItemScreen'
+					component={WishlistItemScreen}
 				/>
 			</Stack.Navigator>
 		);
@@ -123,7 +138,7 @@ export default function App() {
 												component={GamesScreen}
 											/>
 											<Tab.Screen
-												name='WishListScreen'
+												name='WishListScreenMain'
 												options={{
 													tabBarIcon: ({ color, size }) => (
 														<Ionicons
@@ -133,7 +148,7 @@ export default function App() {
 														/>
 													),
 												}}
-												component={WishListScreen}
+												component={WishlistScreenTab}
 											/>
 										</Tab.Navigator>
 									</NavigationContainer>
