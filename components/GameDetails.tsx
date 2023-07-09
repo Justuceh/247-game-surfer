@@ -14,45 +14,16 @@ import YouTubePlayer from './YouTubePlayer';
 import Fonts from '../constants/fonts';
 import PriceLabel from './PriceLabel';
 import GameReviewScore from './GameReviewScore';
+import IgdbGame from '../models/IgdbGame';
+import IgdbCover from '../models/IgdbCover';
+import IgdbVideo from '../models/IgdbVideo';
+import IgdbScreenshots from '../models/IgdbScreenshot';
+import GameText from './GameText';
 
 interface GameDetailsProps {
 	gameDealItem: GameDealItem | undefined;
 	showDetails: boolean;
 	onClose: () => void;
-}
-
-interface IgdbGame {
-	id: number;
-	cover: number;
-	name: string;
-	screenshots: number[];
-	summary: string;
-	videos: number[];
-	first_release_date: string;
-}
-
-interface IgdbCover {
-	id: number;
-	height: number;
-	width: number;
-	game: number;
-	image_id: number;
-	url: string;
-}
-
-interface IgdbVideo {
-	id: number;
-	game: number;
-	name: string;
-	video_id: string;
-}
-
-interface IgdbScreenshots {
-	id: number;
-	height: number;
-	width: number;
-	image_id: number;
-	url: string;
 }
 
 const GameDetails = ({
@@ -218,14 +189,10 @@ const GameDetails = ({
 											game={gameDealItem}
 											releaseDate={readableDate}
 										/>
-										<View style={styles.labelTextContainer}>
-											<Text style={styles.labelText}>{filteredGame?.name}</Text>
-											<View style={styles.summaryContainerText}>
-												<Text style={styles.summaryText}>
-													{filteredGame?.summary}
-												</Text>
-											</View>
-										</View>
+										<GameText
+											gameTitle={filteredGame?.name}
+											gameSummary={filteredGame?.summary}
+										/>
 									</View>
 								</ScrollView>
 								{screenShots !== undefined ? (
@@ -321,34 +288,7 @@ const styles = StyleSheet.create({
 		flex: 2,
 		width: 200,
 	},
-	labelTextContainer: {
-		flex: 1,
-		justifyContent: 'center',
-		alignItems: 'center',
-		margin: 20,
-	},
-	labelText: {
-		color: 'white',
-		fontSize: 25,
-		fontWeight: 'bold',
-		fontFamily: Fonts.itimFont,
-		flex: 1,
-		justifyContent: 'center',
-		alignItems: 'center',
-	},
-	summaryContainerText: {
-		flex: 1,
-		justifyContent: 'center',
-		alignItems: 'center',
-	},
-	summaryText: {
-		flex: 1,
-		color: 'white',
-		fontSize: 18,
-		fontWeight: 'bold',
-		marginTop: 15,
-		fontFamily: Fonts.itimFont,
-	},
+
 	picturesContainer: {
 		flex: 1,
 		flexDirection: 'row',
