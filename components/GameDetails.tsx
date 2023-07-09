@@ -84,9 +84,9 @@ const GameDetails = ({
 	const [screenShotIds, setScreenShotIds] = useState<number[] | undefined>(
 		undefined
 	);
-	const [images, setImages] = useState<
-		{ url: string; props: any }[] | undefined
-	>(undefined);
+	const [images, setImages] = useState<{ url: string }[] | undefined>(
+		undefined
+	);
 	const [showScreenShotModal, setShowScreenShotModal] =
 		useState<boolean>(false);
 	const [selectedImageIndex, setSelectedImageIndex] = useState<
@@ -160,9 +160,6 @@ const GameDetails = ({
 					url: `https://images.igdb.com/igdb/image/upload/t_cover_big/${screenShot.image_id}.jpg`,
 					height: screenShot.height,
 					width: screenShot.width,
-					props: {
-						resizeMode: 'contain',
-					},
 				};
 			});
 			setImages(screenShotImages);
@@ -263,7 +260,6 @@ const GameDetails = ({
 												index={selectedImageIndex}
 												imageUrls={images.map((image) => ({
 													url: image.url,
-													props: image.props,
 												}))}
 											/>
 										</Modal>
