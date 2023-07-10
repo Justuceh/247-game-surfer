@@ -6,7 +6,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { createStackNavigator } from '@react-navigation/stack';
-import { useFonts, Itim_400Regular } from '@expo-google-fonts/itim';
+import { useFonts, OpenSans_400Regular } from '@expo-google-fonts/open-sans';
 import * as SplashScreen from 'expo-splash-screen';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
@@ -41,7 +41,7 @@ const queryClient = new QueryClient();
 
 export default function App() {
 	let [fontsLoaded] = useFonts({
-		Itim_400Regular,
+		OpenSans_400Regular,
 	});
 
 	const onLayoutRootView = useCallback(async () => {

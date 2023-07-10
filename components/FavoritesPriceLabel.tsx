@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
 		textAlign: 'center',
 		fontWeight: '400',
 		color: Colors.charcoalDark,
-		fontFamily: Fonts.itimFont,
+		fontFamily: Fonts.openSans_400Regular,
 		fontSize: 22,
 		marginLeft: 20,
 		backgroundColor: Colors.neonGreen,
@@ -109,8 +109,8 @@ const styles = StyleSheet.create({
 		flex: 1.5,
 		justifyContent: 'center',
 		color: 'yellow',
-		fontSize: 22,
-		fontFamily: Fonts.itimFont,
+		fontSize: 21,
+		fontFamily: Fonts.openSans_400Regular,
 		marginLeft: 10,
 	},
 	strikeThroughText: {
@@ -118,7 +118,7 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 		textAlign: 'right',
 		fontSize: 20,
-		fontFamily: Fonts.itimFont,
+		fontFamily: Fonts.openSans_400Regular,
 		color: Colors.offWhite,
 		textDecorationLine: 'line-through',
 	},
@@ -140,7 +140,7 @@ const styles = StyleSheet.create({
 	dealButtonText: {
 		textAlign: 'center',
 		color: Colors.charcoalDark,
-		fontFamily: Fonts.itimFont,
+		fontFamily: Fonts.openSans_400Regular,
 		fontSize: 15,
 	},
 });

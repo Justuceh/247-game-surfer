@@ -223,7 +223,7 @@ const GameDetails = ({
 								style={{
 									color: Colors.offWhite,
 									fontSize: 23,
-									fontFamily: Fonts.itimFont,
+									fontFamily: Fonts.openSans_400Regular,
 								}}>
 								No game details available for {gameDealItem?.title}
 							</Text>

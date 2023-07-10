@@ -105,7 +105,7 @@ const styles = StyleSheet.create({
 	},
 	title: {
 		textAlign: 'center',
-		fontFamily: Fonts.itimFont,
+		fontFamily: Fonts.openSans_400Regular,
 		color: 'white',
 		fontSize: 18,
 		marginHorizontal: 8,

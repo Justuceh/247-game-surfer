@@ -206,7 +206,7 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 	},
 	bannerText: {
-		fontFamily: Fonts.itimFont,
+		fontFamily: Fonts.openSans_400Regular,
 		fontSize: 23,
 		color: Colors.offWhite,
 	},

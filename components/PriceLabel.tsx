@@ -60,9 +60,10 @@ const styles = StyleSheet.create({
 	savingsPercent: {
 		fontWeight: '400',
 		color: Colors.charcoalDark,
-		fontFamily: Fonts.itimFont,
+		fontFamily: Fonts.openSans_400Regular,
 		fontSize: 18,
 		backgroundColor: Colors.neonGreen,
+		padding: 3,
 	},
 	pricesContainer: {
 		flex: 1,
@@ -80,13 +81,13 @@ const styles = StyleSheet.create({
 		flex: 1,
 		color: 'yellow',
 		fontSize: 20,
-		fontFamily: Fonts.itimFont,
+		fontFamily: Fonts.openSans_400Regular,
 	},
 	strikeThroughText: {
 		flex: 2.5,
 		justifyContent: 'center',
 		fontSize: 20,
-		fontFamily: Fonts.itimFont,
+		fontFamily: Fonts.openSans_400Regular,
 		color: Colors.offWhite,
 		textDecorationLine: 'line-through',
 	},
@@ -103,7 +104,7 @@ const styles = StyleSheet.create({
 	dealButtonText: {
 		textAlign: 'center',
 		color: Colors.charcoalDark,
-		fontFamily: Fonts.itimFont,
+		fontFamily: Fonts.openSans_400Regular,
 		fontSize: 15,
 	},
 });

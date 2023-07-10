@@ -137,7 +137,7 @@ const GameDealsScreen = ({ route }: GameDealsScreenProps) => {
 		navigation.setOptions({
 			title: `${storeTitle} Deals`,
 			headerStyle: { backgroundColor: 'black' },
-			headerTitleStyle: { fontFamily: Fonts.itimFont, fontSize: 20 },
+			headerTitleStyle: { fontFamily: Fonts.openSans_400Regular, fontSize: 20 },
 			headerTintColor: Colors.offWhite,
 		});
 	}, [

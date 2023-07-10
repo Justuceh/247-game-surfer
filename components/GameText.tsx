@@ -30,8 +30,8 @@ const styles = StyleSheet.create({
 	labelText: {
 		color: 'white',
 		fontSize: 25,
-		fontWeight: 'bold',
-		fontFamily: Fonts.itimFont,
+		fontWeight: '600',
+		fontFamily: Fonts.openSans_400Regular,
 		flex: 1,
 		justifyContent: 'center',
 		alignItems: 'center',
@@ -45,8 +45,7 @@ const styles = StyleSheet.create({
 		flex: 1,
 		color: 'white',
 		fontSize: 18,
-		fontWeight: 'bold',
 		marginTop: 15,
-		fontFamily: Fonts.itimFont,
+		fontFamily: Fonts.openSans_400Regular,
 	},
 });

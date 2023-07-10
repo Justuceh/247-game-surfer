@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
 	containerText: {
 		color: Colors.offWhite,
 		fontSize: 20,
-		fontFamily: Fonts.itimFont,
+		fontFamily: Fonts.openSans_400Regular,
 	},
 	videosContainer: {
 		flex: 1,

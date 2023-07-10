@@ -47,7 +47,7 @@ const WishlistItemScreen = ({ route }: WishlistItemScreenProps) => {
 	useEffect(() => {
 		navigation.setOptions({
 			headerStyle: { backgroundColor: 'black' },
-			headerTitleStyle: { fontFamily: Fonts.itimFont, fontSize: 20 },
+			headerTitleStyle: { fontFamily: Fonts.openSans_400Regular, fontSize: 20 },
 			headerTintColor: Colors.offWhite,
 		});
 	}, []);
@@ -280,7 +280,7 @@ const WishlistItemScreen = ({ route }: WishlistItemScreenProps) => {
 										style={{
 											color: Colors.offWhite,
 											fontSize: 23,
-											fontFamily: Fonts.itimFont,
+											fontFamily: Fonts.openSans_400Regular,
 										}}>
 										No game details available for {filteredGame?.name}
 									</Text>
