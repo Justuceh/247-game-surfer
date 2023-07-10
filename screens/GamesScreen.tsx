@@ -18,21 +18,23 @@ import Colors from '../constants/colors';
 import ButtonList from '../components/ButtonList';
 import filterLabels from '../constants/string';
 
+type Filters = {
+	[key: string]: number;
+};
+
 const GamesScreen = () => {
+	const topDealFilterParams = { onSale: 1, upperPrice: 40 };
 	const [searchQuery, setSearchQuery] = useState('');
 	const [clearSearchValue, setClearSearchValue] = useState<
 		boolean | undefined
 	>();
 	const [apiSearchQuery, setApiSearchQuery] = useState('');
 	const [forceSelectTopDealLabel, setForceSelectTopDealLabel] = useState('');
-	const [filterParams, setFilterParams] = useState<{
-		[key: string]: number;
-	} | null>(null);
+	const [filterParams, setFilterParams] = useState<Filters | null>(null);
 
 	async function fetchGames() {
 		const params = !filterParams
 			? {
-					...(apiSearchQuery === '' ? { pageNumber: 2 } : {}),
 					title: apiSearchQuery,
 			  }
 			: { pageNumber: 2, ...filterParams };
@@ -63,13 +65,16 @@ const GamesScreen = () => {
 
 	const onClearHandler = () => {
 		setApiSearchQuery('');
-		setFilterParams(null);
+		setFilterParams(topDealFilterParams);
 		setForceSelectTopDealLabel(filterLabels.topDeals);
 	};
 
 	function handleQueryUpdate(searchQuery: string) {
 		setSearchQuery(searchQuery);
 	}
+	useEffect(() => {
+		setFilterParams(topDealFilterParams);
+	}, []);
 	useEffect(() => {
 		if (searchQuery !== '' || apiSearchQuery !== '') {
 			setClearSearchValue(filterParams !== null);
@@ -88,7 +93,7 @@ const GamesScreen = () => {
 		let param = {};
 		switch (dataSets[0][0]) {
 			case 'topDeals':
-				param = { onSale: 1, upperPrice: 15 };
+				param = topDealFilterParams;
 				break;
 			case 'highlyRatedBySteam':
 				param = { steamRating: 80 };
@@ -168,18 +173,18 @@ const styles = StyleSheet.create({
 		flex: 1,
 	},
 	filterContainer: {
-		flex: 1,
+		flex: 0.7,
 		justifyContent: 'center',
 		alignItems: 'center',
 		backgroundColor: Colors.charcoalLight,
+		paddingTop: 8,
 	},
 	searchContainer: {
 		flex: 1,
 		backgroundColor: Colors.charcoalLight,
 	},
 	gameListContainer: {
-		flex: 10,
-		backgroundColor: Colors.charcoalLight,
+		flex: 11,
 	},
 	activityIndicatorContainer: {
 		flex: 1,

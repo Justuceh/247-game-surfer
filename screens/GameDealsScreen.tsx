@@ -137,7 +137,7 @@ const GameDealsScreen = ({ route }: GameDealsScreenProps) => {
 		navigation.setOptions({
 			title: `${storeTitle} Deals`,
 			headerStyle: { backgroundColor: 'black' },
-			headerTitleStyle: { fontFamily: Fonts.gameTitleFont, fontSize: 20 },
+			headerTitleStyle: { fontFamily: Fonts.openSans_400Regular, fontSize: 20 },
 			headerTintColor: Colors.offWhite,
 		});
 	}, [
@@ -240,10 +240,10 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 	},
 	filterContainer: {
-		flex: 1.2,
+		flex: 0.7,
 		justifyContent: 'center',
 		alignItems: 'center',
-		backgroundColor: Colors.charcoalLight,
+		marginVertical: 7,
 	},
 	scrollContainer: {
 		flex: 11,

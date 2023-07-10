@@ -174,6 +174,7 @@ const StoresScreen = () => {
 									keyExtractor={(item) => `${item.storeID}`}
 									onScroll={handleScroll}
 									scrollEventThrottle={16}
+									showsVerticalScrollIndicator={false}
 								/>
 							</View>
 						</>
@@ -206,7 +207,7 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 	},
 	bannerText: {
-		fontFamily: Fonts.gameTitleFont,
+		fontFamily: Fonts.openSans_400Regular,
 		fontSize: 23,
 		color: Colors.offWhite,
 	},

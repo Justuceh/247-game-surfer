@@ -81,7 +81,13 @@ const GameDealCard = ({
 							{gameDealItem.normalPrice}
 						</Text>
 
-						<WishlistButton gameDealItem={gameDealItem} />
+						<WishlistButton
+							wishlistItem={{
+								id: gameDealItem.gameID,
+								title: gameDealItem.title,
+								thumb: gameDealItem.thumb,
+							}}
+						/>
 					</View>
 				</View>
 			</Pressable>
@@ -117,7 +123,7 @@ const styles = StyleSheet.create({
 	},
 	title: {
 		textAlign: 'center',
-		fontFamily: Fonts.gameTitleFont,
+		fontFamily: Fonts.openSans_400Regular,
 		color: 'white',
 		fontSize: 18,
 		marginHorizontal: 8,
@@ -134,7 +140,7 @@ const styles = StyleSheet.create({
 		fontWeight: '400',
 		justifyContent: 'center',
 		color: 'yellow',
-		fontFamily: Fonts.gameTitleFont,
+		fontFamily: Fonts.openSans_400Regular,
 		fontSize: 18,
 	},
 	strikethroughText: {
@@ -142,7 +148,7 @@ const styles = StyleSheet.create({
 		fontWeight: '400',
 		justifyContent: 'center',
 		color: 'yellow',
-		fontFamily: Fonts.gameTitleFont,
+		fontFamily: Fonts.openSans_400Regular,
 		fontSize: 15,
 	},
 	strikeThrough: {
@@ -160,7 +166,7 @@ const styles = StyleSheet.create({
 	savingsPercent: {
 		fontWeight: '400',
 		color: Colors.charcoalDark,
-		fontFamily: Fonts.gameTitleFont,
+		fontFamily: Fonts.openSans_400Regular,
 		fontSize: 15,
 		backgroundColor: Colors.neonGreen,
 		padding: 3,
