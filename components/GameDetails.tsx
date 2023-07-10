@@ -187,11 +187,11 @@ const GameDetails = ({
 					<ActivityIndicatorComponent color='white' size='large' />
 				</View>
 			) : (
-				<ScrollView>
+				<ScrollView showsVerticalScrollIndicator={false}>
 					{gameList !== null && gameList?.length ? (
 						<View style={styles.rootContainer}>
 							<>
-								<ScrollView>
+								<ScrollView showsVerticalScrollIndicator={false}>
 									<View style={styles.gameInfoContainer}>
 										<GameCover imageId={cover?.[0]?.image_id} />
 										<PriceLabel game={gameDeal} />

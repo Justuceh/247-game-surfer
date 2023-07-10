@@ -36,7 +36,7 @@ const ScreenShotViewer = ({ screenShots, images }: ScreenShotViewerProps) => {
 	return (
 		<>
 			<Text style={styles.containerText}>Screenshots</Text>
-			<ScrollView horizontal={true}>
+			<ScrollView showsHorizontalScrollIndicator={false} horizontal={true}>
 				<View style={styles.picturesContainer}>
 					{screenShots.map((screenShot) => {
 						const index = screenShots.indexOf(screenShot);

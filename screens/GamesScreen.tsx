@@ -173,18 +173,18 @@ const styles = StyleSheet.create({
 		flex: 1,
 	},
 	filterContainer: {
-		flex: 1,
+		flex: 0.7,
 		justifyContent: 'center',
 		alignItems: 'center',
 		backgroundColor: Colors.charcoalLight,
+		paddingTop: 8,
 	},
 	searchContainer: {
 		flex: 1,
 		backgroundColor: Colors.charcoalLight,
 	},
 	gameListContainer: {
-		flex: 10,
-		backgroundColor: Colors.charcoalLight,
+		flex: 11,
 	},
 	activityIndicatorContainer: {
 		flex: 1,

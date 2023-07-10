@@ -174,6 +174,7 @@ const StoresScreen = () => {
 									keyExtractor={(item) => `${item.storeID}`}
 									onScroll={handleScroll}
 									scrollEventThrottle={16}
+									showsVerticalScrollIndicator={false}
 								/>
 							</View>
 						</>

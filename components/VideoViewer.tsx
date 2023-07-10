@@ -21,7 +21,7 @@ const VideoViewer = ({ videos }: VideoViewerProps) => {
 	return (
 		<>
 			<Text style={styles.containerText}>Videos</Text>
-			<ScrollView>
+			<ScrollView showsVerticalScrollIndicator={false}>
 				<View style={styles.videosContainer}>
 					{videos.map((video) => {
 						return renderVideos(video);

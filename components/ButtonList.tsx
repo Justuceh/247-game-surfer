@@ -29,7 +29,10 @@ const ButtonList = ({ labels, onPress, forceSelectLabel }: ButtonListProps) => {
 		}
 	}, [forceSelectLabel]);
 	return (
-		<ScrollView style={styles.scrollViewContainer} horizontal={true}>
+		<ScrollView
+			style={styles.scrollViewContainer}
+			showsHorizontalScrollIndicator={false}
+			horizontal={true}>
 			{labels.map((label) => {
 				const isSelected = label === selectedButton;
 				return (
@@ -76,10 +79,9 @@ const styles = StyleSheet.create({
 		flex: 1,
 		justifyContent: 'center',
 		alignItems: 'center',
-		borderRadius: 10,
+		borderRadius: 18,
 		borderWidth: 1,
-		margin: 13,
-		backgroundColor: Colors.charcoalDark,
+		marginHorizontal: 6,
 	},
 	buttonText: {
 		fontFamily: Fonts.openSans_400Regular,

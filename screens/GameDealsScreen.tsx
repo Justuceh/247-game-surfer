@@ -240,10 +240,10 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 	},
 	filterContainer: {
-		flex: 1.2,
+		flex: 0.7,
 		justifyContent: 'center',
 		alignItems: 'center',
-		backgroundColor: Colors.charcoalLight,
+		marginVertical: 7,
 	},
 	scrollContainer: {
 		flex: 11,
