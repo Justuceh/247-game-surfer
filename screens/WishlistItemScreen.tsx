@@ -251,7 +251,12 @@ const WishlistItemScreen = ({ route }: WishlistItemScreenProps) => {
 												<GameCover imageId={cover?.[0]?.image_id} />
 												{gameDeals !== undefined &&
 													gameDeals?.map((deal) => {
-														return <FavoritesPriceLabel gameDeal={deal} />;
+														return (
+															<FavoritesPriceLabel
+																key={deal.dealID}
+																gameDeal={deal}
+															/>
+														);
 													})}
 												<GameText
 													gameTitle={filteredGame?.name}
