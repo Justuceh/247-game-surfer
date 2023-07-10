@@ -4,14 +4,17 @@ import { CHEAPSHARK_REDIRECT_API } from '@env';
 
 import Colors from '../constants/colors';
 import Fonts from '../constants/fonts';
-import GameDealItem from '../models/GameDealItem';
+import GameDeal from '../models/GameDeal';
 
 interface PriceLabelProps {
-	game: GameDealItem | undefined;
+	game: GameDeal | undefined;
 }
 
 const PriceLabel = ({ game }: PriceLabelProps) => {
-	const savingsPercent = `${game?.savings.split('.')[0]}%`;
+	let savingsPercent;
+	if (game?.savings) {
+		savingsPercent = `${game?.savings.split('.')[0]}%`;
+	}
 
 	const openBrowserAsync = async (dealID: string | undefined) => {
 		await WebBrowser.openBrowserAsync(`${CHEAPSHARK_REDIRECT_API}${dealID}`);
@@ -23,8 +26,8 @@ const PriceLabel = ({ game }: PriceLabelProps) => {
 			</View>
 			<View style={styles.pricesContainer}>
 				<View style={styles.saleInfoContainer}>
-					<Text style={styles.saleText}>${game?.salePrice}</Text>
-					<Text style={styles.strikeThroughText}>{game?.normalPrice}</Text>
+					<Text style={styles.saleText}>${game?.price}</Text>
+					<Text style={styles.strikeThroughText}>{game?.retailPrice}</Text>
 					<Pressable
 						onPress={() => openBrowserAsync(game?.dealID)}
 						style={({ pressed }) => [
@@ -57,9 +60,10 @@ const styles = StyleSheet.create({
 	savingsPercent: {
 		fontWeight: '400',
 		color: Colors.charcoalDark,
-		fontFamily: Fonts.gameTitleFont,
+		fontFamily: Fonts.openSans_400Regular,
 		fontSize: 18,
 		backgroundColor: Colors.neonGreen,
+		padding: 3,
 	},
 	pricesContainer: {
 		flex: 1,
@@ -77,13 +81,13 @@ const styles = StyleSheet.create({
 		flex: 1,
 		color: 'yellow',
 		fontSize: 20,
-		fontFamily: Fonts.gameTitleFont,
+		fontFamily: Fonts.openSans_400Regular,
 	},
 	strikeThroughText: {
 		flex: 2.5,
 		justifyContent: 'center',
 		fontSize: 20,
-		fontFamily: Fonts.gameTitleFont,
+		fontFamily: Fonts.openSans_400Regular,
 		color: Colors.offWhite,
 		textDecorationLine: 'line-through',
 	},
@@ -100,7 +104,7 @@ const styles = StyleSheet.create({
 	dealButtonText: {
 		textAlign: 'center',
 		color: Colors.charcoalDark,
-		fontFamily: Fonts.gameTitleFont,
+		fontFamily: Fonts.openSans_400Regular,
 		fontSize: 15,
 	},
 });

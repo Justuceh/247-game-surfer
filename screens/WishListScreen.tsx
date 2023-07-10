@@ -5,17 +5,21 @@ import {
 	View,
 	StyleSheet,
 	Text,
+	FlatList,
 } from 'react-native';
-import { WishlistContext } from '../store/context/wishlist/wishlist-context';
+import { LinearGradient } from 'expo-linear-gradient';
 
-import GameList from '../components/GameList';
+import { WishlistContext } from '../store/context/wishlist/wishlist-context';
 import Banner from '../components/Banner';
 import Fonts from '../constants/fonts';
 import Colors from '../constants/colors';
+import WishlistGame from '../models/WishlistGame';
+import WishlistGameCard from '../components/WishlistGameCard';
 
-const WishListScreen = () => {
+const WishlistScreen = () => {
 	const wishListGames = useContext(WishlistContext);
 	const [bannerVisible, setBannerVisible] = useState(true);
+	const flatListRef = useRef<FlatList<WishlistGame>>(null);
 
 	const bannerOpacity = useRef(new Animated.Value(1)).current;
 	useEffect(() => {
@@ -41,37 +45,61 @@ const WishListScreen = () => {
 		}
 	};
 
+	function renderWishlistItem({ item }: { item: WishlistGame }) {
+		return <WishlistGameCard wishlistGame={item} />;
+	}
+
 	return (
-		<View style={styles.rootContainer}>
-			{bannerVisible && (
-				<Animated.View
-					style={[styles.bannerContainer, { opacity: bannerOpacity }]}>
-					<Banner>
-						<View style={styles.bannerTextContainer}>
-							<Text style={styles.bannerText}>SURF Your Favorite Games!</Text>
-						</View>
-					</Banner>
-				</Animated.View>
-			)}
-			<View
-				style={
-					bannerVisible
-						? styles.gameListContainer
-						: [styles.gameListContainer, styles.noBanner]
-				}>
-				<GameList
-					games={wishListGames.games}
-					handleScroll={handleScroll}
-					scrollThreshold={scrollThreshold}
-				/>
-			</View>
-		</View>
+		<>
+			<LinearGradient
+				style={styles.linearGradient}
+				colors={[
+					Colors.linearGradient.topColor,
+					Colors.linearGradient.middleColor,
+					Colors.linearGradient.bottomColor,
+				]}>
+				<View style={styles.rootContainer}>
+					{bannerVisible && (
+						<Animated.View
+							style={[styles.bannerContainer, { opacity: bannerOpacity }]}>
+							<Banner>
+								<View style={styles.bannerTextContainer}>
+									<Text style={styles.bannerText}>
+										SURF Your Favorite Games!
+									</Text>
+								</View>
+							</Banner>
+						</Animated.View>
+					)}
+					<View
+						style={
+							bannerVisible
+								? styles.gameListContainer
+								: [styles.gameListContainer, styles.noBanner]
+						}>
+						<FlatList
+							data={wishListGames.games}
+							keyExtractor={(item) => item.id}
+							numColumns={2}
+							renderItem={renderWishlistItem}
+							ref={flatListRef}
+							onScroll={handleScroll}
+							scrollEventThrottle={scrollThreshold}
+							showsVerticalScrollIndicator={false}
+						/>
+					</View>
+				</View>
+			</LinearGradient>
+		</>
 	);
 };
 
-export default WishListScreen;
+export default WishlistScreen;
 
 const styles = StyleSheet.create({
+	linearGradient: {
+		flex: 1,
+	},
 	rootContainer: {
 		flex: 1,
 		justifyContent: 'center',
@@ -88,12 +116,17 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 	},
 	bannerText: {
-		fontFamily: Fonts.gameTitleFont,
+		fontFamily: Fonts.openSans_400Regular,
 		fontSize: 23,
 		color: Colors.offWhite,
 	},
 	gameListContainer: {
 		flex: 10,
+		elevation: 4,
+		shadowColor: '#c7c7c7',
+		shadowOffset: { width: 1, height: 1 },
+		shadowRadius: 4,
+		shadowOpacity: 0.5,
 	},
 	noBanner: {
 		paddingTop: 10,

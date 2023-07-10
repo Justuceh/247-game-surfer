@@ -27,6 +27,7 @@ const GameDealCategoryList = ({
 				ref={flatListRef}
 				onScroll={handleScroll}
 				scrollEventThrottle={scrollThreshold}
+				showsVerticalScrollIndicator={false}
 			/>
 		</View>
 	);

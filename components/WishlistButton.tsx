@@ -3,23 +3,23 @@ import { Pressable, StyleSheet } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import { WishlistContext } from '../store/context/wishlist/wishlist-context';
-import GameDealItem from '../models/GameDealItem';
+import WishlistGame from '../models/WishlistGame';
 
 interface WishlistButtonProps {
-	gameDealItem: GameDealItem;
+	wishlistItem: WishlistGame; // Change this to WishlistItem
 }
 
-const WishlistButton = ({ gameDealItem }: WishlistButtonProps) => {
+const WishlistButton = ({ wishlistItem }: WishlistButtonProps) => {
 	const wishlistContext = useContext(WishlistContext);
 	const isWishlisted = wishlistContext.games.some(
-		(game) => game.dealID === gameDealItem.dealID
+		(game) => game.id === wishlistItem.id
 	);
 
 	const changeWishlistStatusHandler = () => {
 		if (isWishlisted) {
-			wishlistContext.removeGame(gameDealItem.dealID);
+			wishlistContext.removeGame(wishlistItem.id);
 		} else {
-			wishlistContext.addGame(gameDealItem);
+			wishlistContext.addGame(wishlistItem);
 		}
 	};
 
@@ -30,7 +30,7 @@ const WishlistButton = ({ gameDealItem }: WishlistButtonProps) => {
 			<Ionicons
 				onPress={changeWishlistStatusHandler}
 				name='ios-star'
-				size={20}
+				size={30}
 				color={!isWishlisted ? '#a3a3a3' : '#02f402'}
 			/>
 		</Pressable>

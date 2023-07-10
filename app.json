@@ -13,7 +13,6 @@
 		},
 		"assetBundlePatterns": ["**/*"],
 		"ios": {
-			"supportsTablet": true,
 			"bundleIdentifier": "gameSurfer.ios"
 		},
 		"android": {
