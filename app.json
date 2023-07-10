@@ -2,7 +2,7 @@
 	"expo": {
 		"name": "247GameSurfer",
 		"slug": "247GameSurfer",
-		"version": "1.0.2",
+		"version": "1.0.3",
 		"orientation": "portrait",
 		"icon": "./assets/247-gs-app-icon.png",
 		"userInterfaceStyle": "light",
