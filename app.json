@@ -2,7 +2,7 @@
 	"expo": {
 		"name": "247GameSurfer",
 		"slug": "247GameSurfer",
-		"version": "1.0.3",
+		"version": "1.0.4",
 		"orientation": "portrait",
 		"icon": "./assets/247-gs-app-icon.png",
 		"userInterfaceStyle": "light",
@@ -20,7 +20,8 @@
 				"foregroundImage": "./assets/adaptive-icon.png",
 				"backgroundColor": "#ffffff"
 			},
-			"package": "gameSurfer.android"
+			"package": "gameSurfer.android",
+			"versionCode": 3
 		},
 		"web": {
 			"favicon": "./assets/favicon.png"

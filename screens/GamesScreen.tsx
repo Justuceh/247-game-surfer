@@ -9,6 +9,7 @@ import {
 import { CHEAPSHARK_API_URL } from '@env';
 import axios from 'axios';
 import { useQuery } from '@tanstack/react-query';
+import { LinearGradient } from 'expo-linear-gradient';
 
 import ActivityIndicatorComponent from '../components/ActivityIndicator';
 import SearchInput from '../components/SearchInput';
@@ -119,47 +120,55 @@ const GamesScreen = () => {
 			style={styles.keyboardAvoidingViewContainer}
 			behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
 			keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}>
-			<View style={styles.rootContainer}>
-				<View style={styles.filterContainer}>
-					<ButtonList
-						onPress={handleFilterButtonPress}
-						labels={buttonLabels}
-						forceSelectLabel={forceSelectTopDealLabel}
-					/>
+			<LinearGradient
+				style={styles.linearGradient}
+				colors={[
+					Colors.linearGradient.topColor,
+					Colors.linearGradient.middleColor,
+					Colors.linearGradient.bottomColor,
+				]}>
+				<View style={styles.rootContainer}>
+					<View style={styles.filterContainer}>
+						<ButtonList
+							onPress={handleFilterButtonPress}
+							labels={buttonLabels}
+							forceSelectLabel={forceSelectTopDealLabel}
+						/>
+					</View>
+					<View style={styles.searchContainer}>
+						<SearchInput
+							onSearchHandler={onSearchHandler}
+							onClearHandler={onClearHandler}
+							onChangeText={handleQueryUpdate}
+							placeholderTextColor={'grey'}
+							backgroundColor='#fff'
+							buttonColor='white'
+							clearValue={clearSearchValue}
+						/>
+					</View>
+					<View style={styles.gameListContainer}>
+						{isLoading ? (
+							<View style={styles.activityIndicatorContainer}>
+								<ActivityIndicatorComponent color='white' size='large' />
+							</View>
+						) : dataError ? (
+							<View style={styles.displayMessagesContainer}>
+								<Text style={styles.displayMessagesText}>
+									Something went wrong
+								</Text>
+							</View>
+						) : games?.length ? (
+							<GameList games={games} />
+						) : (
+							<View style={styles.displayMessagesContainer}>
+								<Text style={styles.displayMessagesText}>
+									No Game Deals Available for {apiSearchQuery} :(
+								</Text>
+							</View>
+						)}
+					</View>
 				</View>
-				<View style={styles.searchContainer}>
-					<SearchInput
-						onSearchHandler={onSearchHandler}
-						onClearHandler={onClearHandler}
-						onChangeText={handleQueryUpdate}
-						placeholderTextColor={'grey'}
-						backgroundColor='#fff'
-						buttonColor='white'
-						clearValue={clearSearchValue}
-					/>
-				</View>
-				<View style={styles.gameListContainer}>
-					{isLoading ? (
-						<View style={styles.activityIndicatorContainer}>
-							<ActivityIndicatorComponent color='white' size='large' />
-						</View>
-					) : dataError ? (
-						<View style={styles.displayMessagesContainer}>
-							<Text style={styles.displayMessagesText}>
-								Something went wrong
-							</Text>
-						</View>
-					) : games?.length ? (
-						<GameList games={games} />
-					) : (
-						<View style={styles.displayMessagesContainer}>
-							<Text style={styles.displayMessagesText}>
-								No Game Deals Available for {apiSearchQuery} :(
-							</Text>
-						</View>
-					)}
-				</View>
-			</View>
+			</LinearGradient>
 		</KeyboardAvoidingView>
 	);
 };
@@ -167,6 +176,9 @@ const GamesScreen = () => {
 export default GamesScreen;
 const styles = StyleSheet.create({
 	keyboardAvoidingViewContainer: {
+		flex: 1,
+	},
+	linearGradient: {
 		flex: 1,
 	},
 	rootContainer: {

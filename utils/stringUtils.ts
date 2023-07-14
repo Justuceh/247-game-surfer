@@ -20,6 +20,8 @@ export function removeEditionWords(str: string | undefined) {
 		'deluxe edition',
 		'ultimate edition',
 		'special edition',
+		'standard edition',
+		'platinum edition',
 	];
 	const regex = new RegExp(editionWords.join('|'), 'gi');
 	const modifiedString = str?.replace(regex, '').trim();
