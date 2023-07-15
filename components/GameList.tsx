@@ -13,9 +13,17 @@ interface GameListProps {
 	games: GameDealItem[] | undefined;
 	handleScroll?: (event: any) => void | undefined;
 	scrollThreshold?: number | undefined;
+	handleEndScroll?: () => void;
+	endScrollThreshold?: number;
 }
 
-const GameList = ({ games, handleScroll, scrollThreshold }: GameListProps) => {
+const GameList = ({
+	games,
+	handleScroll,
+	scrollThreshold,
+	handleEndScroll,
+	endScrollThreshold,
+}: GameListProps) => {
 	const [showGameDetails, setShowGameDetails] = useState(false);
 	const [modalDealItem, setModalDealItem] = useState<GameDealItem>();
 
@@ -61,6 +69,8 @@ const GameList = ({ games, handleScroll, scrollThreshold }: GameListProps) => {
 									scrollThreshold={scrollThreshold}
 									data={games}
 									renderItem={renderCards}
+									onEndReached={handleEndScroll}
+									onEndReachedThreshold={endScrollThreshold}
 								/>
 							</>
 						</View>
