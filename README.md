@@ -8,7 +8,7 @@ You can also favorite any game you see and it will be added to your favorites sc
 
 It's not ready for release but you can have a sneek peek by watching the private youtube link below :)
 
-App Demo: [https://youtu.be/nSBDfR8XcRU](https://youtu.be/rAx4mQmBTxw)
+App Demo: [https://www.youtube.com/watch?v=hkEOAR2ZEfM&ab_channel=HenneJ)
 <div align="center">
   <h3 style="text-align: center;">Home Screen</h3>
   <img src="https://github.com/Justuceh/247-game-surfer/assets/21269564/67189f06-f74d-4b85-8b86-4ebe6243c0a0" width=20% height=30%>
