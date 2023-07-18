@@ -13,7 +13,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import StoresScreen from './screens/StoresScreen';
 import GamesScreen from './screens/GamesScreen';
 import GameDealsScreen from './screens/GameDealsScreen';
-import WishlistScreen from './screens/WishlistScreen';
+import WishlistScreen from './screens/WishListScreen';
 import WishlistItemScreen from './screens/WishlistItemScreen';
 import { WishlistContextProvider } from './store/context/wishlist/wishlist-context';
 import { GameStoreContextProvider } from './store/context/game_deals/game-stores-context';
