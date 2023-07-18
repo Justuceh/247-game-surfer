@@ -10,6 +10,7 @@ interface GameDealCategoryListProps {
 	scrollThreshold?: number | undefined;
 	onEndReached?: (event: any) => void;
 	onEndReachedThreshold?: number;
+	footerComponent?: any;
 }
 
 const GameDealCategoryList = ({
@@ -19,6 +20,7 @@ const GameDealCategoryList = ({
 	scrollThreshold,
 	onEndReached,
 	onEndReachedThreshold,
+	footerComponent,
 }: GameDealCategoryListProps) => {
 	const flatListRef = useRef<FlatList<GameDealItem>>(null);
 	return (
@@ -34,6 +36,7 @@ const GameDealCategoryList = ({
 				showsVerticalScrollIndicator={false}
 				onEndReached={onEndReached}
 				onEndReachedThreshold={onEndReachedThreshold}
+				ListFooterComponent={footerComponent}
 			/>
 		</View>
 	);

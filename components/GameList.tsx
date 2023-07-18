@@ -15,6 +15,7 @@ interface GameListProps {
 	scrollThreshold?: number | undefined;
 	handleEndScroll?: () => void;
 	endScrollThreshold?: number;
+	footerComponent?: any;
 }
 
 const GameList = ({
@@ -23,6 +24,7 @@ const GameList = ({
 	scrollThreshold,
 	handleEndScroll,
 	endScrollThreshold,
+	footerComponent,
 }: GameListProps) => {
 	const [showGameDetails, setShowGameDetails] = useState(false);
 	const [modalDealItem, setModalDealItem] = useState<GameDealItem>();
@@ -71,6 +73,7 @@ const GameList = ({
 									renderItem={renderCards}
 									onEndReached={handleEndScroll}
 									onEndReachedThreshold={endScrollThreshold}
+									footerComponent={footerComponent}
 								/>
 							</>
 						</View>
