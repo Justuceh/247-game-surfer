@@ -9,6 +9,7 @@ import {
 import { CHEAPSHARK_API_URL } from '@env';
 import axios from 'axios';
 import { useQuery } from '@tanstack/react-query';
+import { LinearGradient } from 'expo-linear-gradient';
 
 import ActivityIndicatorComponent from '../components/ActivityIndicator';
 import SearchInput from '../components/SearchInput';
@@ -17,27 +18,26 @@ import GameList from '../components/GameList';
 import Colors from '../constants/colors';
 import ButtonList from '../components/ButtonList';
 import filterLabels from '../constants/string';
-
-type Filters = {
-	[key: string]: number;
-};
+import Filters from '../models/Filters';
 
 const GamesScreen = () => {
-	const topDealFilterParams = { onSale: 1, upperPrice: 40 };
 	const [searchQuery, setSearchQuery] = useState('');
 	const [clearSearchValue, setClearSearchValue] = useState<
 		boolean | undefined
 	>();
 	const [apiSearchQuery, setApiSearchQuery] = useState('');
 	const [forceSelectTopDealLabel, setForceSelectTopDealLabel] = useState('');
-	const [filterParams, setFilterParams] = useState<Filters | null>(null);
+	const [pageNumber, setPageNumber] = useState(0);
+	const topDealFilterParams = {
+		onSale: 1,
+		upperPrice: 40,
+		pageNumber: pageNumber,
+	};
+	const [filterParams, setFilterParams] =
+		useState<Filters>(topDealFilterParams);
 
 	async function fetchGames() {
-		const params = !filterParams
-			? {
-					title: apiSearchQuery,
-			  }
-			: { pageNumber: 2, ...filterParams };
+		const params = { ...filterParams };
 		return await axios
 			.get(`${CHEAPSHARK_API_URL}/deals`, { params })
 			.then((response) => {
@@ -60,7 +60,7 @@ const GamesScreen = () => {
 
 	const onSearchHandler = () => {
 		setApiSearchQuery(searchQuery);
-		setFilterParams(null);
+		setFilterParams({ title: searchQuery });
 	};
 
 	const onClearHandler = () => {
@@ -72,9 +72,6 @@ const GamesScreen = () => {
 	function handleQueryUpdate(searchQuery: string) {
 		setSearchQuery(searchQuery);
 	}
-	useEffect(() => {
-		setFilterParams(topDealFilterParams);
-	}, []);
 	useEffect(() => {
 		if (searchQuery !== '' || apiSearchQuery !== '') {
 			setClearSearchValue(filterParams !== null);
@@ -90,76 +87,86 @@ const GamesScreen = () => {
 		const dataSets = Object.entries(filterLabels).filter(
 			(key, value) => key[1] === label
 		);
-		let param = {};
+
+		let param = { pageNumber: pageNumber };
 		switch (dataSets[0][0]) {
 			case 'topDeals':
-				param = topDealFilterParams;
+				param = { ...param, ...topDealFilterParams };
 				break;
 			case 'highlyRatedBySteam':
-				param = { steamRating: 80 };
+				param = { ...param, ...{ steamRating: 80 } };
 				break;
 			case 'highlyRatedByMetacritic':
-				param = { metacritic: 70 };
+				param = { ...param, ...{ metacritic: 70 } };
 				break;
 			case 'under20DollarDeals':
-				param = { upperPrice: 20, lowerPrice: 15 };
+				param = { ...param, ...{ upperPrice: 20, lowerPrice: 15 } };
 				break;
 			case 'fiveToTenDollarDeals':
-				param = { upperPrice: 10, lowerPrice: 5 };
+				param = { ...param, ...{ upperPrice: 10, lowerPrice: 5 } };
 				break;
 			default:
-				param = {};
+				param = { ...param, ...topDealFilterParams };
 				break;
 		}
 		setFilterParams(param);
 	}
 	const buttonLabels = Object.values(filterLabels);
+
 	return (
 		<KeyboardAvoidingView
 			style={styles.keyboardAvoidingViewContainer}
 			behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
 			keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}>
-			<View style={styles.rootContainer}>
-				<View style={styles.filterContainer}>
-					<ButtonList
-						onPress={handleFilterButtonPress}
-						labels={buttonLabels}
-						forceSelectLabel={forceSelectTopDealLabel}
-					/>
+			<LinearGradient
+				style={styles.linearGradient}
+				colors={[
+					Colors.linearGradient.topColor,
+					Colors.linearGradient.middleColor,
+					Colors.linearGradient.bottomColor,
+				]}>
+				<View style={styles.rootContainer}>
+					<View style={styles.filterContainer}>
+						<ButtonList
+							onPress={handleFilterButtonPress}
+							labels={buttonLabels}
+							forceSelectLabel={forceSelectTopDealLabel}
+						/>
+					</View>
+					<View style={styles.searchContainer}>
+						<SearchInput
+							onSearchHandler={onSearchHandler}
+							onClearHandler={onClearHandler}
+							onChangeText={handleQueryUpdate}
+							placeholderTextColor={'grey'}
+							backgroundColor='#fff'
+							buttonColor='white'
+							clearValue={clearSearchValue}
+						/>
+					</View>
+					<View style={styles.gameListContainer}>
+						{isLoading ? (
+							<View style={styles.activityIndicatorContainer}>
+								<ActivityIndicatorComponent color='white' size='large' />
+							</View>
+						) : dataError ? (
+							<View style={styles.displayMessagesContainer}>
+								<Text style={styles.displayMessagesText}>
+									Something went wrong
+								</Text>
+							</View>
+						) : games?.length ? (
+							<GameList games={games} />
+						) : (
+							<View style={styles.displayMessagesContainer}>
+								<Text style={styles.displayMessagesText}>
+									No Game Deals Available for {apiSearchQuery} :(
+								</Text>
+							</View>
+						)}
+					</View>
 				</View>
-				<View style={styles.searchContainer}>
-					<SearchInput
-						onSearchHandler={onSearchHandler}
-						onClearHandler={onClearHandler}
-						onChangeText={handleQueryUpdate}
-						placeholderTextColor={'grey'}
-						backgroundColor='#fff'
-						buttonColor='white'
-						clearValue={clearSearchValue}
-					/>
-				</View>
-				<View style={styles.gameListContainer}>
-					{isLoading ? (
-						<View style={styles.activityIndicatorContainer}>
-							<ActivityIndicatorComponent color='white' size='large' />
-						</View>
-					) : dataError ? (
-						<View style={styles.displayMessagesContainer}>
-							<Text style={styles.displayMessagesText}>
-								Something went wrong
-							</Text>
-						</View>
-					) : games?.length ? (
-						<GameList games={games} />
-					) : (
-						<View style={styles.displayMessagesContainer}>
-							<Text style={styles.displayMessagesText}>
-								No Game Deals Available for {apiSearchQuery} :(
-							</Text>
-						</View>
-					)}
-				</View>
-			</View>
+			</LinearGradient>
 		</KeyboardAvoidingView>
 	);
 };
@@ -167,6 +174,9 @@ const GamesScreen = () => {
 export default GamesScreen;
 const styles = StyleSheet.create({
 	keyboardAvoidingViewContainer: {
+		flex: 1,
+	},
+	linearGradient: {
 		flex: 1,
 	},
 	rootContainer: {
