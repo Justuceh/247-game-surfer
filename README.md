@@ -31,13 +31,17 @@ App Demo: [https://youtu.be/nSBDfR8XcRU](https://youtu.be/rAx4mQmBTxw)
 <h3>I click on one to view the RDR2 game details page</h3>
 <img src="https://github.com/Justuceh/247-game-surfer/assets/21269564/712d7a05-06f7-4d51-9a8c-3e32f6293008" width=20% height=20%>
 <img src="https://github.com/Justuceh/247-game-surfer/assets/21269564/78ec54ad-17ba-490a-b301-462747e78bdf" width=20% height=20%>
-<h3>I left that page and moved on to the Favorites Screen (see bottom tabs on pic 1)</h3>
+<h3>I left that page and moved on to the Favorites Screen (button on bottom tabs)</h3>
 <p>Here you can view all the games you marked as a favorite.  You can look at the game details of each game or you can navigate directly to the game you want to purchase</p>
-<img src="https://github.com/Justuceh/247-game-surfer/assets/21269564/f00d921d-916a-40d4-a58b-7d75136bd508" width=20% height=20%>
+<img src="https://github.com/Justuceh/247-game-surfer/assets/21269564/7dfe2115-166f-4692-ae32-70efea3da6a8" width=20% height=20%>
+<img src="https://github.com/Justuceh/247-game-surfer/assets/21269564/ba01985d-ce9c-48c9-9d9b-db5c0ba875cb" width=20% height=20%>
+<img src="https://github.com/Justuceh/247-game-surfer/assets/21269564/78f2d2b2-66e4-443f-82ed-e98d3076aa24" width=20% height=20%>
+<img src="https://github.com/Justuceh/247-game-surfer/assets/21269564/7504426c-3376-44e1-b290-30abbbb66a3a" width=20% height=20%>
 <h3>Navigating to a game to purchase</h3>
 <p>At any point in the app you can navigate to a game to purchase.  All you have to do is "long press" on the game you want to buy.  It will then open a web view browser inside the app and take you to the game deal.  Here you can purchase your game :)</p>
-<img src="https://github.com/Justuceh/247-game-surfer/assets/21269564/8b73f12f-c3ed-446e-a493-936971748554" width=20% height=20%>
+<img src="https://github.com/Justuceh/247-game-surfer/assets/21269564/dabd840a-9ca5-4b19-9f61-22c8df10bf20" width=20% height=20%>
 </div>
 <p></p>
 <p></p>
+
 
