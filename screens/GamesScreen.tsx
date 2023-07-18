@@ -5,10 +5,11 @@ import {
 	StyleSheet,
 	KeyboardAvoidingView,
 	Platform,
+	Pressable,
 } from 'react-native';
 import { CHEAPSHARK_API_URL } from '@env';
 import axios from 'axios';
-import { useQuery } from '@tanstack/react-query';
+import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import { LinearGradient } from 'expo-linear-gradient';
 
 import ActivityIndicatorComponent from '../components/ActivityIndicator';
@@ -19,6 +20,7 @@ import Colors from '../constants/colors';
 import ButtonList from '../components/ButtonList';
 import filterLabels from '../constants/string';
 import Filters from '../models/Filters';
+import Fonts from '../constants/fonts';
 
 const GamesScreen = () => {
 	const [searchQuery, setSearchQuery] = useState('');
@@ -37,7 +39,7 @@ const GamesScreen = () => {
 		useState<Filters>(topDealFilterParams);
 
 	async function fetchGames() {
-		const params = { ...filterParams };
+		const params = { ...filterParams, pageNumber: pageNumber };
 		return await axios
 			.get(`${CHEAPSHARK_API_URL}/deals`, { params })
 			.then((response) => {
@@ -51,12 +53,16 @@ const GamesScreen = () => {
 
 	const {
 		data: games,
+		fetchNextPage,
 		isLoading,
-		error: dataError,
-	} = useQuery<GameDealItem[], unknown>(
-		[`games`, apiSearchQuery, filterParams],
-		fetchGames
-	);
+		isFetchingNextPage,
+		isError,
+		hasNextPage,
+	} = useInfiniteQuery<GameDealItem[], unknown>(['games'], fetchGames, {
+		getNextPageParam: (lastPage, pages) => {
+			return pageNumber + 1;
+		},
+	});
 
 	const onSearchHandler = () => {
 		setApiSearchQuery(searchQuery);
@@ -88,7 +94,8 @@ const GamesScreen = () => {
 			(key, value) => key[1] === label
 		);
 
-		let param = { pageNumber: pageNumber };
+		let param = { pageNumber: 0 };
+		setPageNumber(0);
 		switch (dataSets[0][0]) {
 			case 'topDeals':
 				param = { ...param, ...topDealFilterParams };
@@ -113,6 +120,26 @@ const GamesScreen = () => {
 	}
 	const buttonLabels = Object.values(filterLabels);
 
+	const getFooterComponent = () => {
+		return (
+			<Pressable
+				onPress={loadMoreGames}
+				style={({ pressed }) => {
+					return pressed
+						? [styles.searchButton, styles.buttonPressed]
+						: styles.searchButton;
+				}}>
+				<Text style={styles.searchText}>Get More Games!</Text>
+			</Pressable>
+		);
+	};
+	const loadMoreGames = () => {
+		setPageNumber((prevPageNumber) => prevPageNumber + 1);
+		fetchNextPage();
+	};
+	useEffect(() => {
+		console.log(games?.pages);
+	}, [games]);
 	return (
 		<KeyboardAvoidingView
 			style={styles.keyboardAvoidingViewContainer}
@@ -149,14 +176,17 @@ const GamesScreen = () => {
 							<View style={styles.activityIndicatorContainer}>
 								<ActivityIndicatorComponent color='white' size='large' />
 							</View>
-						) : dataError ? (
+						) : isError ? (
 							<View style={styles.displayMessagesContainer}>
 								<Text style={styles.displayMessagesText}>
 									Something went wrong
 								</Text>
 							</View>
-						) : games?.length ? (
-							<GameList games={games} />
+						) : games.pages?.length ? (
+							<GameList
+								games={games.pages.flatMap((a) => a)}
+								footerComponent={getFooterComponent}
+							/>
 						) : (
 							<View style={styles.displayMessagesContainer}>
 								<Text style={styles.displayMessagesText}>
@@ -210,5 +240,24 @@ const styles = StyleSheet.create({
 	displayMessagesText: {
 		fontSize: 30,
 		fontWeight: 'bold',
+	},
+	searchButton: {
+		backgroundColor: 'white',
+		borderWidth: 1,
+		borderColor: '#ffffff',
+		borderRadius: 15,
+		opacity: 0.9,
+		flex: 1,
+		padding: 5,
+		justifyContent: 'center',
+	},
+	searchText: {
+		fontFamily: Fonts.openSans_400Regular,
+		textAlign: 'center',
+		fontSize: 15,
+		fontWeight: '400',
+	},
+	buttonPressed: {
+		opacity: 0.5,
 	},
 });
