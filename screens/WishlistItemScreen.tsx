@@ -47,8 +47,9 @@ const WishlistItemScreen = ({ route }: WishlistItemScreenProps) => {
 	useEffect(() => {
 		navigation.setOptions({
 			headerStyle: { backgroundColor: 'black' },
-			headerTitleStyle: { fontFamily: Fonts.openSans_400Regular, fontSize: 20 },
+			headerTitleStyle: { fontFamily: Fonts.openSans_400Regular, fontSize: 16 },
 			headerTintColor: Colors.offWhite,
+			title: title,
 		});
 	}, []);
 
@@ -131,9 +132,6 @@ const WishlistItemScreen = ({ route }: WishlistItemScreenProps) => {
 			const game = gameList?.find((game) => game.name == closestGameName);
 			if (game) {
 				setFilteredGame(game);
-				navigation.setOptions({
-					title: `${game.name}`,
-				});
 				if (game.cover) {
 					setCoverId(game.cover);
 				}
@@ -233,7 +231,7 @@ const WishlistItemScreen = ({ route }: WishlistItemScreenProps) => {
 					Colors.linearGradient.bottomColor,
 				]}>
 				<View style={styles.rootContainer}>
-					{(!isGameListEmpty || !isCsGameListEmpty) &&
+					{(!isGameListEmpty || isCsGameListEmpty) &&
 					(isGameLoading ||
 						csGameIsloading ||
 						isCoverLoading ||
@@ -251,7 +249,12 @@ const WishlistItemScreen = ({ route }: WishlistItemScreenProps) => {
 												<GameCover imageId={cover?.[0]?.image_id} />
 												{gameDeals !== undefined &&
 													gameDeals?.map((deal) => {
-														return <FavoritesPriceLabel gameDeal={deal} />;
+														return (
+															<FavoritesPriceLabel
+																key={deal.dealID}
+																gameDeal={deal}
+															/>
+														);
 													})}
 												<GameText
 													gameTitle={filteredGame?.name}
@@ -282,7 +285,7 @@ const WishlistItemScreen = ({ route }: WishlistItemScreenProps) => {
 											fontSize: 23,
 											fontFamily: Fonts.openSans_400Regular,
 										}}>
-										No game details available for {filteredGame?.name}
+										No game details available for {title}
 									</Text>
 								</View>
 							)}
